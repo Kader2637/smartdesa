@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola User & UMKM - Smart Desa</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        /* Toggle Switch CSS */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #10B981;
+        }
+
+        .toggle-checkbox:checked+.toggle-label {
+            background-color: #10B981;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800" x-data="{ sidebarOpen: false, profileOpen: false }">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden"
+            @click="sidebarOpen = false"></div>
+
+        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+            class="fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-slate-200 transition-transform duration-300 lg:static lg:translate-x-0 lg:flex lg:flex-col shadow-sm">
+            <div class="flex items-center justify-center h-20 border-b border-slate-100">
+                <div class="flex items-center gap-2 font-bold text-2xl text-emerald-600 tracking-tight">
+                    <i class="fas fa-leaf"></i> Smart<span class="text-slate-800">Desa</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+                <p class="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-2">Pusat Kendali</p>
+                <a href="index.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-shield-alt w-5 text-center"></i> <span>Dashboard Admin</span>
+                </a>
+                <a href="moderasi-produk.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-check-circle w-5 text-center"></i> <span>Moderasi Produk</span>
+                </a>
+                <a href="validasi-surat.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-file-signature w-5 text-center"></i> <span>Validasi Surat</span>
+                </a>
+                <a href="kelola-user.html"
+                    class="flex items-center gap-3 px-4 py-2.5 bg-emerald-50 text-emerald-600 font-semibold rounded-lg">
+                    <i class="fas fa-users-cog w-5 text-center"></i> <span>Kelola User & UMKM</span>
+                </a>
+
+                <p class="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-6">Akses Cepat</p>
+                <a href="../landingpage/umkm.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-store w-5 text-center"></i> <span>Belanja (Marketplace)</span>
+                </a>
+                
+                <a href="statistik-global.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-chart-line w-5 text-center"></i> <span>Statistik Global</span>
+                </a>
+            </nav>
+        </aside>
+
+        <div class="flex-1 flex flex-col overflow-hidden">
+
+            <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-200">
+                <div class="flex items-center gap-4">
+                    <button @click="sidebarOpen = true"
+                        class="text-slate-500 focus:outline-none lg:hidden hover:text-emerald-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div class="hidden md:flex relative">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" placeholder="Cari NIK, Nama, atau Usaha..."
+                            class="pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 w-72 text-sm outline-none">
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-5">
+                    <div class="relative">
+                        <button @click="profileOpen = !profileOpen" class="flex items-center gap-3 focus:outline-none">
+                            <img src="https://ui-avatars.com/api/?name=Admin+Desa&background=10B981&color=fff"
+                                alt="Avatar" class="h-9 w-9 rounded-full object-cover">
+                            <div class="hidden md:block text-left">
+                                <p class="text-sm font-semibold text-slate-700 leading-tight">Kepala Admin</p>
+                            </div>
+                            <i class="fas fa-chevron-down text-xs text-slate-400"></i>
+                        </button>
+                        <div x-show="profileOpen" @click.away="profileOpen = false" x-transition
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border border-slate-100 z-50">
+                            <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50"><i
+                                    class="fas fa-sign-out-alt mr-2"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 p-4 sm:p-6" x-data="userApp()">
+
+                <div class="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Manajemen Pengguna</h2>
+                        <p class="text-slate-500 text-sm mt-1">Kelola data warga, setujui pendaftaran UMKM, dan atur hak
+                            akses sistem.</p>
+                    </div>
+                    <button @click="showAddModal = true"
+                        class="bg-emerald-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-emerald-700 transition shadow-sm flex items-center justify-center gap-2 whitespace-nowrap">
+                        <i class="fas fa-user-plus"></i> Tambah Pengguna
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
+                        <div
+                            class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-lg">
+                            <i class="fas fa-users"></i></div>
+                        <div>
+                            <p class="text-xs text-slate-500 font-bold uppercase">Total Warga</p>
+                            <p class="text-xl font-bold text-slate-800">1,245</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
+                        <div
+                            class="w-10 h-10 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center text-lg">
+                            <i class="fas fa-store"></i></div>
+                        <div>
+                            <p class="text-xs text-slate-500 font-bold uppercase">Total UMKM</p>
+                            <p class="text-xl font-bold text-slate-800">84</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
+                        <div
+                            class="w-10 h-10 rounded-full bg-yellow-50 text-yellow-600 flex items-center justify-center text-lg">
+                            <i class="fas fa-hourglass-half"></i></div>
+                        <div>
+                            <p class="text-xs text-slate-500 font-bold uppercase">Menunggu Verif</p>
+                            <p class="text-xl font-bold text-slate-800"
+                                x-text="users.filter(u => u.status === 'pending').length"></p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
+                        <div
+                            class="w-10 h-10 rounded-full bg-red-50 text-red-600 flex items-center justify-center text-lg">
+                            <i class="fas fa-user-lock"></i></div>
+                        <div>
+                            <p class="text-xs text-slate-500 font-bold uppercase">Akun Dibekukan</p>
+                            <p class="text-xl font-bold text-slate-800"
+                                x-text="users.filter(u => u.status === 'inactive').length"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-2 rounded-xl border border-slate-200 shadow-sm flex flex-wrap gap-2 mb-6">
+                    <button @click="activeTab = 'all'"
+                        :class="activeTab === 'all' ? 'bg-slate-800 text-white font-bold' : 'text-slate-500 hover:bg-slate-50'"
+                        class="px-4 py-2 rounded-lg text-sm transition">Semua</button>
+                    <button @click="activeTab = 'warga'"
+                        :class="activeTab === 'warga' ? 'bg-blue-100 text-blue-700 font-bold' : 'text-slate-500 hover:bg-slate-50'"
+                        class="px-4 py-2 rounded-lg text-sm transition flex items-center gap-2"><i
+                            class="fas fa-user"></i> Warga</button>
+                    <button @click="activeTab = 'umkm'"
+                        :class="activeTab === 'umkm' ? 'bg-orange-100 text-orange-700 font-bold' : 'text-slate-500 hover:bg-slate-50'"
+                        class="px-4 py-2 rounded-lg text-sm transition flex items-center gap-2"><i
+                            class="fas fa-store"></i> UMKM / Penjual</button>
+                    <button @click="activeTab = 'pending'"
+                        :class="activeTab === 'pending' ? 'bg-yellow-100 text-yellow-700 font-bold' : 'text-slate-500 hover:bg-slate-50'"
+                        class="px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
+                        <i class="fas fa-exclamation-circle"></i> Butuh Verifikasi
+                        <span class="bg-yellow-500 text-white text-[10px] px-2 py-0.5 rounded-full"
+                            x-show="users.filter(u => u.status === 'pending').length > 0"
+                            x-text="users.filter(u => u.status === 'pending').length"></span>
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse whitespace-nowrap">
+                            <thead>
+                                <tr
+                                    class="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs uppercase tracking-wider">
+                                    <th class="p-4 font-bold">Profil Pengguna</th>
+                                    <th class="p-4 font-bold">NIK / Kontak</th>
+                                    <th class="p-4 font-bold">Peran (Role)</th>
+                                    <th class="p-4 font-bold text-center">Status</th>
+                                    <th class="p-4 font-bold text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-sm">
+                                <template x-for="user in filteredUsers" :key="user.id">
+                                    <tr class="hover:bg-slate-50 transition">
+                                        <td class="p-4">
+                                            <div class="flex items-center gap-3">
+                                                <img :src="user.avatar"
+                                                    class="w-10 h-10 rounded-full object-cover bg-slate-200">
+                                                <div>
+                                                    <p class="font-bold text-slate-800" x-text="user.name"></p>
+                                                    <p class="text-xs text-slate-500" x-text="user.address"></p>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td class="p-4">
+                                            <p class="text-slate-700 font-medium"><i
+                                                    class="far fa-id-card text-slate-400 mr-1"></i> <span
+                                                    x-text="user.nik"></span></p>
+                                            <p class="text-xs text-slate-500 mt-1"><i
+                                                    class="fab fa-whatsapp text-emerald-500 mr-1"></i> <span
+                                                    x-text="user.phone"></span></p>
+                                        </td>
+
+                                        <td class="p-4">
+                                            <span x-show="user.role === 'warga'"
+                                                class="px-2.5 py-1 bg-blue-50 text-blue-600 rounded text-xs font-bold border border-blue-100"><i
+                                                    class="fas fa-user mr-1"></i> Warga</span>
+                                            <span x-show="user.role === 'umkm'"
+                                                class="px-2.5 py-1 bg-orange-50 text-orange-600 rounded text-xs font-bold border border-orange-100"><i
+                                                    class="fas fa-store mr-1"></i> UMKM</span>
+                                        </td>
+
+                                        <td class="p-4 text-center">
+                                            <span x-show="user.status === 'active'"
+                                                class="text-emerald-500 font-bold text-xs"><i
+                                                    class="fas fa-circle-check mr-1"></i> Aktif</span>
+                                            <span x-show="user.status === 'inactive'"
+                                                class="text-red-500 font-bold text-xs"><i class="fas fa-ban mr-1"></i>
+                                                Dibekukan</span>
+                                            <div x-show="user.status === 'pending'"
+                                                class="flex flex-col items-center gap-1">
+                                                <span class="text-yellow-600 font-bold text-xs"><i
+                                                        class="fas fa-clock mr-1"></i> Menunggu</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="p-4">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <template x-if="user.status === 'pending'">
+                                                    <button @click="verifyUser(user.id)"
+                                                        class="bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-emerald-200 transition">
+                                                        Verifikasi
+                                                    </button>
+                                                </template>
+
+                                                <template x-if="user.status !== 'pending'">
+                                                    <label class="flex items-center cursor-pointer"
+                                                        title="Aktifkan / Nonaktifkan Akun">
+                                                        <div class="relative">
+                                                            <input type="checkbox" class="sr-only toggle-checkbox"
+                                                                :checked="user.status === 'active'"
+                                                                @change="toggleStatus(user.id)">
+                                                            <div
+                                                                class="block bg-slate-200 w-10 h-6 rounded-full transition toggle-label">
+                                                            </div>
+                                                            <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform"
+                                                                :class="user.status === 'active' ? 'translate-x-4' : ''">
+                                                            </div>
+                                                        </div>
+                                                    </label>
+                                                </template>
+
+                                                <button @click="openEditModal(user)"
+                                                    class="text-slate-400 hover:text-blue-600 p-2 transition"
+                                                    title="Edit Data"><i class="fas fa-edit"></i></button>
+                                                <button @click="deleteUser(user.id)"
+                                                    class="text-slate-400 hover:text-red-600 p-2 transition"
+                                                    title="Hapus Akun"><i class="fas fa-trash-alt"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+
+                                <tr x-show="filteredUsers.length === 0" x-cloak>
+                                    <td colspan="5" class="p-10 text-center text-slate-500">
+                                        <i class="fas fa-folder-open text-4xl mb-3 text-slate-300"></i>
+                                        <p>Tidak ada data pengguna ditemukan.</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="p-4 border-t border-slate-100 flex items-center justify-between text-sm text-slate-500">
+                        <p>Menampilkan <span class="font-bold text-slate-800">1</span> sampai <span
+                                class="font-bold text-slate-800">10</span> dari <span
+                                class="font-bold text-slate-800">1,329</span> pengguna</p>
+                        <div class="flex gap-1">
+                            <button class="px-3 py-1 border border-slate-200 rounded hover:bg-slate-50"
+                                disabled>Sebelumnnya</button>
+                            <button
+                                class="px-3 py-1 bg-emerald-50 text-emerald-600 font-bold border border-emerald-100 rounded">1</button>
+                            <button class="px-3 py-1 border border-slate-200 rounded hover:bg-slate-50">2</button>
+                            <button
+                                class="px-3 py-1 border border-slate-200 rounded hover:bg-slate-50">Selanjutnya</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="showAddModal" x-cloak class="relative z-[60]" aria-labelledby="modal-title" role="dialog"
+                    aria-modal="true">
+                    <div x-transition.opacity class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm"></div>
+                    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+                        <div class="flex min-h-full items-center justify-center p-4 text-center">
+                            <div x-transition.scale.origin.center @click.away="showAddModal = false"
+                                class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 w-full max-w-lg p-6">
+
+                                <div class="flex justify-between items-start mb-5 pb-3 border-b border-slate-100">
+                                    <h3 class="text-lg font-bold text-slate-800"
+                                        x-text="editMode ? 'Edit Data Pengguna' : 'Tambah Pengguna Baru'"></h3>
+                                    <button @click="showAddModal = false"
+                                        class="text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><i
+                                            class="fas fa-times"></i></button>
+                                </div>
+
+                                <form @submit.prevent="saveUser" class="space-y-4 text-sm">
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1">Nama Lengkap / Nama Usaha
+                                            <span class="text-red-500">*</span></label>
+                                        <input type="text" x-model="formData.name" required
+                                            class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                                            placeholder="Masukkan nama...">
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block font-bold text-slate-700 mb-1">NIK <span
+                                                    class="text-red-500">*</span></label>
+                                            <input type="text" x-model="formData.nik" required maxlength="16"
+                                                class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                                                placeholder="16 digit NIK">
+                                        </div>
+                                        <div>
+                                            <label class="block font-bold text-slate-700 mb-1">No. WhatsApp</label>
+                                            <input type="text" x-model="formData.phone"
+                                                class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                                                placeholder="0812...">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1">Peran (Role) <span
+                                                class="text-red-500">*</span></label>
+                                        <select x-model="formData.role"
+                                            class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white">
+                                            <option value="warga">Warga Biasa</option>
+                                            <option value="umkm">UMKM / Penjual</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1">Alamat Domisili</label>
+                                        <textarea x-model="formData.address" rows="2"
+                                            class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                                            placeholder="RT/RW, Dusun..."></textarea>
+                                    </div>
+
+                                    <div class="pt-4 border-t border-slate-100 flex justify-end gap-2 mt-6">
+                                        <button type="button" @click="showAddModal = false"
+                                            class="px-4 py-2 bg-slate-100 text-slate-700 font-bold rounded-lg hover:bg-slate-200">Batal</button>
+                                        <button type="submit"
+                                            class="px-5 py-2 bg-emerald-600 text-white font-bold rounded-lg hover:bg-emerald-700 flex items-center gap-2">
+                                            <i class="fas fa-save"></i> Simpan
+                                        </button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        function userApp() {
+            return {
+                activeTab: 'all',
+                showAddModal: false,
+                editMode: false,
+
+                // Form Data Reset
+                formData: { id: null, name: '', nik: '', phone: '', role: 'warga', address: '' },
+
+                users: [
+                    { id: 1, name: 'Budi Santoso', nik: '3573012345670001', phone: '081234567890', role: 'warga', status: 'active', address: 'RT 01 / RW 02 Dusun Krajan', avatar: 'https://ui-avatars.com/api/?name=Budi+Santoso&background=f1f5f9&color=64748b' },
+                    { id: 2, name: 'Siti Aminah', nik: '3573012345670002', phone: '085678901234', role: 'warga', status: 'active', address: 'RT 03 / RW 01 Dusun Krajan', avatar: 'https://ui-avatars.com/api/?name=Siti+Aminah&background=f1f5f9&color=64748b' },
+                    { id: 3, name: 'Keripik Tempe Bu Ninik', nik: '3573012345670003', phone: '082233445566', role: 'umkm', status: 'active', address: 'Perumahan Asri Blok C-2', avatar: 'https://ui-avatars.com/api/?name=Keripik+Bu+Ninik&background=fff7ed&color=ea580c' },
+                    { id: 4, name: 'Bengkel Motor Jaya', nik: '3573012345670004', phone: '081998877665', role: 'umkm', status: 'pending', address: 'Jl. Raya Tunjungtirto No. 45', avatar: 'https://ui-avatars.com/api/?name=Bengkel+Jaya&background=fff7ed&color=ea580c' },
+                    { id: 5, name: 'Joko Anwar', nik: '3573012345670005', phone: '087766554433', role: 'warga', status: 'inactive', address: 'RT 05 / RW 03 Dusun Sukamaju', avatar: 'https://ui-avatars.com/api/?name=Joko+Anwar&background=f1f5f9&color=64748b' },
+                    { id: 6, name: 'Warung Kopi Cak Man', nik: '3573012345670006', phone: '081211223344', role: 'umkm', status: 'pending', address: 'Pertigaan Pasar Desa', avatar: 'https://ui-avatars.com/api/?name=Warung+Cak+Man&background=fff7ed&color=ea580c' },
+                ],
+
+                get filteredUsers() {
+                    if (this.activeTab === 'all') return this.users;
+                    if (this.activeTab === 'pending') return this.users.filter(u => u.status === 'pending');
+                    return this.users.filter(u => u.role === this.activeTab);
+                },
+
+                toggleStatus(id) {
+                    let user = this.users.find(u => u.id === id);
+                    if (user) {
+                        user.status = user.status === 'active' ? 'inactive' : 'active';
+                    }
+                },
+
+                verifyUser(id) {
+                    if (confirm('Verifikasi UMKM ini? Akun akan menjadi aktif dan bisa berjualan di Marketplace.')) {
+                        let user = this.users.find(u => u.id === id);
+                        if (user) user.status = 'active';
+                    }
+                },
+
+                deleteUser(id) {
+                    if (confirm('Apakah Anda yakin ingin menghapus pengguna ini secara permanen?')) {
+                        this.users = this.users.filter(u => u.id !== id);
+                    }
+                },
+
+                openEditModal(user) {
+                    this.editMode = true;
+                    // Clone object biar ga langsung ngerubah data di tabel sblm disave
+                    this.formData = { ...user };
+                    this.showAddModal = true;
+                },
+
+                saveUser() {
+                    if (this.editMode) {
+                        // Update
+                        let index = this.users.findIndex(u => u.id === this.formData.id);
+                        if (index !== -1) {
+                            // Update avatar color based on role
+                            let bg = this.formData.role === 'umkm' ? 'fff7ed' : 'f1f5f9';
+                            let color = this.formData.role === 'umkm' ? 'ea580c' : '64748b';
+                            this.formData.avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(this.formData.name)}&background=${bg}&color=${color}`;
+
+                            this.users[index] = { ...this.formData };
+                        }
+                    } else {
+                        // Tambah Baru
+                        let newId = this.users.length > 0 ? Math.max(...this.users.map(u => u.id)) + 1 : 1;
+                        let bg = this.formData.role === 'umkm' ? 'fff7ed' : 'f1f5f9';
+                        let color = this.formData.role === 'umkm' ? 'ea580c' : '64748b';
+
+                        this.users.unshift({
+                            ...this.formData,
+                            id: newId,
+                            status: 'active',
+                            avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(this.formData.name)}&background=${bg}&color=${color}`
+                        });
+                    }
+
+                    this.showAddModal = false;
+                    this.formData = { id: null, name: '', nik: '', phone: '', role: 'warga', address: '' };
+                    this.editMode = false;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

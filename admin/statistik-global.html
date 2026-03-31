@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistik Global - Smart Desa</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800" x-data="{ sidebarOpen: false, profileOpen: false }">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden"
+            @click="sidebarOpen = false"></div>
+
+        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+            class="fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-slate-200 transition-transform duration-300 lg:static lg:translate-x-0 lg:flex lg:flex-col shadow-sm">
+            <div class="flex items-center justify-center h-20 border-b border-slate-100">
+                <div class="flex items-center gap-2 font-bold text-2xl text-emerald-600 tracking-tight">
+                    <i class="fas fa-leaf"></i> Smart<span class="text-slate-800">Desa</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+                <p class="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-2">Pusat Kendali</p>
+                <a href="index.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-shield-alt w-5 text-center"></i> <span>Dashboard Admin</span>
+                </a>
+                <a href="moderasi-produk.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-check-circle w-5 text-center"></i> <span>Moderasi Produk</span>
+                </a>
+                <a href="validasi-surat.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-file-signature w-5 text-center"></i> <span>Validasi Surat</span>
+                </a>
+                <a href="kelola-user.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-users-cog w-5 text-center"></i> <span>Kelola User & UMKM</span>
+                </a>
+
+                <p class="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-6">Akses Cepat</p>
+                <a href="../landingpage/umkm.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-store w-5 text-center"></i> <span>Belanja (Marketplace)</span>
+                </a>
+                <a href="statistik-global.html"
+                    class="flex items-center gap-3 px-4 py-2.5 bg-emerald-50 text-emerald-600 font-semibold rounded-lg">
+                    <i class="fas fa-chart-line w-5 text-center"></i> <span>Statistik Global</span>
+                </a>
+            </nav>
+        </aside>
+
+        <div class="flex-1 flex flex-col overflow-hidden">
+
+            <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-200">
+                <div class="flex items-center gap-4">
+                    <button @click="sidebarOpen = true"
+                        class="text-slate-500 focus:outline-none lg:hidden hover:text-emerald-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <h1 class="text-lg font-bold text-slate-800 hidden sm:block">Pusat Data & Statistik</h1>
+                </div>
+
+                <div class="flex items-center gap-5">
+                    <button
+                        class="text-slate-400 hover:text-emerald-600 transition bg-slate-50 w-9 h-9 rounded-full flex items-center justify-center border border-slate-200"
+                        title="Cetak Laporan">
+                        <i class="fas fa-print"></i>
+                    </button>
+                    <div class="relative">
+                        <button @click="profileOpen = !profileOpen" class="flex items-center gap-3 focus:outline-none">
+                            <img src="https://ui-avatars.com/api/?name=Admin+Desa&background=10B981&color=fff"
+                                alt="Avatar" class="h-9 w-9 rounded-full object-cover">
+                        </button>
+                        <div x-show="profileOpen" @click.away="profileOpen = false" x-transition
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border border-slate-100 z-50">
+                            <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50"><i
+                                    class="fas fa-sign-out-alt mr-2"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 p-4 sm:p-6">
+
+                <div class="mb-6">
+                    <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Statistik Global Desa Tunjungtirto</h2>
+                    <p class="text-slate-500 text-sm mt-1">Data real-time kependudukan, perputaran ekonomi UMKM, dan
+                        layanan administrasi.</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div
+                        class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group">
+                        <div
+                            class="absolute -right-4 -bottom-4 opacity-5 text-emerald-600 text-6xl group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Total Penduduk</p>
+                        <h3 class="text-2xl sm:text-3xl font-bold text-slate-800">8,452 <span
+                                class="text-sm font-medium text-slate-500">Jiwa</span></h3>
+                        <p class="text-xs text-emerald-600 font-bold mt-2"><i class="fas fa-arrow-up mr-1"></i> 1.2%
+                            dari tahun lalu</p>
+                    </div>
+
+                    <div
+                        class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group">
+                        <div
+                            class="absolute -right-4 -bottom-4 opacity-5 text-blue-600 text-6xl group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Kepala Keluarga</p>
+                        <h3 class="text-2xl sm:text-3xl font-bold text-slate-800">2,104 <span
+                                class="text-sm font-medium text-slate-500">KK</span></h3>
+                        <div class="flex items-center gap-2 mt-2 text-xs text-slate-500">
+                            <span class="text-blue-500"><i class="fas fa-male"></i> L: 1,800</span>
+                            <span class="text-pink-500"><i class="fas fa-female"></i> P: 304</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group">
+                        <div
+                            class="absolute -right-4 -bottom-4 opacity-5 text-orange-600 text-6xl group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">UMKM Aktif</p>
+                        <h3 class="text-2xl sm:text-3xl font-bold text-slate-800">142 <span
+                                class="text-sm font-medium text-slate-500">Usaha</span></h3>
+                        <p class="text-xs text-emerald-600 font-bold mt-2"><i class="fas fa-arrow-up mr-1"></i> +12
+                            bulan ini</p>
+                    </div>
+
+                    <div
+                        class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group">
+                        <div
+                            class="absolute -right-4 -bottom-4 opacity-5 text-indigo-600 text-6xl group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-file-signature"></i>
+                        </div>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Surat Terbit (Tahun
+                            Ini)</p>
+                        <h3 class="text-2xl sm:text-3xl font-bold text-slate-800">1,284 <span
+                                class="text-sm font-medium text-slate-500">Dokumen</span></h3>
+                        <p class="text-xs text-slate-500 mt-2">Rata-rata 4 surat/hari</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm lg:col-span-2">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-slate-800">Demografi Usia Penduduk</h3>
+                            <button class="text-slate-400 hover:text-emerald-600"><i
+                                    class="fas fa-ellipsis-v"></i></button>
+                        </div>
+                        <div class="relative h-72 w-full">
+                            <canvas id="demografiChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-slate-800">Sebaran Kategori UMKM</h3>
+                            <button class="text-slate-400 hover:text-emerald-600"><i
+                                    class="fas fa-ellipsis-v"></i></button>
+                        </div>
+                        <div class="relative h-64 w-full flex justify-center">
+                            <canvas id="umkmChart"></canvas>
+                        </div>
+                        <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
+                            <div class="flex items-center gap-2"><span
+                                    class="w-3 h-3 rounded-full bg-orange-500"></span> Makanan (45%)</div>
+                            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-blue-500"></span>
+                                Jasa (25%)</div>
+                            <div class="flex items-center gap-2"><span
+                                    class="w-3 h-3 rounded-full bg-emerald-500"></span> Kriya (20%)</div>
+                            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-slate-400"></span>
+                                Lainnya (10%)</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+                        <h3 class="font-bold text-slate-800">Tren Pengajuan Surat Administrasi (6 Bulan Terakhir)</h3>
+                        <select
+                            class="border border-slate-300 text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:border-emerald-500 bg-slate-50">
+                            <option>Tahun 2026</option>
+                            <option>Tahun 2025</option>
+                        </select>
+                    </div>
+                    <div class="relative h-80 w-full">
+                        <canvas id="suratChart"></canvas>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Konfigurasi Default Font Chart.js
+            Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+            Chart.defaults.color = '#64748b';
+
+            // 1. Chart Demografi Penduduk (Bar Chart)
+            const ctxDemografi = document.getElementById('demografiChart').getContext('2d');
+            new Chart(ctxDemografi, {
+                type: 'bar',
+                data: {
+                    labels: ['0-14 Tahun', '15-24 Tahun', '25-34 Tahun', '35-44 Tahun', '45-54 Tahun', '55+ Tahun'],
+                    datasets: [
+                        {
+                            label: 'Laki-laki',
+                            data: [800, 950, 1100, 850, 600, 450],
+                            backgroundColor: '#3b82f6', // blue-500
+                            borderRadius: 4,
+                        },
+                        {
+                            label: 'Perempuan',
+                            data: [780, 920, 1050, 880, 620, 452],
+                            backgroundColor: '#ec4899', // pink-500
+                            borderRadius: 4,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { borderDash: [4, 4], color: '#e2e8f0' } },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { position: 'top', align: 'end' }
+                    }
+                }
+            });
+
+            // 2. Chart Sebaran UMKM (Doughnut Chart)
+            const ctxUmkm = document.getElementById('umkmChart').getContext('2d');
+            new Chart(ctxUmkm, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Kuliner / Makanan', 'Jasa', 'Kriya / Kerajinan', 'Lainnya'],
+                    datasets: [{
+                        data: [45, 25, 20, 10],
+                        backgroundColor: ['#f97316', '#3b82f6', '#10b981', '#94a3b8'], // orange, blue, emerald, slate
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { display: false } // Legend dibuat manual di HTML biar lebih rapi
+                    }
+                }
+            });
+
+            // 3. Chart Tren Surat (Line Chart)
+            const ctxSurat = document.getElementById('suratChart').getContext('2d');
+
+            // Bikin gradient untuk line chart
+            let gradient = ctxSurat.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.2)'); // emerald-500 transparent
+            gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
+            new Chart(ctxSurat, {
+                type: 'line',
+                data: {
+                    labels: ['Oktober', 'November', 'Desember', 'Januari', 'Februari', 'Maret'],
+                    datasets: [{
+                        label: 'Total Surat Terbit',
+                        data: [180, 210, 195, 280, 240, 310],
+                        borderColor: '#10b981', // emerald-500
+                        backgroundColor: gradient,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#10b981',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        fill: true,
+                        tension: 0.4 // Bikin garisnya melengkung smooth
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { borderDash: [4, 4], color: '#e2e8f0' } },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    }
+                }
+            });
+
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk - DesaSmart</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        brand: { 50: '#ecfdf5', 100: '#d1fae5', 400: '#34d399', 500: '#10b981', 600: '#059669', 900: '#064e3b' },
+                        desa: { green: '#2E7D32', greenDark: '#1B5E20', cream: '#FDFBF7', creamDark: '#F2EFE9', brown: '#5D4037', brownLight: '#8D6E63' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* BASE & CURSOR */
+        body {
+            background-color: #FDFBF7;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #10b981;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
+            mix-blend-mode: difference;
+        }
+
+        .custom-cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 6px;
+            background-color: #10b981;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s;
+        }
+
+        .hover-active .custom-cursor {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(16, 185, 129, 0.2);
+            border-color: transparent;
+        }
+
+        /* NAVBAR & GLASS */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .nav-link.active {
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #10b981;
+            border-radius: 99px;
+        }
+
+        /* MD3 INPUT FLOATING LABEL */
+        .input-group {
+            position: relative;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1.25rem 1rem 0.5rem;
+            border: 1px solid #E0E0E0;
+            border-radius: 12px;
+            background-color: white;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .input-field:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+        }
+
+        .input-label {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8D6E63;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            font-size: 0.95rem;
+        }
+
+        .input-field:focus~.input-label,
+        .input-field:not(:placeholder-shown)~.input-label {
+            top: 0.6rem;
+            font-size: 0.75rem;
+            color: #10b981;
+            transform: translateY(0);
+            font-weight: 600;
+        }
+
+        /* SHAKE ANIMATION */
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-8px);
+            }
+
+            75% {
+                transform: translateX(8px);
+            }
+        }
+    </style>
+</head>
+
+<body class="text-desa-brown antialiased selection:bg-brand-500 selection:text-white">
+
+    <div class="custom-cursor hidden md:block"></div>
+    <div class="custom-cursor-dot hidden md:block"></div>
+
+    <div class="fixed top-6 inset-x-0 z-50 flex justify-center px-4 pointer-events-none">
+        <nav class="glass border border-white/60 shadow-lg shadow-slate-200/50 rounded-full px-6 py-4 w-full max-w-6xl flex items-center justify-between transition-all duration-300 pointer-events-auto"
+            id="navbar">
+            <a href="index.html" class="flex items-center gap-3 group hover-target">
+                <div
+                    class="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center group-hover:-rotate-12 transition-transform duration-500">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L2 12h3v8h14v-8h3L12 2z" />
+                    </svg>
+                </div>
+                <span class="font-extrabold text-slate-900 tracking-tight text-xl">Desa<span
+                        class="text-brand-500">Smart.</span></span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-10 font-medium text-sm text-slate-500" id="nav-links">
+                <a href="index.html" data-page="index.html"
+                    class="nav-link hover:text-slate-900 transition-all hover-target relative py-1">Beranda</a>
+                <a href="layanan.html" data-page="layanan.html"
+                    class="nav-link hover:text-slate-900 transition-all hover-target relative py-1">Layanan</a>
+                <a href="umkm.html" data-page="umkm.html"
+                    class="nav-link hover:text-slate-900 transition-all hover-target relative py-1">UMKM</a>
+                <a href="berita.html" data-page="berita.html"
+                    class="nav-link hover:text-slate-900 transition-all hover-target relative py-1">Berita</a>
+                <a href="kontak.html" data-page="kontak.html"
+                    class="nav-link hover:text-slate-900 transition-all hover-target relative py-1">Kontak</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="login.html"
+                    class="hidden md:block text-sm font-semibold text-slate-600 hover:text-slate-900 hover-target">Masuk</a>
+                <a href="dashboard.html"
+                    class="bg-slate-900 text-white text-sm font-bold rounded-full px-6 py-2.5 hover:bg-brand-500 transition-all shadow-lg shadow-slate-900/20 hover:shadow-brand-500/40 hover:-translate-y-0.5 hover-target">Dashboard</a>
+            </div>
+        </nav>
+    </div>
+
+    <section class="min-h-screen pt-32 pb-16 px-4 flex items-center justify-center relative overflow-hidden">
+
+        <div class="absolute top-10 left-0 w-96 h-96 bg-brand-100/50 rounded-full blur-3xl pointer-events-none"></div>
+        <div
+            class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-amber-50 rounded-full blur-3xl pointer-events-none">
+        </div>
+
+        <div
+            class="w-full max-w-5xl flex bg-white rounded-[2rem] shadow-2xl shadow-slate-200/50 overflow-hidden relative z-10 border border-slate-100">
+
+            <div class="hidden lg:flex w-1/2 bg-slate-900 p-12 flex-col justify-between relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10"
+                    style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;">
+                </div>
+                <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-brand-500 rounded-full blur-3xl opacity-30"></div>
+
+                <div class="relative z-10">
+                    <h1 class="text-4xl font-extrabold text-white leading-tight mb-4 mt-8">
+                        Digitalisasi Desa,<br>Maju Bersama.
+                    </h1>
+                    <p class="text-slate-400 text-lg">
+                        Akses layanan administrasi, pantau UMKM, dan berinteraksi dengan warga dalam satu platform
+                        terpadu.
+                    </p>
+                </div>
+
+                <div class="relative z-10 bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 mt-8">
+                    <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Akses Akun Demo Lomba
+                    </h3>
+                    <ul class="space-y-4 text-sm text-slate-300">
+                        <li class="flex justify-between items-center border-b border-white/10 pb-3 hover-target">
+                            <span><strong>Admin Folder:</strong> admin@desasmart.id</span>
+                            <code class="bg-brand-500/20 text-brand-300 px-2.5 py-1 rounded font-mono">admin123</code>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-white/10 pb-3 hover-target">
+                            <span><strong>Seller Folder:</strong> seller@desasmart.id</span>
+                            <code class="bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded font-mono">seller123</code>
+                        </li>
+                        <li class="flex justify-between items-center hover-target">
+                            <span><strong>User Folder:</strong> user@desasmart.id</span>
+                            <code class="bg-blue-500/20 text-blue-300 px-2.5 py-1 rounded font-mono">user123</code>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="w-full lg:w-1/2 p-8 md:p-14 flex flex-col justify-center bg-white relative">
+
+                <div class="mb-10 text-center lg:text-left">
+                    <h2 class="text-3xl font-extrabold text-slate-900 mb-2">Selamat Datang 👋</h2>
+                    <p class="text-slate-500">Silakan masuk menggunakan akun terdaftar Anda.</p>
+                </div>
+
+                <div id="errorMessage"
+                    class="hidden mb-6 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-medium flex items-start gap-3">
+                    <svg class="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span id="errorText">Email atau password salah! Silakan cek kembali.</span>
+                </div>
+
+                <form id="loginForm" class="space-y-6 relative z-10">
+                    <div class="input-group">
+                        <input type="email" id="email" class="input-field hover-target" placeholder=" " required
+                            autocomplete="email">
+                        <label for="email" class="input-label">Alamat Email</label>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="password" class="input-field pr-12 hover-target" placeholder=" "
+                            required autocomplete="current-password">
+                        <label for="password" class="input-label">Kata Sandi</label>
+                        <button type="button" id="togglePassword"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-brand-500 transition-colors focus:outline-none hover-target">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="eyeIcon">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between text-sm">
+                        <label class="flex items-center gap-2 cursor-pointer group hover-target">
+                            <input type="checkbox"
+                                class="w-4 h-4 rounded border-slate-300 text-brand-500 focus:ring-brand-500 accent-brand-500">
+                            <span class="text-slate-500 group-hover:text-slate-900 transition-colors">Ingat saya</span>
+                        </label>
+                        <a href="#"
+                            class="font-semibold text-brand-600 hover:text-brand-700 transition-colors hover-target">Lupa
+                            sandi?</a>
+                    </div>
+
+                    <button type="submit" id="submitBtn"
+                        class="w-full bg-slate-900 text-white font-bold py-4 rounded-xl hover:bg-brand-500 transition-all shadow-lg shadow-slate-900/20 hover:shadow-brand-500/40 hover:-translate-y-1 flex items-center justify-center gap-2 mt-4 hover-target">
+                        <span id="btnText">Masuk ke Dashboard</span>
+                        <svg id="btnSpinner" class="w-5 h-5 animate-spin hidden" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                    </button>
+                </form>
+
+                <p class="mt-8 text-center text-sm text-slate-500">
+                    Belum punya akun warga?
+                    <a href="#" class="font-bold text-brand-600 hover:underline hover-target">Daftar ke Balai Desa</a>
+                </p>
+
+                <div class="block lg:hidden mt-8 p-5 bg-slate-50 rounded-xl border border-slate-200 text-sm">
+                    <p class="font-bold text-slate-900 mb-3 text-center">Info Akun Demo:</p>
+                    <div class="space-y-2 text-slate-600">
+                        <p><strong>Admin:</strong> admin@desasmart.id / admin123</p>
+                        <p><strong>Seller:</strong> seller@desasmart.id / seller123</p>
+                        <p><strong>User:</strong> user@desasmart.id / user123</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            /* 1. SETUP KURSOR & NAV AKTIF */
+            const cursor = document.querySelector('.custom-cursor');
+            const cursorDot = document.querySelector('.custom-cursor-dot');
+            document.addEventListener('mousemove', e => {
+                requestAnimationFrame(() => {
+                    cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+                    cursorDot.style.left = e.clientX + 'px'; cursorDot.style.top = e.clientY + 'px';
+                });
+            });
+            const updateHoverTargets = () => {
+                document.querySelectorAll('.hover-target, a, button, input').forEach(t => {
+                    t.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+                    t.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+                });
+            };
+            updateHoverTargets();
+
+            const currentPage = window.location.pathname.split("/").pop() || 'login.html';
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('data-page') === currentPage) link.classList.add('active');
+            });
+
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) { navbar.classList.add('bg-white/90'); navbar.classList.remove('bg-white/70'); }
+                else { navbar.classList.add('bg-white/70'); navbar.classList.remove('bg-white/90'); }
+            });
+
+            /* 2. LOGIKA FORM LOGIN & ROUTING FOLDER */
+            const form = document.getElementById('loginForm');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const togglePasswordBtn = document.getElementById('togglePassword');
+            const eyeIcon = document.getElementById('eyeIcon');
+
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Toggle Show/Hide Password
+            togglePasswordBtn.addEventListener('click', () => {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+
+                if (type === 'text') {
+                    eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>`;
+                } else {
+                    eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>`;
+                }
+            });
+
+            // Login Logic with Directory Routing
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                errorMessage.classList.add('hidden');
+                form.classList.remove('shake');
+
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-90', 'cursor-not-allowed');
+                btnText.innerText = "Memverifikasi...";
+                btnSpinner.classList.remove('hidden');
+
+                const email = emailInput.value.trim();
+                const password = passwordInput.value;
+
+                setTimeout(() => {
+                    let redirectUrl = "";
+
+                    // Arahkan ke folder masing-masing sesuai instruksi
+                    if (email === "admin@desasmart.id" && password === "admin123") {
+                        redirectUrl = "../admin/index.html";
+                    } else if (email === "seller@desasmart.id" && password === "seller123") {
+                        redirectUrl = "../seller/index.html";
+                    } else if (email === "user@desasmart.id" && password === "user123") {
+                        redirectUrl = "../user/index.html";
+                    } else {
+                        // Kredensial Salah
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('opacity-90', 'cursor-not-allowed');
+                        btnText.innerText = "Masuk ke Dashboard";
+                        btnSpinner.classList.add('hidden');
+
+                        errorMessage.classList.remove('hidden');
+                        form.classList.add('shake');
+                        return;
+                    }
+
+                    // Sukses Login
+                    btnSpinner.classList.add('hidden');
+                    btnText.innerText = "Berhasil Masuk!";
+                    submitBtn.classList.remove('bg-slate-900', 'hover:bg-brand-500');
+                    submitBtn.classList.add('bg-brand-500'); // Warna hijau sukses
+
+                    // Redirect ke target folder
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 600);
+
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+
+</html>

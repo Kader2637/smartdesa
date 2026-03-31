@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hubungi Kami - DesaSmart</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: { brand: { 50: '#ecfdf5', 100: '#d1fae5', 400: '#34d399', 500: '#10b981', 600: '#059669', 900: '#064e3b' },
+                              contact: { 50: '#f5f3ff', 100: '#ede9fe', 500: '#8b5cf6', 600: '#7c3aed' } // Aksen ungu untuk kontak
+                    },
+                    animation: { 'blob': 'blob 10s infinite alternate' },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '50%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '100%': { transform: 'translate(-20px, 20px) scale(0.9)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* BASE & CURSOR */
+        body { background-color: #f8fafc; overflow-x: hidden; cursor: none; }
+        .custom-cursor { position: fixed; top: 0; left: 0; width: 20px; height: 20px; border: 2px solid #8b5cf6; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s; mix-blend-mode: difference; }
+        .custom-cursor-dot { position: fixed; top: 0; left: 0; width: 6px; height: 6px; background-color: #8b5cf6; border-radius: 50%; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); transition: transform 0.1s; }
+        .hover-active .custom-cursor { width: 50px; height: 50px; background-color: rgba(139, 92, 246, 0.2); border-color: transparent; }
+
+        /* SCROLLBAR & GLASS */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+
+        /* ANIMATIONS & CARDS */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        .info-card { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .info-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -10px rgba(139, 92, 246, 0.1); border-color: #ddd6fe; }
+
+        /* ACTIVE NAV LINK */
+        .nav-link.active { color: #0f172a; font-weight: 700; }
+        .nav-link.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px; background-color: #10b981; border-radius: 99px; }
+
+        /* FORM INPUTS */
+        .input-field { transition: all 0.3s ease; }
+        .input-field:focus { box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1); }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-contact-500 selection:text-white">
+
+    <div class="custom-cursor hidden md:block"></div>
+    <div class="custom-cursor-dot hidden md:block"></div>
+
+    <div class="fixed top-6 inset-x-0 z-50 flex justify-center px-4 pointer-events-none">
+        <nav class="glass border border-white/60 shadow-lg shadow-slate-200/50 rounded-full px-6 py-4 w-full max-w-6xl flex items-center justify-between transition-all duration-300 pointer-events-auto" id="navbar">
+            <a href="index.html" class="flex items-center gap-3 group hover-target">
+                <div class="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center group-hover:-rotate-12 transition-transform duration-500">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 12h3v8h14v-8h3L12 2z" /></svg>
+                </div>
+                <span class="font-extrabold text-slate-900 tracking-tight text-xl">Desa<span class="text-brand-500">Smart.</span></span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-10 font-medium text-sm text-slate-500" id="nav-links">
+                <a href="index.html" data-page="index.html" class="nav-link hover:text-slate-900 transition-all hover-target relative py-1">Beranda</a>
+                <a href="layanan.html" data-page="layanan.html" class="nav-link hover:text-slate-900 transition-all hover-target relative py-1">Layanan</a>
+                <a href="umkm.html" data-page="umkm.html" class="nav-link hover:text-slate-900 transition-all hover-target relative py-1">UMKM</a>
+                <a href="berita.html" data-page="berita.html" class="nav-link hover:text-slate-900 transition-all hover-target relative py-1">Berita</a>
+                <a href="kontak.html" data-page="kontak.html" class="nav-link hover:text-slate-900 transition-all hover-target relative py-1">Kontak</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="login.html" class="hidden md:block text-sm font-semibold text-slate-600 hover:text-slate-900 hover-target">Masuk</a>
+                <a href="dashboard.html" class="bg-slate-900 text-white text-sm font-bold rounded-full px-6 py-2.5 hover:bg-brand-500 transition-all shadow-lg shadow-slate-900/20 hover:shadow-brand-500/40 hover:-translate-y-0.5 hover-target">Dashboard</a>
+            </div>
+        </nav>
+    </div>
+
+    <section class="relative pt-40 pb-20 overflow-hidden px-4">
+        <div class="absolute top-0 right-1/4 w-[400px] h-[400px] bg-contact-100 blur-[100px] rounded-full -z-10 animate-blob"></div>
+        <div class="absolute bottom-0 left-1/4 w-[300px] h-[300px] bg-brand-50 blur-[100px] rounded-full -z-10 animate-blob" style="animation-delay: 2s"></div>
+
+        <div class="max-w-7xl mx-auto z-10 text-center reveal">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-contact-50 border border-contact-100 text-sm font-semibold text-contact-600 mb-6">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                Pusat Bantuan & Layanan Warga
+            </div>
+            <h1 class="text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.1] mb-6">
+                Punya Pertanyaan? <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-contact-600 to-brand-500">Mari Berdiskusi.</span>
+            </h1>
+            <p class="text-lg text-slate-500 max-w-2xl mx-auto">
+                Sampaikan aspirasi, aduan, atau pertanyaan Anda kepada Pemerintah Desa. Kami siap membantu melayani kebutuhan Anda dengan cepat dan transparan.
+            </p>
+        </div>
+    </section>
+
+    <section class="pb-24 px-4 relative z-10">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+            
+            <div class="space-y-8 reveal" style="transition-delay: 100ms;">
+                
+                <h2 class="text-2xl font-bold text-slate-900 mb-6">Informasi Kontak</h2>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm info-card flex flex-col hover-target cursor-none">
+                        <div class="w-12 h-12 bg-contact-50 rounded-2xl flex items-center justify-center text-contact-600 mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-slate-900 mb-1">Alamat Balai Desa</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">Jl. Raya Nusantara No. 45, Kecamatan Makmur, Kabupaten Gemilang, 65141.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm info-card flex flex-col hover-target cursor-none">
+                        <div class="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center text-brand-600 mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-slate-900 mb-1">Telepon / WhatsApp</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">+62 812-3456-7890<br><span class="text-xs text-brand-500 font-medium">(Fast Response Pk 08.00 - 15.00)</span></p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm info-card flex flex-col hover-target cursor-none">
+                        <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-slate-900 mb-1">Email Resmi</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">halo@desasmart.id<br>pelayanan@desasmart.id</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm info-card flex flex-col hover-target cursor-none">
+                        <div class="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600 mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-slate-900 mb-1">Jam Pelayanan</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">Senin - Jumat: 08:00 - 15:00<br>Sabtu - Minggu: Libur / Tutup</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-2 rounded-3xl border border-slate-100 shadow-sm h-64 overflow-hidden relative">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.2185244585145!2d112.60670867414988!3d-7.976326179513328!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e788281bdd08839%3A0xc915f268bfa3ea85!2sMalang%2C%20Kota%20Malang%2C%20Jawa%20Timur!5e0!3m2!1sid!2sid!4v1711867891234!5m2!1sid!2sid" width="100%" height="100%" style="border:0; border-radius: 1.25rem;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+
+            </div>
+
+            <div class="bg-white rounded-[2.5rem] p-8 md:p-12 border border-slate-100 shadow-2xl shadow-slate-200/50 relative overflow-hidden reveal" style="transition-delay: 200ms;">
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-contact-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                <h2 class="text-2xl font-bold text-slate-900 mb-2">Kirim Pesan Langsung</h2>
+                <p class="text-slate-500 mb-8 text-sm">Gunakan formulir di bawah ini untuk mengirimkan saran, kritik, atau pertanyaan. Kami akan membalas via Email atau WhatsApp Anda.</p>
+
+                <form id="contactForm" class="space-y-5">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-1.5">
+                            <label for="name" class="text-sm font-semibold text-slate-700">Nama Lengkap <span class="text-red-500">*</span></label>
+                            <input type="text" id="name" required class="input-field w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-contact-500 focus:bg-white hover-target cursor-none" placeholder="Cth: Budi Santoso">
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label for="phone" class="text-sm font-semibold text-slate-700">No. WhatsApp <span class="text-red-500">*</span></label>
+                            <input type="tel" id="phone" required class="input-field w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-contact-500 focus:bg-white hover-target cursor-none" placeholder="0812xxxxxx">
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label for="email" class="text-sm font-semibold text-slate-700">Alamat Email</label>
+                        <input type="email" id="email" class="input-field w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-contact-500 focus:bg-white hover-target cursor-none" placeholder="budi@contoh.com">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label for="kategori" class="text-sm font-semibold text-slate-700">Kategori <span class="text-red-500">*</span></label>
+                        <select id="kategori" required class="input-field w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-contact-500 focus:bg-white appearance-none hover-target cursor-none">
+                            <option value="" disabled selected>Pilih kategori pesan...</option>
+                            <option value="pertanyaan">Pertanyaan Umum</option>
+                            <option value="pengaduan">Pengaduan Masyarakat</option>
+                            <option value="saran">Saran & Masukan</option>
+                            <option value="layanan">Kendala Layanan Digital</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label for="message" class="text-sm font-semibold text-slate-700">Detail Pesan <span class="text-red-500">*</span></label>
+                        <textarea id="message" rows="5" required class="input-field w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-contact-500 focus:bg-white resize-none hover-target cursor-none" placeholder="Tuliskan pesan Anda secara detail di sini..."></textarea>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl hover:bg-contact-600 transition-all shadow-lg shadow-slate-900/20 hover:shadow-contact-500/30 hover:-translate-y-1 hover-target flex items-center justify-center gap-2 mt-4 cursor-none">
+                        <span id="btnText">Kirim Pesan Sekarang</span>
+                        <svg id="btnIcon" class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        
+                        <svg id="btnSpinner" class="w-5 h-5 animate-spin hidden" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    </button>
+                    
+                    <div id="successAlert" class="hidden mt-4 bg-brand-50 border border-brand-200 text-brand-600 text-sm font-medium px-4 py-3 rounded-xl flex items-start gap-3">
+                        <svg class="w-5 h-5 text-brand-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <p><strong>Terima kasih!</strong> Pesan Anda telah berhasil terkirim. Tim kami akan segera menindaklanjuti laporan Anda melalui kontak yang dicantumkan.</p>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-900 text-white pt-24 pb-10 border-t-4 border-contact-500">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div class="md:col-span-2">
+                <a href="index.html" class="flex items-center gap-2 mb-6 hover-target w-max">
+                    <div class="w-10 h-10 bg-contact-500 rounded-full flex items-center justify-center"><svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 12h3v8h14v-8h3L12 2z"/></svg></div>
+                    <span class="font-bold text-2xl tracking-tight">Desa<span class="text-contact-400">Smart.</span></span>
+                </a>
+                <p class="text-slate-400 max-w-sm leading-relaxed">Pusat keterbukaan informasi publik dan layanan responsif demi menciptakan lingkungan desa yang aman dan sejahtera.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-lg mb-6">Menu Navigasi</h4>
+                <ul class="space-y-4 text-slate-400">
+                    <li><a href="layanan.html" class="hover:text-contact-400 transition-colors hover-target cursor-none">Layanan Desa</a></li>
+                    <li><a href="umkm.html" class="hover:text-contact-400 transition-colors hover-target cursor-none">Marketplace</a></li>
+                    <li><a href="berita.html" class="hover:text-contact-400 transition-colors hover-target cursor-none">Berita</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-lg mb-6">Sosial Media</h4>
+                <div class="flex items-center gap-4 text-slate-400">
+                    <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-contact-500 hover:text-white transition-colors hover-target cursor-none">FB</a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-contact-500 hover:text-white transition-colors hover-target cursor-none">IG</a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-contact-500 hover:text-white transition-colors hover-target cursor-none">YT</a>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 border-t border-slate-800 pt-8 text-sm">
+            <p>&copy; 2026 DesaSmart V2.0. Pusat Layanan Warga.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            /* 1. SETUP KURSOR, NAV AKTIF, NAVBAR BLUR */
+            const cursor = document.querySelector('.custom-cursor');
+            const cursorDot = document.querySelector('.custom-cursor-dot');
+            document.addEventListener('mousemove', e => {
+                requestAnimationFrame(() => {
+                    cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+                    cursorDot.style.left = e.clientX + 'px'; cursorDot.style.top = e.clientY + 'px';
+                });
+            });
+            const updateHoverTargets = () => {
+                document.querySelectorAll('.hover-target, a, button, input, textarea, select, .info-card').forEach(t => {
+                    t.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+                    t.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+                });
+            };
+            updateHoverTargets();
+
+            // Aktifkan Navigasi saat ini
+            const currentPage = window.location.pathname.split("/").pop() || 'kontak.html';
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('data-page') === currentPage) link.classList.add('active');
+            });
+
+            // Efek Navbar saat Scroll
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) { navbar.classList.add('bg-white/90'); navbar.classList.remove('bg-white/70'); }
+                else { navbar.classList.add('bg-white/70'); navbar.classList.remove('bg-white/90'); }
+            });
+
+            /* 2. SCROLL REVEAL OBSERVER */
+            const reveals = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+            reveals.forEach(el => revealObserver.observe(el));
+
+
+            /* 3. FORM SUBMISSION LOGIC (Simulasi) */
+            const form = document.getElementById('contactForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnIcon = document.getElementById('btnIcon');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const successAlert = document.getElementById('successAlert');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault(); // Mencegah reload halaman
+
+                // Ubah status tombol menjadi loading
+                submitBtn.disabled = true;
+                submitBtn.classList.remove('hover:-translate-y-1');
+                submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                btnText.innerText = "Mengirim...";
+                btnIcon.classList.add('hidden');
+                btnSpinner.classList.remove('hidden');
+                successAlert.classList.add('hidden'); // Sembunyikan alert jika sudah ada
+
+                // Simulasi delay pengiriman server (1.5 detik)
+                setTimeout(() => {
+                    // Tampilkan pesan sukses
+                    successAlert.classList.remove('hidden');
+                    
+                    // Reset form
+                    form.reset();
+
+                    // Kembalikan tombol ke keadaan semula
+                    submitBtn.disabled = false;
+                    submitBtn.classList.add('hover:-translate-y-1');
+                    submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                    btnText.innerText = "Kirim Pesan Sekarang";
+                    btnIcon.classList.remove('hidden');
+                    btnSpinner.classList.add('hidden');
+
+                    // Scroll pelan ke pesan sukses
+                    successAlert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                }, 1500);
+            });
+
+        });
+    </script>
+</body>
+</html>

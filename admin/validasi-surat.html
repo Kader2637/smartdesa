@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validasi Surat - Smart Desa</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .font-serif-surat {
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        /* Animasi stempel TTD */
+        .ttd-stamp {
+            animation: stampIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes stampIn {
+            0% {
+                transform: scale(2) rotate(-15deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800" x-data="{ sidebarOpen: false, profileOpen: false }">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden"
+            @click="sidebarOpen = false"></div>
+
+        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+            class="fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-slate-200 transition-transform duration-300 lg:static lg:translate-x-0 lg:flex lg:flex-col shadow-sm">
+            <div class="flex items-center justify-center h-20 border-b border-slate-100">
+                <div class="flex items-center gap-2 font-bold text-2xl text-emerald-600 tracking-tight">
+                    <i class="fas fa-leaf"></i> Smart<span class="text-slate-800">Desa</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+                <p class="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-2">Pusat Kendali</p>
+                <a href="index.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-shield-alt w-5 text-center"></i> <span>Dashboard Admin</span>
+                </a>
+                <a href="moderasi-produk.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-check-circle w-5 text-center"></i> <span>Moderasi Produk</span>
+                </a>
+                <a href="validasi-surat.html"
+                    class="flex items-center gap-3 px-4 py-2.5 bg-emerald-50 text-emerald-600 font-semibold rounded-lg">
+                    <i class="fas fa-file-signature w-5 text-center"></i> <span>Validasi Surat</span>
+                </a>
+                <a href="kelola-user.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-users-cog w-5 text-center"></i> <span>Kelola User & UMKM</span>
+                </a>
+
+                <p class="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-6">Akses Cepat</p>
+                <a href="../landingpage/umkm.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-store w-5 text-center"></i> <span>Belanja (Marketplace)</span>
+                </a>
+                
+                <a href="statistik-global.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-chart-line w-5 text-center"></i> <span>Statistik Global</span>
+                </a>
+            </nav>
+        </aside>
+
+        <div class="flex-1 flex flex-col overflow-hidden">
+
+            <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-200">
+                <div class="flex items-center gap-4">
+                    <button @click="sidebarOpen = true"
+                        class="text-slate-500 focus:outline-none lg:hidden hover:text-emerald-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div class="hidden md:flex relative">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" placeholder="Cari NIK atau Nama Pemohon..."
+                            class="pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 w-72 text-sm outline-none">
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-5">
+                    <div class="relative">
+                        <button @click="profileOpen = !profileOpen" class="flex items-center gap-3 focus:outline-none">
+                            <img src="https://ui-avatars.com/api/?name=Admin+Desa&background=10B981&color=fff"
+                                alt="Avatar" class="h-9 w-9 rounded-full object-cover">
+                            <div class="hidden md:block text-left">
+                                <p class="text-sm font-semibold text-slate-700 leading-tight">Kepala Admin</p>
+                            </div>
+                            <i class="fas fa-chevron-down text-xs text-slate-400"></i>
+                        </button>
+                        <div x-show="profileOpen" @click.away="profileOpen = false" x-transition
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border border-slate-100 z-50">
+                            <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50"><i
+                                    class="fas fa-sign-out-alt mr-2"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 p-4 sm:p-6" x-data="suratApp()">
+
+                <div class="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Penerbitan Surat Administrasi</h2>
+                        <p class="text-slate-500 text-sm mt-1">Periksa berkas warga, *generate* surat otomatis, dan
+                            bubuhkan TTE.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-2 rounded-xl border border-slate-200 shadow-sm flex flex-wrap gap-2 mb-6">
+                    <button @click="activeTab = 'pending'"
+                        :class="activeTab === 'pending' ? 'bg-blue-100 text-blue-700 font-bold' : 'text-slate-500 hover:bg-slate-50'"
+                        class="px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
+                        <i class="fas fa-inbox"></i> Antrean
+                        <span class="bg-blue-500 text-white text-[10px] px-2 py-0.5 rounded-full"
+                            x-text="suratList.filter(s => s.status === 'pending').length"></span>
+                    </button>
+                    <button @click="activeTab = 'approved'"
+                        :class="activeTab === 'approved' ? 'bg-emerald-100 text-emerald-700 font-bold' : 'text-slate-500 hover:bg-slate-50'"
+                        class="px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
+                        <i class="fas fa-paper-plane"></i> Surat Terbit
+                    </button>
+                    <button @click="activeTab = 'rejected'"
+                        :class="activeTab === 'rejected' ? 'bg-red-100 text-red-700 font-bold' : 'text-slate-500 hover:bg-slate-50'"
+                        class="px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
+                        <i class="fas fa-times-circle"></i> Berkas Ditolak
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+
+                    <template x-for="surat in filteredSurat" :key="surat.id">
+                        <div
+                            class="bg-white rounded-xl border border-slate-200 shadow-sm p-4 sm:p-5 flex flex-col md:flex-row gap-4 sm:gap-5 items-start md:items-center transition hover:shadow-md">
+
+                            <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center shrink-0"
+                                :class="{
+                                     'bg-blue-50 text-blue-500': surat.status === 'pending',
+                                     'bg-emerald-50 text-emerald-500': surat.status === 'approved',
+                                     'bg-red-50 text-red-500': surat.status === 'rejected'
+                                 }">
+                                <i class="fas text-xl sm:text-2xl" :class="surat.icon"></i>
+                            </div>
+
+                            <div class="flex-1 w-full">
+                                <div class="flex flex-wrap items-center gap-2 mb-1">
+                                    <h3 class="text-sm sm:text-base font-bold text-slate-800" x-text="surat.type"></h3>
+                                    <span
+                                        class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-500"><i
+                                            class="far fa-clock mr-1"></i> <span x-text="surat.date"></span></span>
+                                </div>
+
+                                <div
+                                    class="grid grid-cols-1 md:grid-cols-2 gap-y-1 text-xs sm:text-sm text-slate-600 mt-2">
+                                    <p><i class="far fa-user w-4 text-slate-400"></i> <strong class="text-slate-700"
+                                            x-text="surat.name"></strong></p>
+                                    <p><i class="far fa-id-card w-4 text-slate-400"></i> NIK: <span
+                                            x-text="surat.nik"></span></p>
+                                    <p class="md:col-span-2 truncate"><i
+                                            class="fas fa-map-marker-alt w-4 text-slate-400"></i> <span
+                                            x-text="surat.address"></span></p>
+                                </div>
+
+                                <div x-show="surat.status === 'rejected'"
+                                    class="mt-3 p-2 bg-red-50 border border-red-100 rounded text-xs text-red-700">
+                                    <strong><i class="fas fa-exclamation-triangle mr-1"></i> Alasan Penolakan:</strong>
+                                    <span x-text="surat.reason"></span>
+                                </div>
+                                <div x-show="surat.status === 'approved'"
+                                    class="mt-3 p-2 bg-emerald-50 border border-emerald-100 rounded text-xs text-emerald-700 flex items-center">
+                                    <i class="fas fa-check-circle mr-2 text-emerald-500"></i> Surat elektronik telah
+                                    diterbitkan ke akun warga.
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto mt-4 md:mt-0">
+                                <button @click="openDetail(surat)"
+                                    class="bg-slate-100 text-slate-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-200 transition whitespace-nowrap text-center">
+                                    <i class="fas fa-folder-open mr-1"></i> Cek Berkas
+                                </button>
+
+                                <template x-if="surat.status === 'pending'">
+                                    <button @click="openPublishModal(surat)"
+                                        class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 transition flex justify-center items-center gap-2 whitespace-nowrap shadow-sm shadow-blue-200 w-full sm:w-auto">
+                                        <i class="fas fa-pen-nib"></i> Proses Surat
+                                    </button>
+                                </template>
+
+                                <template x-if="surat.status === 'approved'">
+                                    <button
+                                        class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-50 transition flex justify-center items-center gap-2 whitespace-nowrap w-full sm:w-auto">
+                                        <i class="fas fa-download"></i> Unduh Arsip
+                                    </button>
+                                </template>
+                            </div>
+
+                        </div>
+                    </template>
+
+                    <div x-show="filteredSurat.length === 0" x-cloak
+                        class="bg-white rounded-xl border border-slate-200 border-dashed p-10 text-center">
+                        <div
+                            class="w-16 h-16 bg-slate-50 text-slate-400 rounded-full flex items-center justify-center text-3xl mx-auto mb-3">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-800">Bersih!</h3>
+                        <p class="text-sm text-slate-500 mt-1">Tidak ada pengajuan surat di kategori ini.</p>
+                    </div>
+
+                </div>
+
+                <div x-show="showDetailModal" x-cloak class="relative z-[50]" aria-labelledby="modal-title"
+                    role="dialog" aria-modal="true">
+                    <div x-transition.opacity class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm"></div>
+
+                    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+                        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                            <div x-transition.scale.origin.center @click.away="showDetailModal = false"
+                                class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl p-4 sm:p-6 w-full">
+                                <div class="flex justify-between items-start mb-6 pb-4 border-b border-slate-100">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-slate-800">Detail Pengajuan Berkas</h3>
+                                        <p class="text-sm text-slate-500" x-text="selectedSurat?.type"></p>
+                                    </div>
+                                    <button @click="showDetailModal = false"
+                                        class="text-slate-400 hover:text-slate-700 bg-slate-100 w-8 h-8 rounded-full flex items-center justify-center"><i
+                                            class="fas fa-times"></i></button>
+                                </div>
+
+                                <template x-if="selectedSurat">
+                                    <div class="space-y-6">
+                                        <div>
+                                            <h4
+                                                class="text-sm font-bold text-slate-800 mb-3 uppercase tracking-wider text-emerald-600">
+                                                Data Pemohon</h4>
+                                            <div
+                                                class="bg-slate-50 p-4 rounded-xl border border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                                                <div>
+                                                    <p class="text-slate-500 text-xs mb-1">Nama Lengkap</p>
+                                                    <p class="font-semibold text-slate-800" x-text="selectedSurat.name">
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-slate-500 text-xs mb-1">NIK</p>
+                                                    <p class="font-semibold text-slate-800" x-text="selectedSurat.nik">
+                                                    </p>
+                                                </div>
+                                                <div class="sm:col-span-2">
+                                                    <p class="text-slate-500 text-xs mb-1">Alamat</p>
+                                                    <p class="font-semibold text-slate-800"
+                                                        x-text="selectedSurat.address"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h4
+                                                class="text-sm font-bold text-slate-800 mb-3 uppercase tracking-wider text-emerald-600">
+                                                Lampiran Bukti</h4>
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                <div class="border border-slate-200 rounded-xl p-2">
+                                                    <p class="text-xs font-semibold text-slate-500 text-center mb-2">
+                                                        Foto KTP</p><img
+                                                        src="https://images.unsplash.com/photo-1633265486064-086b219458ce?w=400&q=80"
+                                                        class="w-full h-32 object-cover rounded-lg">
+                                                </div>
+                                                <div
+                                                    class="border border-slate-200 rounded-xl p-2 flex flex-col items-center justify-center bg-slate-50 py-6 sm:py-0">
+                                                    <i class="fas fa-file-pdf text-4xl text-red-400 mb-2"></i>
+                                                    <p class="text-sm font-semibold text-slate-700">Pengantar_RT.pdf</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <div class="mt-6 pt-4 border-t border-slate-100 flex flex-col sm:flex-row justify-end gap-3"
+                                    x-show="selectedSurat?.status === 'pending'">
+                                    <button @click="showDetailModal = false; showRejectModal = true"
+                                        class="w-full sm:w-auto bg-white border border-red-200 text-red-600 px-4 py-2 rounded-lg text-sm font-bold hover:bg-red-50 text-center">Tolak
+                                        Berkas Kurang</button>
+                                    <button @click="showDetailModal = false; openPublishModal(selectedSurat)"
+                                        class="w-full sm:w-auto bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 text-center">Berkas
+                                        Valid -> Proses Surat</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="showPublishModal" x-cloak class="relative z-[60]" aria-labelledby="modal-title"
+                    role="dialog" aria-modal="true">
+
+                    <div x-transition.opacity class="fixed inset-0 bg-slate-900/80 backdrop-blur-md"></div>
+
+                    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+                        <div class="flex min-h-full items-start justify-center p-2 sm:p-4 text-center">
+
+                            <div x-transition.scale.origin.top
+                                class="relative transform text-left transition-all w-full max-w-3xl my-4 sm:my-8 flex flex-col gap-4">
+
+                                <div
+                                    class="bg-white rounded-xl shadow-lg p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b-4 border-blue-600">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-slate-800">Penerbitan Surat Otomatis</h3>
+                                        <p class="text-xs text-slate-500">Lengkapi nomor surat dan berikan TTD.</p>
+                                    </div>
+                                    <div
+                                        class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                                        <label class="text-sm font-bold text-slate-700 whitespace-nowrap">No.
+                                            Surat:</label>
+                                        <input type="text" x-model="nomorSurat"
+                                            class="border border-slate-300 rounded px-3 py-1.5 text-sm w-full sm:w-48 focus:border-blue-500 focus:outline-none bg-yellow-50"
+                                            placeholder="140/xxx/35.07/2026">
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="bg-white rounded shadow-2xl mx-auto w-full p-5 sm:p-8 md:p-12 font-serif-surat text-black min-h-max relative overflow-x-hidden">
+                                    <div
+                                        class="border-b-4 border-double border-black pb-3 sm:pb-4 mb-4 sm:mb-6 text-center flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Lambang_Kabupaten_Malang.png/410px-Lambang_Kabupaten_Malang.png"
+                                            alt="Logo Kab Malang" class="w-16 sm:w-20">
+                                        <div>
+                                            <h2 class="font-bold text-lg sm:text-xl uppercase tracking-wider">Pemerintah
+                                                Kabupaten Malang</h2>
+                                            <h2 class="font-bold text-lg sm:text-xl uppercase tracking-wider">Kecamatan
+                                                Singosari</h2>
+                                            <h1 class="font-bold text-xl sm:text-2xl uppercase tracking-widest">Desa
+                                                Tunjungtirto</h1>
+                                            <p class="text-xs sm:text-sm mt-1 sm:mt-0">Jl. Raya Tunjungtirto No. 01,
+                                                Kodepos 65153, Email: pemdes@tunjungtirto.desa.id</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center mb-6 sm:mb-8">
+                                        <h3 class="font-bold text-lg sm:text-xl uppercase underline"
+                                            x-text="selectedSurat?.type.split(' (')[0]"></h3>
+                                        <p class="text-sm sm:text-base mt-1">Nomor: <span
+                                                x-text="nomorSurat || '...........................'"></span></p>
+                                    </div>
+
+                                    <div
+                                        class="text-justify leading-relaxed space-y-3 sm:space-y-4 mb-8 sm:mb-10 text-sm sm:text-base">
+                                        <p>Yang bertanda tangan di bawah ini, Kepala Desa Tunjungtirto, Kecamatan
+                                            Singosari, Kabupaten Malang, menerangkan dengan sebenarnya bahwa:</p>
+
+                                        <div class="ml-0 sm:ml-8 mb-4 overflow-x-auto">
+                                            <table class="w-full text-left">
+                                                <tr>
+                                                    <td class="w-24 sm:w-48 pb-2 align-top">Nama</td>
+                                                    <td class="w-4 pb-2 align-top">:</td>
+                                                    <td class="font-bold pb-2 uppercase align-top"
+                                                        x-text="selectedSurat?.name"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="pb-2 align-top">NIK</td>
+                                                    <td class="pb-2 align-top">:</td>
+                                                    <td class="pb-2 align-top" x-text="selectedSurat?.nik"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="pb-2 align-top">Pekerjaan</td>
+                                                    <td class="pb-2 align-top">:</td>
+                                                    <td class="pb-2 align-top">Wiraswasta / Swasta</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="pb-2 align-top">Alamat</td>
+                                                    <td class="pb-2 align-top">:</td>
+                                                    <td class="pb-2 align-top" x-text="selectedSurat?.address"></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                        <p>Orang tersebut di atas adalah benar-benar warga Desa Tunjungtirto yang
+                                            berdomisili pada alamat tersebut. Surat keterangan ini dibuat untuk
+                                            keperluan:</p>
+                                        <p class="font-bold italic text-center my-4">"<span
+                                                x-text="selectedSurat?.purpose"></span>"</p>
+                                        <p>Demikian surat keterangan ini dibuat dengan sebenar-benarnya untuk dapat
+                                            dipergunakan sebagaimana mestinya oleh pihak yang berkepentingan.</p>
+                                    </div>
+
+                                    <div class="flex justify-center sm:justify-end mt-8 sm:mt-12 text-sm sm:text-base">
+                                        <div class="text-center w-full sm:w-64 relative">
+                                            <p>Tunjungtirto, <span x-text="currentDate"></span></p>
+                                            <p class="font-bold mb-4 sm:mb-6">Kepala Desa</p>
+
+                                            <div class="h-20 sm:h-24 relative flex items-center justify-center border-2 border-dashed border-slate-300 bg-slate-50 cursor-pointer rounded hover:bg-slate-100 transition group mx-auto w-48 sm:w-full"
+                                                @click="isSigned = true" x-show="!isSigned">
+                                                <p class="text-xs text-slate-500 font-sans group-hover:text-blue-600"><i
+                                                        class="fas fa-fingerprint mb-1 block text-lg sm:text-xl"></i>
+                                                    Klik untuk<br>TTD Elektronik</p>
+                                            </div>
+
+                                            <div x-show="isSigned"
+                                                class="h-20 sm:h-24 relative flex items-center justify-center ttd-stamp mx-auto w-48 sm:w-full">
+                                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"
+                                                    class="w-12 h-12 sm:w-16 sm:h-16 absolute left-0 opacity-80"
+                                                    alt="QR TTE">
+                                                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Signature_of_John_Hancock.svg"
+                                                    class="w-24 sm:w-32 h-auto opacity-90 relative z-10"
+                                                    alt="TTD Kades">
+                                                <div
+                                                    class="absolute w-20 h-20 sm:w-24 sm:h-24 border-[3px] sm:border-4 border-blue-800 rounded-full right-0 top-0 opacity-40 rotate-12 flex items-center justify-center">
+                                                    <p
+                                                        class="text-[6px] sm:text-[8px] font-sans text-blue-800 font-bold text-center leading-tight">
+                                                        PEMERINTAH DESA<br>TUNJUNGTIRTO</p>
+                                                </div>
+                                            </div>
+
+                                            <p class="font-bold mt-2 underline">Ir. BAMBANG SETIAWAN, M.Si</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 mt-2 mb-10 sm:mb-0">
+                                    <button @click="showPublishModal = false"
+                                        class="w-full sm:w-auto bg-slate-700 text-white px-5 py-3 rounded-lg font-bold hover:bg-slate-600 shadow-lg order-2 sm:order-1 text-center">Batal</button>
+                                    <button @click="publishSurat()"
+                                        :class="isSigned && nomorSurat !== '' ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-500/30' : 'bg-slate-300 cursor-not-allowed'"
+                                        class="w-full sm:w-auto text-white px-6 py-3 rounded-lg font-bold shadow-lg transition flex items-center justify-center gap-2 order-1 sm:order-2">
+                                        <i class="fas fa-paper-plane"></i> Terbitkan & Kirim ke Warga
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="showRejectModal" x-cloak class="relative z-[70]" aria-labelledby="modal-title"
+                    role="dialog" aria-modal="true">
+                    <div x-transition.opacity class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm"></div>
+                    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+                        <div class="flex min-h-full items-center justify-center p-4 text-center">
+                            <div x-transition.scale.origin.center @click.away="showRejectModal = false"
+                                class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 w-full max-w-md p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h3 class="text-lg font-bold text-red-600">Kembalikan Berkas</h3>
+                                    <button @click="showRejectModal = false"
+                                        class="text-slate-400 hover:text-slate-700"><i
+                                            class="fas fa-times text-xl"></i></button>
+                                </div>
+                                <textarea x-model="rejectReason" rows="3"
+                                    class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    placeholder="Tulis alasan penolakan..."></textarea>
+                                <div class="mt-4 flex flex-col sm:flex-row justify-end gap-2">
+                                    <button @click="confirmReject()"
+                                        class="w-full sm:w-auto bg-red-600 text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-red-700 text-center">Tolak
+                                        Berkas</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="showToast" x-transition.opacity.duration.500ms x-cloak
+                    class="fixed bottom-6 right-6 bg-emerald-600 text-white px-6 py-4 rounded-xl shadow-lg flex items-center gap-4 z-50">
+                    <i class="fas fa-check-circle text-2xl"></i>
+                    <div>
+                        <p class="font-bold text-sm">Surat Resmi Diterbitkan!</p>
+                        <p class="text-xs text-emerald-100">Dokumen PDF telah masuk ke akun warga.</p>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        function suratApp() {
+            return {
+                activeTab: 'pending',
+                showDetailModal: false,
+                showPublishModal: false,
+                showRejectModal: false,
+                showToast: false,
+                selectedSurat: null,
+                rejectReason: '',
+
+                nomorSurat: '',
+                isSigned: false,
+                currentDate: '31 Maret 2026',
+
+                suratList: [
+                    { id: 1, type: 'Surat Keterangan Tidak Mampu (SKTM)', name: 'Joko Anwar', nik: '3573012345670001', date: '31 Mar 2026, 09:15', status: 'pending', icon: 'fa-hand-holding-heart', address: 'Jl. Merdeka Gg. 4 No. 12, RT 02 / RW 01', purpose: 'Persyaratan pengajuan keringanan biaya rawat inap rumah sakit.' },
+                    { id: 2, type: 'Surat Pengantar Nikah', name: 'Siti Aminah', nik: '3573012345670002', date: '31 Mar 2026, 10:30', status: 'pending', icon: 'fa-ring', address: 'Perumahan Desa Asri Blok C-4, RT 05 / RW 02', purpose: 'Pengurusan administrasi pernikahan di KUA Kecamatan Singosari.' },
+                    { id: 3, type: 'Surat Keterangan Domisili', name: 'Agus Supriyadi', nik: '3573012345670004', date: '29 Mar 2026, 11:00', status: 'approved', icon: 'fa-map-marked-alt', address: 'Jl. Raya Desa No. 45, RT 03 / RW 01', purpose: 'Persyaratan melamar pekerjaan di luar kota.' },
+                ],
+
+                get filteredSurat() {
+                    return this.suratList.filter(s => s.status === this.activeTab);
+                },
+
+                openDetail(surat) {
+                    this.selectedSurat = surat;
+                    this.showDetailModal = true;
+                },
+
+                openPublishModal(surat) {
+                    this.selectedSurat = surat;
+                    this.nomorSurat = '';
+                    this.isSigned = false;
+
+                    const randomNum = Math.floor(Math.random() * 900) + 100;
+                    this.nomorSurat = `140/${randomNum}/35.07.24/2026`;
+
+                    this.showPublishModal = true;
+                },
+
+                publishSurat() {
+                    if (!this.isSigned) {
+                        alert("Gagal menerbitkan! Anda belum membubuhkan Tanda Tangan Elektronik.");
+                        return;
+                    }
+                    if (this.nomorSurat === '') {
+                        alert("Nomor surat tidak boleh kosong!");
+                        return;
+                    }
+
+                    let s = this.suratList.find(x => x.id === this.selectedSurat.id);
+                    if (s) {
+                        s.status = 'approved';
+                        this.showPublishModal = false;
+
+                        this.showToast = true;
+                        setTimeout(() => { this.showToast = false; }, 3500);
+                    }
+                },
+
+                confirmReject() {
+                    let s = this.suratList.find(x => x.id === this.selectedSurat.id);
+                    if (s) {
+                        s.status = 'rejected';
+                        s.reason = this.rejectReason;
+                        this.showRejectModal = false;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

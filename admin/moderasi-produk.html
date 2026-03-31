@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moderasi Produk - Smart Desa</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Animasi untuk Modal */
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800" x-data="{ sidebarOpen: false, profileOpen: false }">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden"
+            @click="sidebarOpen = false"></div>
+
+        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+            class="fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-slate-200 transition-transform duration-300 lg:static lg:translate-x-0 lg:flex lg:flex-col shadow-sm">
+            <div class="flex items-center justify-center h-20 border-b border-slate-100">
+                <div class="flex items-center gap-2 font-bold text-2xl text-emerald-600 tracking-tight">
+                    <i class="fas fa-leaf"></i> Smart<span class="text-slate-800">Desa</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+                <p class="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-2">Pusat Kendali</p>
+                <a href="index.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-shield-alt w-5 text-center"></i> <span>Dashboard Admin</span>
+                </a>
+                <a href="moderasi-produk.html"
+                    class="flex items-center gap-3 px-4 py-2.5 bg-emerald-50 text-emerald-600 font-semibold rounded-lg">
+                    <i class="fas fa-check-circle w-5 text-center"></i> <span>Moderasi Produk</span>
+                </a>
+                <a href="validasi-surat.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-file-signature w-5 text-center"></i> <span>Validasi Surat</span>
+                </a>
+                <a href="kelola-user.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-users-cog w-5 text-center"></i> <span>Kelola User & UMKM</span>
+                </a>
+
+                <p class="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-6">Akses Cepat</p>
+                <a href="../landingpage/umkm.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-store w-5 text-center"></i> <span>Belanja (Marketplace)</span>
+                </a>
+                
+                <a href="statistik-global.html"
+                    class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-chart-line w-5 text-center"></i> <span>Statistik Global</span>
+                </a>
+            </nav>
+        </aside>
+
+        <div class="flex-1 flex flex-col overflow-hidden">
+
+            <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-200">
+                <div class="flex items-center gap-4">
+                    <button @click="sidebarOpen = true"
+                        class="text-slate-500 focus:outline-none lg:hidden hover:text-emerald-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div class="hidden md:flex relative">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" placeholder="Cari nama produk atau toko..."
+                            class="pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 w-72 text-sm outline-none">
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-5">
+                    <div class="relative">
+                        <button @click="profileOpen = !profileOpen" class="flex items-center gap-3 focus:outline-none">
+                            <img src="https://ui-avatars.com/api/?name=Admin+Desa&background=10B981&color=fff"
+                                alt="Avatar" class="h-9 w-9 rounded-full object-cover">
+                            <div class="hidden md:block text-left">
+                                <p class="text-sm font-semibold text-slate-700 leading-tight">Kepala Admin</p>
+                            </div>
+                            <i class="fas fa-chevron-down text-xs text-slate-400"></i>
+                        </button>
+                        <div x-show="profileOpen" @click.away="profileOpen = false" x-transition
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border border-slate-100 z-50">
+                            <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50"><i
+                                    class="fas fa-sign-out-alt mr-2"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 p-6" x-data="moderationApp()">
+
+                <div class="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-800">Moderasi Produk UMKM</h2>
+                        <p class="text-slate-500 text-sm mt-1">Verifikasi kelayakan, foto, dan harga produk sebelum
+                            tayang di Marketplace.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-2 rounded-xl border border-slate-200 shadow-sm flex flex-wrap gap-2 mb-6">
+                    <button @click="activeTab = 'pending'"
+                        :class="activeTab === 'pending' ? 'bg-orange-100 text-orange-700 font-bold' : 'text-slate-500 hover:bg-slate-50'"
+                        class="px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
+                        <i class="fas fa-clock"></i> Menunggu Validasi
+                        <span class="bg-orange-500 text-white text-[10px] px-2 py-0.5 rounded-full"
+                            x-text="products.filter(p => p.status === 'pending').length"></span>
+                    </button>
+                    <button @click="activeTab = 'approved'"
+                        :class="activeTab === 'approved' ? 'bg-emerald-100 text-emerald-700 font-bold' : 'text-slate-500 hover:bg-slate-50'"
+                        class="px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
+                        <i class="fas fa-check-circle"></i> Disetujui
+                    </button>
+                    <button @click="activeTab = 'rejected'"
+                        :class="activeTab === 'rejected' ? 'bg-red-100 text-red-700 font-bold' : 'text-slate-500 hover:bg-slate-50'"
+                        class="px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
+                        <i class="fas fa-times-circle"></i> Ditolak
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+
+                    <template x-for="product in filteredProducts" :key="product.id">
+                        <div
+                            class="bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex flex-col md:flex-row gap-4 items-start md:items-center transition hover:shadow-md">
+
+                            <img :src="product.image" alt="Product"
+                                class="w-24 h-24 object-cover rounded-lg border border-slate-100">
+
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span
+                                        class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-500"
+                                        x-text="product.category"></span>
+                                </div>
+                                <h3 class="text-base font-bold text-slate-800" x-text="product.name"></h3>
+                                <p class="text-sm text-slate-500 mb-2"><i class="fas fa-store mr-1"></i> <span
+                                        x-text="product.shop"></span></p>
+                                <div class="flex gap-4 text-sm font-semibold">
+                                    <span class="text-emerald-600" x-text="product.price"></span>
+                                    <span class="text-slate-400">Stok: <span x-text="product.stock"></span></span>
+                                </div>
+                                <p x-show="product.status === 'rejected'"
+                                    class="text-xs text-red-600 mt-2 bg-red-50 p-2 rounded border border-red-100">
+                                    <strong>Alasan Ditolak:</strong> <span x-text="product.reason"></span>
+                                </p>
+                            </div>
+
+                            <div class="flex flex-col gap-2 w-full md:w-auto mt-4 md:mt-0">
+                                <button @click="openDetail(product)"
+                                    class="bg-slate-100 text-slate-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-200 transition">
+                                    <i class="fas fa-eye mr-1"></i> Detail
+                                </button>
+
+                                <template x-if="product.status === 'pending'">
+                                    <div class="flex gap-2">
+                                        <button @click="approveProduct(product)"
+                                            class="flex-1 bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-emerald-700 transition">
+                                            <i class="fas fa-check mr-1"></i> Setujui
+                                        </button>
+                                        <button @click="openRejectModal(product)"
+                                            class="flex-1 bg-red-50 text-red-600 border border-red-200 px-4 py-2 rounded-lg text-sm font-bold hover:bg-red-100 transition">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </template>
+                            </div>
+
+                        </div>
+                    </template>
+
+                    <div x-show="filteredProducts.length === 0" x-cloak
+                        class="bg-white rounded-xl border border-slate-200 border-dashed p-10 text-center">
+                        <div
+                            class="w-16 h-16 bg-slate-50 text-slate-400 rounded-full flex items-center justify-center text-3xl mx-auto mb-3">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-800">Tidak ada produk</h3>
+                        <p class="text-sm text-slate-500 mt-1">Daftar produk untuk kategori ini masih kosong.</p>
+                    </div>
+
+                </div>
+
+                <div x-show="showDetailModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center">
+                    <div class="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
+                        @click="showDetailModal = false"></div>
+
+                    <div x-show="showDetailModal" x-transition.scale.origin.center
+                        class="relative bg-white rounded-2xl shadow-xl w-full max-w-lg p-6 m-4 z-10">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-lg font-bold text-slate-800">Detail Lengkap Produk</h3>
+                            <button @click="showDetailModal = false" class="text-slate-400 hover:text-slate-700"><i
+                                    class="fas fa-times text-xl"></i></button>
+                        </div>
+
+                        <template x-if="selectedProduct">
+                            <div>
+                                <img :src="selectedProduct.image"
+                                    class="w-full h-48 object-cover rounded-xl mb-4 border border-slate-100">
+                                <h4 class="text-xl font-bold text-slate-800" x-text="selectedProduct.name"></h4>
+                                <p class="text-sm text-slate-500 mb-4"><i class="fas fa-store"></i> <span
+                                        x-text="selectedProduct.shop"></span></p>
+
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-4">
+                                    <p class="text-sm text-slate-700 font-medium mb-1">Deskripsi:</p>
+                                    <p class="text-sm text-slate-600" x-text="selectedProduct.desc"></p>
+                                </div>
+                            </div>
+                        </template>
+
+                        <div class="mt-6 flex justify-end">
+                            <button @click="showDetailModal = false"
+                                class="bg-slate-200 text-slate-700 px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-300">Tutup</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="showRejectModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center">
+                    <div class="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
+                        @click="showRejectModal = false"></div>
+
+                    <div x-show="showRejectModal" x-transition.scale.origin.center
+                        class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 m-4 z-10">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-lg font-bold text-red-600"><i class="fas fa-exclamation-triangle mr-2"></i>
+                                Tolak Produk</h3>
+                            <button @click="showRejectModal = false" class="text-slate-400 hover:text-slate-700"><i
+                                    class="fas fa-times text-xl"></i></button>
+                        </div>
+
+                        <p class="text-sm text-slate-600 mb-4">Berikan alasan kenapa produk <strong
+                                x-text="selectedProduct?.name"></strong> dari <strong
+                                x-text="selectedProduct?.shop"></strong> ditolak. Alasan ini akan dibaca oleh UMKM.</p>
+
+                        <textarea x-model="rejectReason" rows="3"
+                            class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                            placeholder="Misal: Foto produk terlalu buram, silakan upload ulang dengan foto yang lebih terang."></textarea>
+
+                        <div class="mt-6 flex justify-end gap-3">
+                            <button @click="showRejectModal = false"
+                                class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-50">Batal</button>
+                            <button @click="confirmReject()"
+                                class="bg-red-600 text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-red-700">Konfirmasi
+                                Tolak</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="showToast" x-transition.opacity.duration.500ms x-cloak
+                    class="fixed bottom-6 right-6 bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-3 z-50">
+                    <i class="fas fa-check-circle text-xl"></i>
+                    <div>
+                        <p class="font-bold text-sm">Berhasil Disetujui!</p>
+                        <p class="text-xs text-emerald-100">Produk kini tayang di Marketplace.</p>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        function moderationApp() {
+            return {
+                activeTab: 'pending', // Default tab yang terbuka
+                showDetailModal: false,
+                showRejectModal: false,
+                showToast: false,
+                selectedProduct: null,
+                rejectReason: '',
+
+                // Data Dummy (Bisa diganti dengan API Backend nantinya)
+                products: [
+                    {
+                        id: 1, name: 'Kopi Robusta Lereng Arjuno (250g)', shop: 'UMKM Abah Jajang', category: 'Minuman', price: 'Rp 45.000', stock: 24, status: 'pending',
+                        image: 'https://images.unsplash.com/photo-1559525839-b184a4d698c7?w=300&q=80',
+                        desc: 'Kopi asli yang ditanam di lereng gunung Arjuno oleh petani lokal. Dipetik dari biji merah pilihan dan di-roasting medium dark. Harum dan mantap.'
+                    },
+                    {
+                        id: 2, name: 'Kerajinan Anyaman Bambu Set', shop: 'Karya Ibu PKK', category: 'Kerajinan', price: 'Rp 120.000', stock: 5, status: 'pending',
+                        image: 'https://images.unsplash.com/photo-1516707328634-11005fb4142f?w=300&q=80',
+                        desc: 'Satu set anyaman bambu berisi 3 rantang. Asli buatan tangan ibu-ibu PKK desa. Cocok untuk hiasan atau tempat penyajian makanan tradisional.'
+                    },
+                    {
+                        id: 3, name: 'Beras Organik Mentik Wangi', shop: 'Koperasi Tani Makmur', category: 'Sembako', price: 'Rp 75.000', stock: 100, status: 'pending',
+                        image: 'https://images.unsplash.com/photo-1586201375761-83865001e8ac?w=300&q=80',
+                        desc: 'Beras hasil panen warga desa. 100% Organik tanpa pestisida kimia, pulen dan sangat wangi. Kemasan zak 5 Kg.'
+                    },
+                    {
+                        id: 4, name: 'Sambal Pecel Khas Desa', shop: 'Warung Bu Sri', category: 'Makanan', price: 'Rp 25.000', stock: 15, status: 'approved',
+                        image: 'https://images.unsplash.com/photo-1596649281559-86bc2e8251e6?w=300&q=80',
+                        desc: 'Sambal pecel pedas sedang racikan Bu Sri. Tahan 1 bulan di suhu ruang. Dibuat menggunakan kacang tanah oven kualitas super.'
+                    },
+                    {
+                        id: 5, name: 'Parang/Golok Tajam', shop: 'Pandai Besi Pak Slamet', category: 'Perkakas', price: 'Rp 150.000', stock: 2, status: 'rejected', reason: 'Foto produk melanggar standar (terlalu gelap dan menampilkan benda tajam tanpa sensor). Silakan unggah foto yang lebih aman sesuai panduan desa.',
+                        image: 'https://images.unsplash.com/photo-1584857467334-727b3d30b656?w=300&q=80',
+                        desc: 'Golok baja asli untuk keperluan berkebun dan bertani.'
+                    }
+                ],
+
+                // Computed property untuk memfilter data sesuai tab yang aktif
+                get filteredProducts() {
+                    return this.products.filter(p => p.status === this.activeTab);
+                },
+
+                // Fungsi Lihat Detail
+                openDetail(product) {
+                    this.selectedProduct = product;
+                    this.showDetailModal = true;
+                },
+
+                // Fungsi Setujui Produk
+                approveProduct(product) {
+                    // Cari index dan update status
+                    let p = this.products.find(x => x.id === product.id);
+                    if (p) {
+                        p.status = 'approved';
+                        // Tampilkan Notifikasi Toast selama 3 detik
+                        this.showToast = true;
+                        setTimeout(() => { this.showToast = false; }, 3000);
+                    }
+                },
+
+                // Fungsi Buka Modal Tolak
+                openRejectModal(product) {
+                    this.selectedProduct = product;
+                    this.rejectReason = ''; // Kosongkan form alasan
+                    this.showRejectModal = true;
+                },
+
+                // Konfirmasi Tolak dari dalam modal
+                confirmReject() {
+                    if (this.rejectReason.trim() === '') {
+                        alert('Alasan penolakan tidak boleh kosong!');
+                        return;
+                    }
+
+                    let p = this.products.find(x => x.id === this.selectedProduct.id);
+                    if (p) {
+                        p.status = 'rejected';
+                        p.reason = this.rejectReason;
+                        this.showRejectModal = false;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

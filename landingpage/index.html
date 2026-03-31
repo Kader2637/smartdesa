@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DesaSmart - Era Baru Digitalisasi Desa</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: { brand: { 50: '#ecfdf5', 100: '#d1fae5', 400: '#34d399', 500: '#10b981', 600: '#059669', 900: '#064e3b' } },
+                    animation: {
+                        'marquee': 'marquee 30s linear infinite',
+                        'marquee-reverse': 'marquee-reverse 30s linear infinite',
+                        'blob': 'blob 10s infinite alternate',
+                        'spin-slow': 'spin 8s linear infinite'
+                    },
+                    keyframes: {
+                        marquee: { '0%': { transform: 'translateX(0%)' }, '100%': { transform: 'translateX(-50%)' } },
+                        'marquee-reverse': { '0%': { transform: 'translateX(-50%)' }, '100%': { transform: 'translateX(0%)' } },
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '50%': { transform: 'translate(40px, -60px) scale(1.1)' },
+                            '100%': { transform: 'translate(-30px, 30px) scale(0.9)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* 1. CUSTOM CURSOR & BASE STYLES */
+        body {
+            background-color: #f8fafc;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #10b981;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            mix-blend-mode: difference;
+        }
+
+        .custom-cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 6px;
+            background-color: #10b981;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s;
+        }
+
+        .hover-active .custom-cursor {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(16, 185, 129, 0.2);
+            border-color: transparent;
+        }
+
+        /* 2. SCROLLBAR & GLASSMORPHISM */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        /* 3. REVEAL ON SCROLL */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-scale.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* 4. 3D TILT EFFECT & HOVER STATES */
+        .tilt-card {
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .tilt-card-inner {
+            transform: translateZ(30px);
+        }
+
+        .card-hover:hover {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            border-color: #e2e8f0;
+        }
+
+        /* 5. TYPING CURSOR */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* 6. MODAL STYLES */
+        .modal-overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            transform: translateY(50px) scale(0.95);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        /* Hide scrollbar for horizontal containers */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .nav-link.active {
+            color: #0f172a;
+            /* slate-900 */
+            font-weight: 700;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #10b981;
+            /* brand-500 */
+            border-radius: 99px;
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 antialiased selection:bg-brand-500 selection:text-white">
+
+    <div class="custom-cursor hidden md:block"></div>
+    <div class="custom-cursor-dot hidden md:block"></div>
+
+    <div class="bg-slate-900 text-white text-xs font-mono py-2 overflow-hidden relative z-50">
+        <div class="flex animate-marquee whitespace-nowrap">
+            <div class="flex gap-8 px-4" id="ticker-content">
+            </div>
+            <div class="flex gap-8 px-4" id="ticker-content-clone">
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed top-12 inset-x-0 z-50 flex justify-center px-4 pointer-events-none">
+        <nav class="glass border border-white/60 shadow-lg shadow-slate-200/50 rounded-full px-6 py-4 w-full max-w-6xl flex items-center justify-between transition-all duration-300 pointer-events-auto"
+            id="navbar">
+            <a href="index.html" class="flex items-center gap-3 group hover-target">
+                <div
+                    class="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center group-hover:-rotate-12 transition-transform duration-500">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L2 12h3v8h14v-8h3L12 2z" />
+                    </svg>
+                </div>
+                <span class="font-extrabold text-slate-900 tracking-tight text-xl">Desa<span
+                        class="text-brand-500">Smart.</span></span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-10 font-medium text-sm text-slate-500" id="nav-links">
+                <a href="index.html" data-page="index.html"
+                    class="nav-link hover:text-slate-900 transition-all hover-target relative py-1">Beranda</a>
+                <a href="layanan.html" data-page="layanan.html"
+                    class="nav-link hover:text-slate-900 transition-all hover-target relative py-1">Layanan</a>
+                <a href="umkm.html" data-page="umkm.html"
+                    class="nav-link hover:text-slate-900 transition-all hover-target relative py-1">UMKM</a>
+                <a href="berita.html" data-page="berita.html"
+                    class="nav-link hover:text-slate-900 transition-all hover-target relative py-1">Berita</a>
+                <a href="kontak.html" data-page="kontak.html"
+                    class="nav-link hover:text-slate-900 transition-all hover-target relative py-1">Kontak</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="login.html"
+                    class="hidden md:block text-sm font-semibold text-slate-600 hover:text-slate-900 hover-target">Masuk</a>
+                <a href="dashboard.html"
+                    class="bg-slate-900 text-white text-sm font-bold rounded-full px-6 py-2.5 hover:bg-brand-500 transition-all shadow-lg shadow-slate-900/20 hover:shadow-brand-500/40 hover:-translate-y-0.5 hover-target">Dashboard</a>
+            </div>
+        </nav>
+
+    </div>
+
+    <section id="hero" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden px-4">
+        <div
+            class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-brand-400/20 blur-[120px] rounded-full -z-10 animate-blob">
+        </div>
+        <div class="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-blue-400/10 blur-[120px] rounded-full -z-10 animate-blob"
+            style="animation-delay: 3s"></div>
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:32px_32px] opacity-40 -z-20">
+        </div>
+
+        <div class="max-w-5xl mx-auto text-center z-10">
+            <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur border border-slate-200 shadow-sm text-sm font-semibold text-brand-600 mb-8 reveal hover-target cursor-pointer hover:bg-white transition-colors">
+                <span class="relative flex h-3 w-3"><span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span><span
+                        class="relative inline-flex rounded-full h-3 w-3 bg-brand-500"></span></span>
+                Sistem Desa Terintegrasi v2.0
+            </div>
+
+            <h1 class="text-6xl md:text-8xl font-extrabold text-slate-900 tracking-tight leading-[1.05] mb-6 reveal"
+                style="transition-delay: 100ms">
+                Urus Desa <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-teal-400"
+                    id="typing-text">Lebih Cepat</span><span class="typing-cursor text-slate-400"></span>
+            </h1>
+
+            <p class="text-lg md:text-2xl text-slate-500 max-w-3xl mx-auto mb-12 reveal font-medium"
+                style="transition-delay: 200ms">
+                Satu antarmuka premium untuk administrasi warga, pasar digital UMKM, dan statistik cerdas secara
+                *real-time*.
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4 reveal" style="transition-delay: 300ms">
+                <button
+                    class="bg-slate-900 text-white font-bold rounded-full px-8 py-4 hover:bg-brand-500 hover:shadow-2xl hover:shadow-brand-500/30 transition-all flex items-center justify-center gap-3 hover-target group">
+                    Eksplorasi Fitur
+                    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </button>
+                <button
+                    class="bg-white text-slate-800 border-2 border-slate-200 font-bold rounded-full px-8 py-4 hover:border-slate-900 hover:shadow-lg transition-all flex items-center justify-center gap-3 hover-target group">
+                    <svg class="w-5 h-5 text-slate-400 group-hover:text-slate-900 transition-colors" fill="currentColor"
+                        viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                    Tonton Demo
+                </button>
+            </div>
+        </div>
+
+        <div
+            class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce">
+            <span class="text-xs font-bold uppercase tracking-widest">Scroll</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+        </div>
+    </section>
+
+    <section class="py-12 bg-slate-900 relative z-20">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-slate-800 text-center">
+            <div class="reveal-scale hover-target">
+                <p class="text-4xl md:text-5xl font-extrabold text-white mb-2"><span class="counter"
+                        data-target="15420">0</span>+</p>
+                <p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Warga Terdaftar</p>
+            </div>
+            <div class="reveal-scale hover-target" style="transition-delay: 100ms">
+                <p class="text-4xl md:text-5xl font-extrabold text-brand-400 mb-2"><span class="counter"
+                        data-target="850">0</span></p>
+                <p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Surat Tercetak</p>
+            </div>
+            <div class="reveal-scale hover-target" style="transition-delay: 200ms">
+                <p class="text-4xl md:text-5xl font-extrabold text-white mb-2">Rp <span class="counter"
+                        data-target="125">0</span>Jt</p>
+                <p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Transaksi UMKM</p>
+            </div>
+            <div class="reveal-scale hover-target" style="transition-delay: 300ms">
+                <p class="text-4xl md:text-5xl font-extrabold text-white mb-2"><span class="counter"
+                        data-target="99">0</span>%</p>
+                <p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Kepuasan Warga</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="fitur" class="py-32 bg-white relative">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">Satu Ekosistem, <br><span
+                        class="text-brand-600">Jutaan Solusi.</span></h2>
+                <p class="text-slate-500 text-lg max-w-2xl">Arsitektur BENTO yang mempermudah akses informasi warga
+                    hanya dengan sapuan jari.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-[300px]">
+
+                <div
+                    class="tilt-card bg-slate-50 rounded-[2.5rem] p-10 border border-slate-100 md:col-span-2 md:row-span-2 relative overflow-hidden group card-hover hover-target reveal">
+                    <div
+                        class="absolute -right-20 -top-20 w-80 h-80 bg-brand-100 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700 ease-out">
+                    </div>
+                    <div class="relative z-10 h-full flex flex-col tilt-card-inner">
+                        <div
+                            class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center mb-8 text-brand-600">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-extrabold text-slate-900 mb-4">E-Administrasi</h3>
+                        <p class="text-slate-500 text-lg mb-8 max-w-md">Pembuatan SKTM, Surat Pindah, dan pengantar
+                            nikah. Selesai dalam hitungan jam dengan notifikasi otomatis ke WhatsApp.</p>
+
+                        <div class="mt-auto flex gap-4">
+                            <div
+                                class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center gap-3">
+                                <div class="w-3 h-3 bg-brand-500 rounded-full animate-pulse"></div>
+                                <span class="font-bold text-sm">Validasi Kades Selesai</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tilt-card bg-slate-900 rounded-[2.5rem] p-8 md:col-span-2 relative overflow-hidden group card-hover hover-target reveal"
+                    style="transition-delay: 100ms">
+                    <div class="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 opacity-80"></div>
+                    <div class="relative z-10 flex flex-col h-full tilt-card-inner">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="w-12 h-12 bg-slate-800 rounded-xl border border-slate-700 flex items-center justify-center text-white">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <span
+                                class="bg-brand-500/20 text-brand-400 text-xs font-bold px-3 py-1 rounded-full border border-brand-500/30">Keamanan
+                                Enkripsi AES</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 mt-auto">Perlindungan Data</h3>
+                        <p class="text-slate-400 text-sm">Data KTP dan KK warga dienkripsi secara aman. Privasi adalah
+                            prioritas utama kami.</p>
+                    </div>
+                </div>
+
+                <div class="tilt-card bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm md:col-span-1 group card-hover hover-target reveal"
+                    style="transition-delay: 200ms">
+                    <div class="relative z-10 h-full flex flex-col tilt-card-inner">
+                        <div
+                            class="w-12 h-12 bg-orange-50 rounded-xl text-orange-500 flex items-center justify-center mb-6">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 mt-auto">Pelaporan Warga</h3>
+                        <p class="text-slate-500 text-sm">Lapor infrastruktur rusak dengan foto GPS.</p>
+                    </div>
+                </div>
+
+                <div class="tilt-card bg-brand-500 rounded-[2.5rem] p-8 md:col-span-1 group card-hover hover-target reveal text-white"
+                    style="transition-delay: 300ms">
+                    <div class="relative z-10 h-full flex flex-col tilt-card-inner">
+                        <div
+                            class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-6 backdrop-blur">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 mt-auto">Statistik Realtime</h3>
+                        <p class="text-brand-100 text-sm">Pantau demografi & ekonomi desa dalam 1 layar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="marketplace" class="py-32 bg-slate-50 border-y border-slate-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 reveal">
+                <div>
+                    <span class="text-brand-600 font-bold tracking-wider text-sm uppercase mb-2 block">Dukung Produk
+                        Lokal</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900">Etalase UMKM Desa</h2>
+                </div>
+
+                <div class="flex gap-2 mt-6 md:mt-0 overflow-x-auto no-scrollbar pb-2 w-full md:w-auto"
+                    id="filter-container">
+                    <button
+                        class="filter-btn active px-6 py-2.5 rounded-full bg-slate-900 text-white font-semibold text-sm hover-target"
+                        data-filter="all">Semua</button>
+                    <button
+                        class="filter-btn px-6 py-2.5 rounded-full bg-white border border-slate-200 text-slate-600 font-semibold text-sm hover:bg-slate-100 hover-target"
+                        data-filter="Kuliner">Kuliner</button>
+                    <button
+                        class="filter-btn px-6 py-2.5 rounded-full bg-white border border-slate-200 text-slate-600 font-semibold text-sm hover:bg-slate-100 hover-target"
+                        data-filter="Kerajinan">Kerajinan</button>
+                    <button
+                        class="filter-btn px-6 py-2.5 rounded-full bg-white border border-slate-200 text-slate-600 font-semibold text-sm hover:bg-slate-100 hover-target"
+                        data-filter="Pertanian">Pertanian</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="umkm-grid">
+            </div>
+        </div>
+    </section>
+
+    <section id="testimoni" class="py-24 bg-white overflow-hidden relative">
+        <div class="text-center mb-16 reveal">
+            <h2 class="text-3xl font-bold text-slate-900">Dipercaya Oleh Warga</h2>
+            <p class="text-slate-500 mt-2">Ribuan pengguna merasakan kemudahan DesaSmart.</p>
+        </div>
+
+        <div class="relative w-full flex overflow-hidden">
+            <div
+                class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none">
+            </div>
+            <div
+                class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none">
+            </div>
+
+            <div class="flex w-max animate-marquee whitespace-nowrap items-center hover:[animation-play-state:paused]"
+                id="testi-track-1">
+            </div>
+        </div>
+
+        <div class="relative w-full flex overflow-hidden mt-6">
+            <div
+                class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none">
+            </div>
+            <div
+                class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none">
+            </div>
+
+            <div class="flex w-max animate-marquee-reverse whitespace-nowrap items-center hover:[animation-play-state:paused]"
+                id="testi-track-2">
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-900 text-white pt-24 pb-10 border-t-4 border-brand-500">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div class="md:col-span-2">
+                <a href="#" class="flex items-center gap-2 mb-6 hover-target w-max">
+                    <div class="w-10 h-10 bg-brand-500 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-slate-900" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L2 12h3v8h14v-8h3L12 2z" />
+                        </svg>
+                    </div>
+                    <span class="font-bold text-2xl tracking-tight">Desa<span
+                            class="text-brand-400">Smart.</span></span>
+                </a>
+                <p class="text-slate-400 max-w-sm leading-relaxed">Membangun ekosistem desa yang mandiri, transparan,
+                    dan terhubung secara digital menuju Indonesia Emas 2045.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-lg mb-6">Menu Navigasi</h4>
+                <ul class="space-y-4 text-slate-400">
+                    <li><a href="#" class="hover:text-brand-400 transition-colors hover-target">Layanan Desa</a></li>
+                    <li><a href="#" class="hover:text-brand-400 transition-colors hover-target">Marketplace</a></li>
+                    <li><a href="#" class="hover:text-brand-400 transition-colors hover-target">Lapor Warga</a></li>
+                    <li><a href="#" class="hover:text-brand-400 transition-colors hover-target">Statistik</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-lg mb-6">Kontak Kami</h4>
+                <ul class="space-y-4 text-slate-400">
+                    <li class="flex items-center gap-3"><svg class="w-5 h-5" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg> halo@desasmart.id</li>
+                    <li class="flex items-center gap-3"><svg class="w-5 h-5" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg> 0811-2233-4455</li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 border-t border-slate-800 pt-8 text-sm">
+            <p>&copy; 2024 DesaSmart V2.0. Desain Ekstrem dengan Vanilla JS.</p>
+        </div>
+    </footer>
+
+    <div id="umkm-modal"
+        class="modal-overlay fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-3xl p-8 max-w-lg w-full relative shadow-2xl">
+            <button id="close-modal"
+                class="absolute top-6 right-6 w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-200 hover-target transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <div id="modal-body">
+            </div>
+            <button
+                class="w-full mt-6 bg-brand-500 text-white font-bold py-4 rounded-2xl hover:bg-brand-600 transition-colors shadow-lg shadow-brand-500/30 hover-target">Beli
+                Sekarang via WhatsApp</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentPage = window.location.pathname.split("/").pop() || 'index.html';
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            navLinks.forEach(link => {
+                if (link.getAttribute('data-page') === currentPage) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+            /* =======================================================
+               1. CUSTOM MOUSE CURSOR LOGIC
+               ======================================================= */
+            const cursor = document.querySelector('.custom-cursor');
+            const cursorDot = document.querySelector('.custom-cursor-dot');
+            const hoverTargets = document.querySelectorAll('.hover-target, a, button');
+
+            document.addEventListener('mousemove', (e) => {
+                // Gunakan requestAnimationFrame untuk performa mulus
+                requestAnimationFrame(() => {
+                    cursor.style.left = e.clientX + 'px';
+                    cursor.style.top = e.clientY + 'px';
+                    cursorDot.style.left = e.clientX + 'px';
+                    cursorDot.style.top = e.clientY + 'px';
+                });
+            });
+
+            hoverTargets.forEach(target => {
+                target.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+                target.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+            });
+
+            /* =======================================================
+               2. DUMMY DATA: 12 PRODUK UMKM (Melebihi syarat 10)
+               ======================================================= */
+            const umkmData = [
+                { id: 1, nama: "Kopi Arabika Gayo Asli", penjual: "Pak Budi", kategori: "Pertanian", harga: "Rp 65.000", rating: 4.9, terjual: 342, img: "https://images.unsplash.com/photo-1559525839-b184a4d698c7?w=500&q=80" },
+                { id: 2, nama: "Kerajinan Anyaman Bambu", penjual: "Ibu Siti", kategori: "Kerajinan", harga: "Rp 120.000", rating: 4.8, terjual: 89, img: "https://images.unsplash.com/photo-1590736969955-71cc94801759?w=500&q=80" },
+                { id: 3, nama: "Madu Hutan Liar Murni", penjual: "Kelompok Tani", kategori: "Pertanian", harga: "Rp 85.000", rating: 5.0, terjual: 512, img: "https://images.unsplash.com/photo-1587049352847-4d4b1ed748d3?w=500&q=80" },
+                { id: 4, nama: "Keripik Singkong Pedas", penjual: "Mpok Nori", kategori: "Kuliner", harga: "Rp 15.000", rating: 4.7, terjual: 1024, img: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=500&q=80" },
+                { id: 5, nama: "Kain Batik Tulis Motif Padi", penjual: "Sanggar Desa", kategori: "Kerajinan", harga: "Rp 450.000", rating: 4.9, terjual: 45, img: "https://images.unsplash.com/photo-1605813800619-358055a40728?w=500&q=80" },
+                { id: 6, nama: "Sambal Roa Tradisional", penjual: "Ibu Rahma", kategori: "Kuliner", harga: "Rp 35.000", rating: 4.8, terjual: 876, img: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=500&q=80" },
+                { id: 7, nama: "Beras Merah Organik (5kg)", penjual: "Gapoktan Maju", kategori: "Pertanian", harga: "Rp 90.000", rating: 4.9, terjual: 230, img: "https://images.unsplash.com/photo-1586201375761-83865001e8ac?w=500&q=80" },
+                { id: 8, nama: "Tas Rajut Tangan", penjual: "Nisa Craft", kategori: "Kerajinan", harga: "Rp 85.000", rating: 4.6, terjual: 112, img: "https://images.unsplash.com/photo-1591561954557-26941169b49e?w=500&q=80" },
+                { id: 9, nama: "Kue Kering Khas Lebaran", penjual: "Dapur Bunda", kategori: "Kuliner", harga: "Rp 75.000", rating: 4.8, terjual: 654, img: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=500&q=80" },
+                { id: 10, nama: "Pupuk Kompos Desa", penjual: "BUMDes", kategori: "Pertanian", harga: "Rp 25.000", rating: 4.7, terjual: 900, img: "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?w=500&q=80" },
+                { id: 11, nama: "Pajangan Kayu Jati", penjual: "Pak Karto Wood", kategori: "Kerajinan", harga: "Rp 300.000", rating: 5.0, terjual: 21, img: "https://images.unsplash.com/photo-1611077544835-08e1a89c92b5?w=500&q=80" },
+                { id: 12, nama: "Gula Aren Asli Blok", penjual: "Mang Ujang", kategori: "Kuliner", harga: "Rp 20.000", rating: 4.9, terjual: 1200, img: "https://images.unsplash.com/photo-1622485542831-f9b7c8dc9119?w=500&q=80" }
+            ];
+
+            const gridContainer = document.getElementById('umkm-grid');
+            const modalOverlay = document.getElementById('umkm-modal');
+            const modalBody = document.getElementById('modal-body');
+            const btnCloseModal = document.getElementById('close-modal');
+
+            // Render Function
+            const renderUMKM = (data) => {
+                gridContainer.innerHTML = ''; // Clear
+                data.forEach((item, index) => {
+                    const card = document.createElement('div');
+                    card.className = `bg-white rounded-3xl p-3 border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 group cursor-none reveal active`;
+                    card.style.transitionDelay = `${index * 50}ms`; // Stagger animation
+
+                    card.innerHTML = `
+                        <div class="relative overflow-hidden rounded-2xl aspect-square mb-4 bg-slate-100">
+                            <img src="${item.img}" alt="${item.nama}" class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur text-xs font-bold px-3 py-1 rounded-full text-slate-700">${item.kategori}</span>
+                        </div>
+                        <div class="px-2 pb-2">
+                            <div class="flex justify-between items-start mb-1">
+                                <h3 class="font-bold text-slate-900 text-lg leading-tight line-clamp-1">${item.nama}</h3>
+                            </div>
+                            <p class="text-xs text-slate-400 mb-3 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg> ${item.penjual}</p>
+                            <div class="flex justify-between items-center">
+                                <span class="font-extrabold text-brand-600">${item.harga}</span>
+                                <div class="flex items-center gap-1 text-xs font-bold text-slate-600 bg-slate-100 px-2 py-1 rounded-lg">
+                                    <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                    ${item.rating}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // Modal Trigger
+                    card.addEventListener('click', () => openModal(item));
+
+                    // Add Custom Cursor class
+                    card.classList.add('hover-target');
+                    card.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+                    card.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+
+                    gridContainer.appendChild(card);
+                });
+            };
+
+            // Initial Render
+            renderUMKM(umkmData);
+
+            // Filter Logic
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Styling Button
+                    filterBtns.forEach(b => {
+                        b.classList.remove('bg-slate-900', 'text-white');
+                        b.classList.add('bg-white', 'text-slate-600');
+                    });
+                    e.target.classList.add('bg-slate-900', 'text-white');
+                    e.target.classList.remove('bg-white', 'text-slate-600');
+
+                    // Filter Data
+                    const filterValue = e.target.getAttribute('data-filter');
+                    if (filterValue === 'all') {
+                        renderUMKM(umkmData);
+                    } else {
+                        const filteredData = umkmData.filter(item => item.kategori === filterValue);
+                        renderUMKM(filteredData);
+                    }
+                });
+            });
+
+            // Modal Logic
+            const openModal = (item) => {
+                modalBody.innerHTML = `
+                    <img src="${item.img}" class="w-full h-56 object-cover rounded-2xl mb-6 shadow-sm">
+                    <span class="text-brand-600 font-bold text-sm uppercase tracking-wider">${item.kategori}</span>
+                    <h3 class="text-3xl font-extrabold text-slate-900 mt-1 mb-2">${item.nama}</h3>
+                    <p class="text-slate-500 mb-6">Produk unggulan desa karya ${item.penjual}. Terjamin kualitasnya dan diproses dengan standar higienis. Ayo majukan ekonomi desa!</p>
+                    <div class="flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <div>
+                            <p class="text-xs text-slate-400 font-bold mb-1">HARGA</p>
+                            <p class="text-2xl font-extrabold text-slate-900">${item.harga}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-slate-400 font-bold mb-1">TERJUAL</p>
+                            <p class="text-lg font-bold text-slate-900">${item.terjual}+ Produk</p>
+                        </div>
+                    </div>
+                `;
+                modalOverlay.classList.add('active');
+            };
+
+            btnCloseModal.addEventListener('click', () => modalOverlay.classList.remove('active'));
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) modalOverlay.classList.remove('active');
+            });
+
+
+            /* =======================================================
+               3. DUMMY DATA: 10 TESTIMONI (MARQUEE INJECTOR)
+               ======================================================= */
+            const testimoniData = [
+                { teks: "Sangat inovatif! Urus KTP jadi gak perlu ninggalin sawah.", nama: "Pak Maman", peran: "Petani" },
+                { teks: "Jualan keripik saya laku keras berkat Marketplace DesaSmart.", nama: "Bu Ningsih", peran: "Pelaku UMKM" },
+                { teks: "Lapor lampu jalan mati, besoknya langsung diganti.", nama: "Rudi", peran: "Ketua RT 02" },
+                { teks: "Desainnya mewah banget untuk ukuran aplikasi desa.", nama: "Ayu", peran: "Mahasiswi" },
+                { teks: "Tanda tangan digital mempermudah kerja kades.", nama: "Bpk. Kades", peran: "Perangkat Desa" },
+                { teks: "Statistik real-time bantu kami data bansos lebih akurat.", nama: "Dinas Sosial", peran: "Instansi" },
+                { teks: "Platform paling stabil yang pernah dipakai desa kami.", nama: "Budi", peran: "Operator Desa" },
+                { teks: "Aman, cepat, dan transparan. Wajib ditiru desa lain.", nama: "Camat", peran: "Pemerintah" },
+                { teks: "Pembayaran QRIS UMKM sangat lancar tanpa kendala.", nama: "Sinta", peran: "Warga" },
+                { teks: "Era digital masuk desa bukan lagi sekadar wacana.", nama: "Pengamat IT", peran: "Pakar" }
+            ];
+
+            const track1 = document.getElementById('testi-track-1');
+            const track2 = document.getElementById('testi-track-2');
+
+            // Render Card Testimoni
+            const generateTestiCards = (data) => {
+                return data.map(t => `
+                    <div class="bg-white border border-slate-100 p-6 rounded-3xl shadow-sm mx-4 w-[350px] inline-flex flex-col flex-shrink-0">
+                        <div class="flex text-yellow-400 mb-4">★★★★★</div>
+                        <p class="text-slate-600 font-medium whitespace-normal mb-6 leading-relaxed">"${t.teks}"</p>
+                        <div class="mt-auto flex items-center gap-3">
+                            <div class="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white font-bold">${t.nama.charAt(0)}</div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">${t.nama}</h4>
+                                <p class="text-xs text-brand-600 font-bold">${t.peran}</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            };
+
+            // Inject (Kali 2 agar looping marquee halus)
+            const htmlTrack1 = generateTestiCards(testimoniData.slice(0, 5));
+            const htmlTrack2 = generateTestiCards(testimoniData.slice(5, 10));
+            track1.innerHTML = htmlTrack1 + htmlTrack1;
+            track2.innerHTML = htmlTrack2 + htmlTrack2;
+
+
+            /* =======================================================
+               4. LIVE DATA TICKER INJECTOR
+               ======================================================= */
+            const tickerItems = [
+                "🚀 Wahyu S. baru saja mendaftar.", "🟢 SKTM RT.05 Selesai dicetak.",
+                "💸 Transaksi UMKM Rp 120.000 berhasil.", "🛠️ Laporan jalan rusak Diterima.",
+                "📊 Statistik kependudukan diperbarui."
+            ];
+            const tickerHtml = tickerItems.map(t => `<span class="flex items-center gap-2"><span class="w-2 h-2 bg-brand-500 rounded-full animate-pulse"></span>${t}</span>`).join('<span class="text-slate-700 mx-4">|</span>');
+            document.getElementById('ticker-content').innerHTML = tickerHtml;
+            document.getElementById('ticker-content-clone').innerHTML = tickerHtml;
+
+
+            /* =======================================================
+               5. 3D VANILLA TILT EFFECT (Logic Complex)
+               ======================================================= */
+            const tiltCards = document.querySelectorAll('.tilt-card');
+            tiltCards.forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left; // x position within element
+                    const y = e.clientY - rect.top;  // y position within element
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const rotateX = ((y - centerY) / centerY) * -10; // Max rotation 10deg
+                    const rotateY = ((x - centerX) / centerX) * 10;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                    card.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)';
+                });
+                card.addEventListener('mouseenter', () => {
+                    card.style.transition = 'none'; // remove transition for smooth tracking
+                });
+            });
+
+
+            /* =======================================================
+               6. SCROLL REVEAL & COUNTER ANIMATION
+               ======================================================= */
+            const revealElements = document.querySelectorAll('.reveal, .reveal-scale');
+            const counters = document.querySelectorAll('.counter');
+            let hasCounted = false;
+
+            const animateCounter = () => {
+                counters.forEach(counter => {
+                    const target = +counter.getAttribute('data-target');
+                    const duration = 2000; // 2 seconds
+                    const increment = target / (duration / 16); // 60fps
+                    let current = 0;
+
+                    const updateCounter = () => {
+                        current += increment;
+                        if (current < target) {
+                            counter.innerText = Math.ceil(current);
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
+                    updateCounter();
+                });
+            };
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // Jika elemen yang di-reveal adalah div pembungkus counter
+                        if (entry.target.querySelector('.counter') && !hasCounted) {
+                            animateCounter();
+                            hasCounted = true;
+                        }
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+
+            /* =======================================================
+               7. TYPING ANIMATION (Hero Section)
+               ======================================================= */
+            const typingText = document.getElementById('typing-text');
+            const words = ["Lebih Cepat", "Lebih Transparan", "Lebih Mudah", "Secara Digital"];
+            let wordIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+
+            const typeEffect = () => {
+                const currentWord = words[wordIndex];
+
+                if (isDeleting) {
+                    typingText.innerText = currentWord.substring(0, charIndex - 1);
+                    charIndex--;
+                } else {
+                    typingText.innerText = currentWord.substring(0, charIndex + 1);
+                    charIndex++;
+                }
+
+                let typeSpeed = isDeleting ? 50 : 100;
+
+                if (!isDeleting && charIndex === currentWord.length) {
+                    typeSpeed = 2000; // Pause at end of word
+                    isDeleting = true;
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    wordIndex = (wordIndex + 1) % words.length;
+                    typeSpeed = 500; // Pause before new word
+                }
+
+                setTimeout(typeEffect, typeSpeed);
+            };
+
+            // Start Typiing
+            setTimeout(typeEffect, 1000);
+
+
+            /* =======================================================
+               8. FLOATING NAVBAR BLUR EFFECT
+               ======================================================= */
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-white/90');
+                    navbar.classList.remove('bg-white/70');
+                } else {
+                    navbar.classList.add('bg-white/70');
+                    navbar.classList.remove('bg-white/90');
+                }
+            });
+
+        });
+    </script>
+</body>
+
+</html>
