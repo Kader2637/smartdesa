@@ -1,73 +1,52 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Halaman Tidak Ditemukan </title>
-
+    <title>Halaman Tidak Ditemukan - Smart Desa</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-    <script>
-        tailwind.config = {
-            darkMode: 'media',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            DEFAULT: '#4f46e5', // Indigo-600
-                            hover: '#4338ca',
-                            light: '#e0e7ff',
-                            darkLight: 'rgba(79, 70, 229, 0.15)'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
 </head>
+<body class="bg-slate-50 flex items-center justify-center min-h-screen p-4 sm:p-6">
 
-<body
-    class="bg-[#f8fafc] dark:bg-[#0f1115] text-slate-800 dark:text-slate-200 font-sans antialiased selection:bg-brand selection:text-white">
-
-    <main class="min-h-screen flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-
-        <div
-            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30rem] h-[30rem] bg-brand/5 dark:bg-brand/10 blur-[100px] rounded-full pointer-events-none">
+    <div class="max-w-lg w-full text-center">
+        
+        <div class="flex items-center justify-center gap-2 font-bold text-2xl text-emerald-600 tracking-tight mb-8">
+            <i class="fas fa-leaf"></i> Smart<span class="text-slate-800">Desa</span>
         </div>
 
-        <div class="relative z-10 flex flex-col items-center">
-            <span
-                class="px-3 py-1 mb-6 text-xs font-bold text-brand bg-brand-light dark:bg-brand-darkLight rounded-full uppercase tracking-wider">
-                Error 404
-            </span>
+        <div class="relative flex justify-center items-center h-48 mb-6">
+            <h1 class="text-[150px] font-extrabold text-slate-200 select-none tracking-tighter absolute">404</h1>
+            <div class="relative z-10 bg-white p-4 rounded-full shadow-lg border border-slate-100 animate-bounce mt-10">
+                <i class="fas fa-compass text-6xl text-emerald-500"></i>
+            </div>
+        </div>
 
-            <h1
-                class="text-8xl md:text-[9rem] font-extrabold text-slate-900 dark:text-white tracking-tighter leading-none mb-6">
-                4<span class="text-brand">0</span>4 
-            </h1>
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-800 mb-3">Waduh! Kamu sepertinya tersesat.</h2>
+        <p class="text-slate-500 text-sm sm:text-base leading-relaxed mb-8 px-4">
+            Halaman yang kamu cari tidak dapat ditemukan. Mungkin halamannya sudah dipindahkan, dihapus, atau kamu salah mengetikkan alamat URL.
+        </p>
 
-            <h2 class="text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 mb-4">
-                Oops! Nyasar ya?
-            </h2>
-            <p class="text-base text-slate-600 dark:text-slate-400 max-w-md mb-10 leading-relaxed">
-                Halaman yang kamu cari mungkin sudah dihapus, diubah namanya, atau memang tidak pernah ada. Yuk, kembali
-                ke jalan yang benar!
-            </p>
-
-            <a href="/"
-                class="inline-flex items-center gap-2 px-8 py-3.5 bg-brand hover:bg-brand-hover text-white text-sm font-semibold rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-brand/25">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
-                Kembali ke Beranda
+        <div class="flex flex-col sm:flex-row justify-center gap-3 px-6 sm:px-0">
+            <button onclick="history.back()" class="px-6 py-3 bg-white text-slate-600 font-bold rounded-xl border border-slate-200 hover:bg-slate-100 transition shadow-sm flex items-center justify-center gap-2 w-full sm:w-auto">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </button>
+            <a href="index.html" class="px-6 py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition shadow-md hover:shadow-lg flex items-center justify-center gap-2 w-full sm:w-auto">
+                <i class="fas fa-home"></i> Ke Beranda Utama
             </a>
         </div>
 
-    </main>
+        <div class="mt-12 text-sm text-slate-400">
+            <p>Butuh bantuan? <a href="#" class="text-emerald-600 font-semibold hover:underline">Hubungi Administrator Desa</a></p>
+        </div>
+
+    </div>
 
 </body>
-
 </html>
