@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Pengiriman - Smart Desa</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        [x-cloak] { display: none !important; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        @keyframes slide-up {
+            0% { transform: translateY(100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .toast-animate { animation: slide-up 0.3s ease-out forwards; }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800" x-data="deliveryManager()">
+
+    <div x-cloak x-show="toast.show" class="fixed bottom-6 right-6 z-[100] toast-animate">
+        <div class="bg-slate-800 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4">
+            <div :class="toast.type === 'success' ? 'bg-emerald-500' : 'bg-red-500'" class="w-8 h-8 rounded-full flex items-center justify-center">
+                <i class="fas" :class="toast.type === 'success' ? 'fa-check' : 'fa-info'"></i>
+            </div>
+            <p class="font-bold text-sm" x-text="toast.msg"></p>
+        </div>
+    </div>
+
+    <div class="flex h-screen overflow-hidden">
+        <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden" @click="sidebarOpen = false"></div>
+
+        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+            class="fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-slate-200 transition-transform duration-300 lg:static lg:translate-x-0 lg:flex lg:flex-col shadow-sm">
+            <div class="flex items-center justify-center h-20 border-b border-slate-100">
+                <div class="flex items-center gap-2 font-bold text-2xl text-emerald-600 tracking-tight">
+                    <i class="fas fa-store"></i> UMKM<span class="text-slate-800">Desa</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+                <p class="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-2">Pusat Seller</p>
+                <a href="index.html" class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-chart-pie w-5 text-center"></i> <span>Dashboard Toko</span>
+                </a>
+                
+                <p class="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-6">Manajemen Toko</p>
+                <a href="kelola-produk.html" class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-box-open w-5 text-center"></i> <span>Kelola Produk</span>
+                </a>
+                <a href="pesanan-masuk.html" class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-shopping-cart w-5 text-center"></i> <span>Pesanan Masuk</span>
+                </a>
+                <a href="status-pengiriman.html" class="flex items-center gap-3 px-4 py-2.5 bg-emerald-50 text-emerald-600 font-semibold rounded-lg transition-colors">
+                    <i class="fas fa-truck-fast w-5 text-center"></i> <span>Status Pengiriman</span>
+                </a>
+                
+                <p class="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-6">Keuangan & Profil</p>
+                <a href="riwayat-pendapatan.html" class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-wallet w-5 text-center"></i> <span>Riwayat Pendapatan</span>
+                </a>
+                <a href="profil-toko.html" class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-store-alt w-5 text-center"></i> <span>Profil & Pengaturan</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-200 shadow-sm relative z-10">
+                <div class="flex items-center gap-4">
+                    <button @click="sidebarOpen = true" class="text-slate-500 focus:outline-none lg:hidden hover:text-emerald-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div class="hidden md:flex flex-col">
+                        <h1 class="font-bold text-slate-800 text-lg leading-tight">Status Pengiriman</h1>
+                        <p class="text-xs text-slate-500">Pantau perjalanan pesanan yang dikirim</p>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 p-6">
+
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+                    <div class="p-5 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-800">Paket Dalam Perjalanan</h3>
+                    </div>
+
+                    <div class="divide-y divide-slate-100 p-0">
+                        
+                        <template x-for="d in deliveries" :key="d.id">
+                            <div class="p-5 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 hover:bg-slate-50 transition">
+                                <div class="flex gap-4">
+                                    <div class="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
+                                        :class="d.type === 'lokal' ? 'bg-teal-50 text-teal-600' : 'bg-blue-50 text-blue-600'">
+                                        <i class="fas" :class="d.type === 'lokal' ? 'fa-shipping-fast' : 'fa-truck-loading'"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-slate-800 text-lg" x-text="d.id"></p>
+                                        <p class="text-sm text-slate-500 font-medium" x-text="d.customer"></p>
+                                        <div class="flex items-center gap-2 mt-2">
+                                            <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded border border-slate-200 font-medium whitespace-nowrap"><i class="fas fa-box text-slate-400"></i> <span x-text="d.product"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex-1 w-full flex items-center px-4">
+                                    <template x-if="d.type === 'lokal'">
+                                        <ol class="relative border-l border-emerald-500 w-full pl-6 space-y-4">
+                                            <li class="relative">
+                                                <div class="absolute w-3 h-3 rounded-full -left-[1.65rem] top-1" :class="d.status==='selesai'?'bg-emerald-500':'bg-emerald-500'"></div>
+                                                <p class="text-sm font-bold" :class="d.status==='selesai'?'text-emerald-600':'text-slate-800'" x-text="d.status==='selesai' ? 'Terkirim ke Pembeli' : 'Menuju Alamat Tujuan'"></p>
+                                                <p class="text-xs text-slate-500" x-text="'Kurir BUMDes - ' + d.courier"></p>
+                                            </li>
+                                        </ol>
+                                    </template>
+                                    <template x-if="d.type === 'ekspedisi'">
+                                        <p class="text-sm text-slate-500 p-2 font-medium bg-slate-100 rounded-lg w-full text-center border-dashed border border-slate-300">Resi: <span class="font-bold text-slate-800 text-lg uppercase tracking-wider ml-2" x-text="d.resi"></span></p>
+                                    </template>
+                                </div>
+
+                                <div class="flex flex-col items-center justify-center gap-2 lg:border-l border-slate-100 lg:pl-6 w-full lg:w-48">
+                                    <template x-if="d.status === 'sedang diantar'">
+                                        <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap">Sedang Diantar</span>
+                                    </template>
+                                    <template x-if="d.status === 'selesai'">
+                                        <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap"><i class="fas fa-check"></i> Selesai</span>
+                                    </template>
+
+                                    <!-- Actions -->
+                                    <template x-if="d.type === 'lokal' && d.status !== 'selesai'">
+                                        <button class="w-full text-xs font-bold text-teal-700 hover:text-teal-800 border border-teal-200 bg-white hover:bg-teal-50 py-2 rounded-lg transition" @click="openResiModal(d)">Konfirmasi COD</button>
+                                    </template>
+                                    <template x-if="d.type === 'ekspedisi'">
+                                        <button class="w-full text-xs font-bold text-slate-600 hover:text-slate-800 hover:bg-slate-100 py-2 rounded-lg transition" @click="trackModal = true; activeDelivery = d"><i class="fas fa-map-marker-alt"></i> Lacak Resi</button>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Selesai Modal (COD) -->
+    <div x-cloak x-show="resiModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4 text-left">
+        <div x-show="resiModal" @click.away="resiModal = false" x-transition.scale class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl">
+            <h3 class="font-bold text-xl text-slate-800 mb-2">Konfirmasi Barang Sampai</h3>
+            <p class="text-sm text-slate-500 mb-6">Pastikan warga telah menerima paket <strong x-text="activeDelivery?.id"></strong> dan lunas dibayar jika menggunakan COD.</p>
+            
+            <div class="flex gap-3">
+                <button @click="resiModal = false" class="flex-1 py-3 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition">Batal</button>
+                <button @click="completeDelivery()" class="flex-1 py-3 bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/30 hover:bg-emerald-600 transition">Ya, Terkirim!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lacak Resi Ekspedisi Modal -->
+    <div x-cloak x-show="trackModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4 text-left">
+        <div x-show="trackModal" @click.away="trackModal = false" x-transition.scale class="bg-white rounded-3xl w-full max-w-md p-6 shadow-2xl relative">
+            <button @click="trackModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fas fa-times text-xl"></i></button>
+            <h3 class="font-bold text-xl text-slate-800 mb-1">Pelacakan Paket</h3>
+            <p class="text-sm text-brand-600 font-bold mb-6 font-mono text-blue-600" x-text="activeDelivery?.resi"></p>
+            
+            <div class="h-64 overflow-y-auto mb-4 pr-2">
+                <ol class="relative border-l border-slate-200 w-full pl-6 space-y-6">
+                    <li class="relative">
+                        <div class="absolute w-4 h-4 rounded-full -left-[1.8rem] top-1 bg-emerald-400 border-4 border-white shadow"></div>
+                        <p class="text-sm font-bold text-emerald-600">Transit Terminal Bandung</p>
+                        <p class="text-xs text-slate-500">Menuju HUB pusat. (Hari ini, 08:30)</p>
+                    </li>
+                    <li class="relative">
+                        <div class="absolute w-3 h-3 rounded-full -left-[1.65rem] top-1 bg-slate-300"></div>
+                        <p class="text-sm font-bold text-slate-600">Terima oleh Kurir Ekspedisi</p>
+                        <p class="text-xs text-slate-500">Pick-up via gerai DesaSmart. (Kemarin, 19:10)</p>
+                    </li>
+                    <li class="relative">
+                        <div class="absolute w-3 h-3 rounded-full -left-[1.65rem] top-1 bg-slate-300"></div>
+                        <p class="text-sm font-bold text-slate-600">Pesanan Dibuat</p>
+                        <p class="text-xs text-slate-500">Resi telah di generate. (Kemarin, 15:00)</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function deliveryManager() {
+            return {
+                sidebarOpen: false, resiModal: false, trackModal: false, activeDelivery: null,
+                toast: { show: false, msg: '', type: 'success' },
+                deliveries: [
+                    { id: '#ORD-99001', type: 'lokal', status: 'sedang diantar', courier: 'Mulyadi', customer: 'Bu Sri (Luaran Desa)', product: 'Kopi Gayo 1kg', resi: '' },
+                    { id: '#ORD-99002', type: 'ekspedisi', status: 'sedang diantar', courier: '', customer: 'Bapak JND (Luar Kota)', product: 'Kerajinan Anyaman', resi: 'JNT88012000X' },
+                ],
+                showToast(msg, type='success') {
+                    this.toast.msg = msg; this.toast.type = type; this.toast.show = true;
+                    setTimeout(() => { this.toast.show = false; }, 3000);
+                },
+                openResiModal(d) {
+                    this.activeDelivery = d; this.resiModal = true;
+                },
+                completeDelivery() {
+                    this.activeDelivery.status = 'selesai';
+                    this.resiModal = false;
+                    this.showToast('Pengiriman ' + this.activeDelivery.id + ' berhasil diselesaikan!');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+

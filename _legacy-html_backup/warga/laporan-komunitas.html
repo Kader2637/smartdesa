@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Komunitas - SmartDesa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        primary: { 50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e', 600: '#16a34a', 700: '#15803d' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; }
+        .glass-panel { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); }
+        .sidebar-link { transition: all 0.2s ease-in-out; }
+        .sidebar-link:hover, .sidebar-link.active { background-color: #f0fdf4; color: #16a34a; border-right: 3px solid #16a34a; }
+    </style>
+</head>
+<body class="text-gray-800 antialiased" x-data="{ sidebarOpen: false, profileOpen: false, showForm: false, 
+    filterBtn: 'semua'
+}">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar -->
+        <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 lg:static lg:translate-x-0"
+               :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}">
+            <div class="flex items-center justify-center h-16 border-b border-gray-200">
+                <div class="text-2xl font-bold text-primary-600 flex items-center pr-12 lg:pr-0">
+                    <i class="fas fa-leaf mr-2"></i> SmartDesa
+                </div>
+            </div>
+            <nav class="p-4 space-y-1">
+                <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 mt-4 px-3">Menu Warga</div>
+                <a href="index.html" class="sidebar-link flex items-center px-3 py-2.5 rounded-lg font-medium text-gray-700">
+                    <i class="fas fa-home w-6 text-center mr-2 text-lg"></i> Dashboard
+                </a>
+                <a href="layanan-surat.html" class="sidebar-link flex items-center px-3 py-2.5 rounded-lg font-medium text-gray-700">
+                    <i class="fas fa-envelope-open-text w-6 text-center mr-2 text-lg"></i> Layanan Surat
+                </a>
+                <a href="laporan-komunitas.html" class="sidebar-link active flex items-center px-3 py-2.5 rounded-lg font-medium text-gray-700">
+                    <i class="fas fa-bullhorn w-6 text-center mr-2 text-lg"></i> Laporan Komunitas
+                </a>
+                <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 mt-6 px-3">Belanja UMKM</div>
+                <a href="pasar.html" class="sidebar-link flex items-center px-3 py-2.5 rounded-lg font-medium text-gray-700">
+                    <i class="fas fa-store-alt w-6 text-center mr-2 text-lg"></i> Pasar Desa
+                </a>
+                <a href="keranjang.html" class="sidebar-link flex items-center px-3 py-2.5 rounded-lg font-medium text-gray-700">
+                    <i class="fas fa-shopping-cart w-6 text-center mr-2 text-lg"></i> Keranjang
+                </a>
+                <a href="status-pesanan.html" class="sidebar-link flex items-center px-3 py-2.5 rounded-lg font-medium text-gray-700">
+                    <i class="fas fa-truck w-6 text-center mr-2 text-lg"></i> Status Pesanan
+                </a>
+                <a href="riwayat-belanja.html" class="sidebar-link flex items-center px-3 py-2.5 rounded-lg font-medium text-gray-700">
+                    <i class="fas fa-history w-6 text-center mr-2 text-lg"></i> Riwayat Belanja
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden relative">
+            <div x-show="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-40 lg:hidden" style="display: none;"></div>
+
+            <header class="h-16 glass-panel flex items-center justify-between px-6 z-30">
+                <div class="flex items-center">
+                    <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 focus:outline-none lg:hidden mr-4">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <h2 class="text-xl font-semibold text-gray-800 hidden sm:block">Laporan Komunitas</h2>
+                </div>
+                <!-- Profile -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button @click="profileOpen = !profileOpen" @click.away="profileOpen = false" class="flex items-center space-x-2 focus:outline-none">
+                            <img class="h-9 w-9 rounded-full object-cover border-2 border-primary-500 p-0.5" src="https://ui-avatars.com/api/?name=Budi+Santoso&background=22c55e&color=fff" alt="">
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-4 lg:p-8">
+                
+                <!-- Hero/Header Section -->
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 mb-8 text-white shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center justify-between">
+                    <div class="relative z-10 w-full md:w-2/3 mb-6 md:mb-0">
+                        <h1 class="text-3xl font-bold mb-3">Suara Warga, Untuk Desa Sejahtera</h1>
+                        <p class="text-blue-100 mb-6 font-light">Laporkan masalah infrastruktur, lingkungan, atau diskusikan ide untuk kemajuan desa kita langsung ke perangkat desa.</p>
+                        <button @click="showForm = !showForm" class="bg-white text-blue-600 hover:bg-gray-50 px-6 py-3 rounded-xl font-bold shadow-md transition transform hover:-translate-y-0.5">
+                            <i class="fas fa-edit mr-2"></i> Buat Laporan Baru
+                        </button>
+                    </div>
+                    <div class="relative z-10 hidden md:block">
+                        <i class="fas fa-comments text-9xl text-white opacity-20"></i>
+                    </div>
+                    <!-- Background Pattern -->
+                    <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-white opacity-10"></div>
+                </div>
+
+                <!-- Create Report Form (Toggleable) -->
+                <div x-show="showForm" x-transition.duration.300ms class="bg-white rounded-2xl p-6 mb-8 border border-gray-100 shadow-xl relative mt-4">
+                    <div class="absolute top-0 right-0 mt-4 mr-4">
+                        <button @click="showForm = false" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-100 pb-3"><i class="fas fa-bullhorn text-primary-500 mr-2"></i> Formulir Pelaporan</h2>
+                    
+                    <form @submit.prevent="alert('Laporan berhasil dikirim dan akan diverifikasi oleh Admin!'); showForm = false;" class="space-y-5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Judul Laporan</label>
+                                <input type="text" required placeholder="Contoh: Jalan berlubang di RT 03" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none bg-gray-50">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                                <select required class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none bg-gray-50">
+                                    <option value="">-- Pilih Kategori --</option>
+                                    <option value="infrastruktur">Infrastruktur & Fasilitas Umum</option>
+                                    <option value="kebersihan">Kebersihan & Lingkungan</option>
+                                    <option value="keamanan">Keamanan & Ketertiban</option>
+                                    <option value="ide">Saran & Ide Kreatif</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Detail Lokasi</label>
+                            <input type="text" placeholder="Detail alamat lokasi kejadian..." class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none bg-gray-50">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi Lengkap</label>
+                            <textarea required rows="4" placeholder="Jelaskan secara detail masalah atau ide Anda..." class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none bg-gray-50"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Foto Bukti (Opsional)</label>
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-xl bg-gray-50 hover:bg-gray-100 transition cursor-pointer">
+                                <div class="space-y-1 text-center">
+                                    <i class="fas fa-camera text-3xl text-gray-400 mb-2"></i>
+                                    <div class="flex text-sm text-gray-600 justify-center">
+                                        <span class="relative cursor-pointer bg-transparent rounded-md font-medium text-primary-600 hover:text-primary-500">
+                                            <span>Upload foto dari galeri</span>
+                                            <input type="file" class="sr-only" accept="image/*">
+                                        </span>
+                                    </div>
+                                    <p class="text-xs text-gray-500">Maks. 5MB (JPG/PNG)</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end pt-2">
+                            <button type="submit" class="w-full md:w-auto px-8 py-3 bg-primary-600 text-white rounded-xl font-bold hover:bg-primary-700 transition shadow-md">
+                                Kirim Laporan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Feed/List Laporan -->
+                <div class="mb-4 flex flex-wrap gap-2 md:gap-4 justify-between items-center">
+                    <h3 class="text-xl font-bold text-gray-800">Daftar Laporan Publik</h3>
+                    
+                    <div class="flex bg-white rounded-lg p-1 border border-gray-200">
+                        <button @click="filterBtn = 'semua'" :class="filterBtn === 'semua' ? 'bg-gray-100 text-gray-800 font-semibold' : 'text-gray-500'" class="px-3 py-1.5 rounded-md text-sm transition">Terbaru</button>
+                        <button @click="filterBtn = 'saya'" :class="filterBtn === 'saya' ? 'bg-gray-100 text-gray-800 font-semibold' : 'text-gray-500'" class="px-3 py-1.5 rounded-md text-sm transition">Laporan Saya</button>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <!-- Feed Item 1: Status Selesai -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">
+                                    AP
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-sm">Andi Pratama</h4>
+                                    <p class="text-xs text-gray-500">2 hari yang lalu • <i class="fas fa-map-marker-alt text-red-400"></i> Jl. Mawar RT 01</p>
+                                </div>
+                            </div>
+                            <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full"><i class="fas fa-check mr-1"></i> Ditangani</span>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <h3 class="font-bold text-lg text-gray-900 mb-2">Pohon Tumbang Mengering di Jalan Utama</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed mb-4">Ada pohon tumbang sisa hujan badai minggu lalu yang batangnya menutupi sebagian jalan Mawar. Sangat berbahaya kalau malam hari karena kurang penerangan.</p>
+                            
+                            <img src="https://images.unsplash.com/photo-1544605927-4632128522e8?auto=format&fit=crop&w=600&q=80" alt="Pohon tumbang" class="w-full md:w-1/2 h-48 object-cover rounded-xl mb-4 border border-gray-100">
+                        </div>
+
+                        <!-- Response/Tanggapan Admin -->
+                        <div class="bg-blue-50 bg-opacity-50 border-l-4 border-blue-500 rounded-r-xl p-4 mt-2">
+                            <div class="flex items-center mb-1">
+                                <i class="fas fa-shield-alt text-blue-500 mr-2"></i>
+                                <span class="font-bold text-blue-700 text-sm">Tanggapan Admin Desa</span>
+                                <span class="text-xs text-gray-500 ml-2">Kemarin, 14:00</span>
+                            </div>
+                            <p class="text-sm text-gray-700 ml-6">Terima kasih laporannya Bapak Andi. Tim kebersihan desa dan Linmas sudah mengevakuasi sisa pohon tumbang. Jalan sudah bisa dilewati normal kembali.</p>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-gray-100 flex items-center space-x-6">
+                            <button class="text-gray-500 hover:text-primary-600 transition flex items-center text-sm font-medium">
+                                <i class="far fa-thumbs-up mr-2 text-lg"></i> 12 Dukungan
+                            </button>
+                            <button class="text-gray-500 hover:text-blue-600 transition flex items-center text-sm font-medium">
+                                <i class="far fa-comment mr-2 text-lg"></i> 3 Komentar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Feed Item 2: Status Diproses -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex items-center space-x-3">
+                                <img src="https://ui-avatars.com/api/?name=Budi+Santoso&background=22c55e&color=fff" class="w-10 h-10 rounded-full">
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-sm">Budi Santoso <span class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded ml-1">Saya</span></h4>
+                                    <p class="text-xs text-gray-500">5 jam yang lalu • Kategori: Infrastruktur</p>
+                                </div>
+                            </div>
+                            <span class="bg-yellow-100 text-yellow-700 text-xs font-bold px-3 py-1 rounded-full"><i class="fas fa-hourglass-half mr-1"></i> Diproses</span>
+                        </div>
+                        
+                        <div class="mt-3 mb-4">
+                            <h3 class="font-bold text-lg text-gray-900 mb-2">Usulan Perbaikan Gorong-gorong Pertigaan</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed">Air selalu menggenang saat hujan deras. Mohon agar gorong-gorong bisa segera diperlebar atau dibersihkan menjelang musim penghujan bulan depan.</p>
+                        </div>
+
+                        <!-- Response/Tanggapan Admin -->
+                        <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 mt-2">
+                            <div class="flex items-center mb-1">
+                                <i class="fas fa-spinner fa-spin text-gray-500 mr-2"></i>
+                                <span class="font-bold text-gray-700 text-sm">Status: Sedang Direview oleh Kepala Desa</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-gray-100 flex items-center space-x-6">
+                            <button class="text-primary-600 transition flex items-center text-sm font-medium">
+                                <i class="fas fa-thumbs-up mr-2 text-lg"></i> 24 Dukungan
+                            </button>
+                            <button class="text-gray-500 hover:text-blue-600 transition flex items-center text-sm font-medium">
+                                <i class="far fa-comment mr-2 text-lg"></i> 0 Komentar
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </main>
+        </div>
+    </div>
+</body>
+</html>

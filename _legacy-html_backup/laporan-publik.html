@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lapor Warga Publik - DesaSmart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: { brand: { 50: '#ecfdf5', 100: '#d1fae5', 400: '#34d399', 500: '#10b981', 600: '#059669', 900: '#064e3b' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .nav-link.active { color: #0f172a; font-weight: 800; }
+        .nav-link.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px; background-color: #10b981; border-radius: 99px; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .feed-scroll { max-height: calc(100vh - 200px); overflow-y: auto; }
+    </style>
+</head>
+<body class="text-slate-800 antialiased pt-40 pb-20" x-data="{
+        submitting: false,
+        success: false,
+        submitReport() {
+            this.submitting = true;
+            setTimeout(() => {
+                this.submitting = false;
+                this.success = true;
+                setTimeout(() => this.success = false, 4000);
+            }, 1500)
+        }
+    }">
+
+    <!-- Navbar -->
+    <div class="fixed top-2 inset-x-0 z-50 flex justify-center px-4">
+        <nav class="glass shadow-lg shadow-slate-200/50 rounded-full px-6 py-4 w-full max-w-6xl flex items-center justify-between" id="navbar">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center group-hover:-rotate-12 transition-transform duration-500"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 12h3v8h14v-8h3L12 2z" /></svg></div>
+                <span class="font-extrabold text-slate-900 tracking-tight text-xl">Desa<span class="text-brand-500">Smart.</span></span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-500" id="nav-links">
+                <a href="index.html" data-page="index.html" class="nav-link hover:text-slate-900 transition-all relative py-1">Beranda</a>
+                <a href="profil-desa.html" data-page="profil-desa.html" class="nav-link hover:text-slate-900 transition-all relative py-1">Profil</a>
+                <a href="layanan.html" data-page="layanan.html" class="nav-link hover:text-slate-900 transition-all relative py-1">Layanan</a>
+                <a href="umkm.html" data-page="umkm.html" class="nav-link hover:text-slate-900 transition-all relative py-1">UMKM</a>
+                <a href="laporan-publik.html" data-page="laporan-publik.html" class="nav-link hover:text-slate-900 transition-all relative py-1">Lapor</a>
+                <a href="berita.html" data-page="berita.html" class="nav-link hover:text-slate-900 transition-all relative py-1">Berita</a>
+                <a href="kontak.html" data-page="kontak.html" class="nav-link hover:text-slate-900 transition-all relative py-1">Kontak</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="warga/index.html" class="bg-brand-500 text-white text-sm font-bold rounded-full px-6 py-2.5 hover:bg-brand-600 transition-all">Portal Warga</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content Split -->
+    <div class="max-w-7xl mx-auto px-4 mb-24">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">Suara Warga Publik</h1>
+            <p class="text-slate-500 text-lg">Laporkan temuan Anda demi membangun desa yang lebih baik. Transparan, Cepat, dan Tuntas.</p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            
+            <!-- LEFT: REPORT FORM -->
+            <div class="w-full lg:w-5/12">
+                <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-xl border border-slate-100 shadow-slate-200/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-brand-100 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+                    
+                    <h2 class="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-brand-50 rounded-xl flex items-center justify-center text-brand-600"><i class="fas fa-edit"></i></div>
+                        Buat Laporan Baru
+                    </h2>
+
+                    <!-- Success Alert -->
+                    <div x-show="success" x-transition class="bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-2xl mb-6 flex items-center gap-3">
+                        <i class="fas fa-check-circle text-emerald-500 text-xl"></i>
+                        <div><p class="font-bold text-sm">Berhasil Dikirim!</p><p class="text-xs">Laporan masuk antrean admin. NIK Anda dirahasiakan.</p></div>
+                    </div>
+
+                    <form @submit.prevent="submitReport" class="space-y-6 relative z-10">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Sifat Pelaporan</label>
+                            <div class="flex gap-4">
+                                <label class="flex-1 border border-slate-200 rounded-xl p-3 cursor-pointer hover:bg-slate-50 transition flex items-center gap-2">
+                                    <input type="radio" name="sifat" checked class="text-brand-500 focus:ring-brand-500">
+                                    <span class="text-sm font-semibold">Publik</span>
+                                </label>
+                                <label class="flex-1 border border-slate-200 rounded-xl p-3 cursor-pointer hover:bg-slate-50 transition flex items-center gap-2 text-slate-400">
+                                    <input type="radio" name="sifat" disabled>
+                                    <span class="text-sm font-semibold relative"><i class="fas fa-lock mr-1"></i> Rahasia (Warga Login)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Kategori Laporan</label>
+                            <select required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all">
+                                <option value="">Pilih Kategori Masalah</option>
+                                <option value="infrastruktur">Jalan / Infrastruktur / Fasum</option>
+                                <option value="lingkungan">Sampah / Lingkungan</option>
+                                <option value="layanan">Pelayanan Perangkat Desa</option>
+                                <option value="keamanan">Ketertiban & Keamanan</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Judul Singkat</label>
+                            <input type="text" required placeholder="Contoh: Lampu jalan mati di RT 02" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Deskripsi Lengkap & Lokasi</label>
+                            <textarea required rows="4" placeholder="Jelaskan titik lokasi spesifik dan dampaknya..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all resize-none"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Unggah Foto Kejadian</label>
+                            <div class="border-2 border-dashed border-slate-300 rounded-2xl p-6 text-center hover:bg-slate-50 cursor-pointer transition">
+                                <i class="fas fa-cloud-upload-alt text-3xl text-slate-300 mb-2"></i>
+                                <p class="text-sm text-brand-600 font-semibold text-center mb-1">Klik untuk upload foto</p>
+                                <p class="text-xs text-slate-400">JPG, PNG maksimal 5MB</p>
+                            </div>
+                        </div>
+
+                        <button type="submit" :disabled="submitting" class="w-full bg-slate-900 text-white font-bold text-lg py-4 rounded-xl hover:bg-brand-500 transition-all shadow-lg hover:shadow-brand-500/30 flex items-center justify-center gap-2">
+                            <span x-show="!submitting"><i class="fas fa-paper-plane mr-1"></i> Kirim Laporan Pengaduan</span>
+                            <span x-show="submitting"><i class="fas fa-spinner fa-spin mr-1"></i> Memproses...</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- RIGHT: LIVE FEED -->
+            <div class="w-full lg:w-7/12">
+                <div class="flex items-center justify-between mb-6 px-2">
+                    <h3 class="text-xl font-bold text-slate-900 border-l-4 border-brand-500 pl-3">Aduan Masuk Terbaru</h3>
+                    <div class="flex gap-2">
+                        <span class="px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs font-semibold shadow-sm hover:bg-slate-50 cursor-pointer">Hari Ini</span>
+                        <span class="px-3 py-1 bg-slate-100 text-slate-500 rounded-lg text-xs font-semibold cursor-pointer border border-transparent hover:border-slate-200 hover:bg-white text-center flex items-center"><i class="fas fa-filter text-slate-400 mr-1"></i> Filter</span>
+                    </div>
+                </div>
+
+                <div class="feed-scroll pr-2 space-y-5 no-scrollbar">
+
+                    <!-- Card 1 -->
+                    <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-lg"><i class="fas fa-user-secret"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900">Anonim Publik</h4>
+                                    <p class="text-xs text-slate-400">2 jam yang lalu • Infrastruktur</p>
+                                </div>
+                            </div>
+                            <span class="bg-brand-50 text-brand-600 border border-brand-200 text-xs font-bold px-3 py-1 rounded-full"><i class="fas fa-check-circle mr-1"></i> Ditangani</span>
+                        </div>
+                        <h5 class="font-extrabold text-lg text-slate-800 mb-2">Selokan Tersumbat di Depan KUD</h5>
+                        <p class="text-slate-600 text-sm mb-4 leading-relaxed">Air limbah dari pasar meluap ke selokan KUD dan baunya sangat mengganggu pejalan kaki. Mohon dinas kebersihan segera cek.</p>
+                        <div class="border-t border-slate-100 pt-4 mt-2">
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 relative">
+                                <div class="absolute -top-3 left-6 bg-slate-200 text-slate-600 text-xs font-bold px-2 py-0.5 rounded-full">Respon Admin</div>
+                                <p class="text-sm text-slate-700 italic mt-1">"Terima kasih atas laporannya. Laporan sudah diteruskan ke petugas harian dan sedang dalam proses pembersihan. Estimasi selesai sore ini."</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center font-bold text-lg">H</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900">Hidayat R.</h4>
+                                    <p class="text-xs text-slate-400">Kemarin • Keamanan</p>
+                                </div>
+                            </div>
+                            <span class="bg-slate-100 text-slate-500 border border-slate-200 text-xs font-bold px-3 py-1 rounded-full"><i class="fas fa-hourglass-half mr-1"></i> Menunggu Respon</span>
+                        </div>
+                        <h5 class="font-extrabold text-lg text-slate-800 mb-2">Lampu PJU Mati Total di Perempatan Timur</h5>
+                        <p class="text-slate-600 text-sm leading-relaxed">Sudah 3 hari lampu mati, kondisi sangat gelap dan rawan kecelakaan di malam hari.</p>
+                        <div class="mt-4 w-full h-32 rounded-xl bg-slate-200 bg-[url('https://images.unsplash.com/photo-1519069151598-a28a1ea5336d?auto=format&fit=crop&w=400&q=80')] bg-cover bg-center"></div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition opacity-80 hover:opacity-100">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center font-bold text-lg">S</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900">Siti Maesaroh</h4>
+                                    <p class="text-xs text-slate-400">24 Mar 2026 • Layanan Desa</p>
+                                </div>
+                            </div>
+                            <span class="bg-brand-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm"><i class="fas fa-check-double mr-1"></i> Selesai</span>
+                        </div>
+                        <h5 class="font-extrabold text-lg text-slate-800 mb-2">Apresiasi Program Posyandu Keliling</h5>
+                        <p class="text-slate-600 text-sm leading-relaxed">Terima kasih atas bantuan mobil siaga desa yang memfasilitasi posyandu jemput bola untuk lansia kami, sangat bermanfaat.</p>
+                        <div class="flex items-center gap-2 mt-4 text-brand-600 text-sm font-bold">
+                            <i class="fas fa-heart text-rose-500"></i> Disukai 128 Warga
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script Init -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const page = window.location.pathname.split("/").pop() || 'index.html';
+            document.querySelectorAll('.nav-link').forEach(l => {
+                if(l.getAttribute('data-page') === page) l.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Desa - DesaSmart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: { brand: { 50: '#ecfdf5', 100: '#d1fae5', 400: '#34d399', 500: '#10b981', 600: '#059669', 900: '#064e3b' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; overflow-x: hidden; }
+        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        .nav-link.active { color: #0f172a; font-weight: 800; }
+        .nav-link.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px; background-color: #10b981; border-radius: 99px; }
+        /* Hero Parallax */
+        .hero-bg { background-image: url('https://images.unsplash.com/photo-1596404983050-6e469bb0fcbe?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center; background-attachment: fixed; }
+        .hero-overlay { background: linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.9)); }
+        .blob-anim { animation: float 6s ease-in-out infinite; }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-brand-500 selection:text-white" x-data="{ scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 50)">
+
+    <!-- Navbar -->
+    <div class="fixed top-6 inset-x-0 z-50 flex justify-center px-4 transition-all duration-300" :class="{ 'top-2': scrolled }">
+        <nav class="glass shadow-lg shadow-slate-200/50 rounded-full px-6 py-4 w-full max-w-6xl flex items-center justify-between" id="navbar">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center group-hover:-rotate-12 transition-transform duration-500">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 12h3v8h14v-8h3L12 2z" /></svg>
+                </div>
+                <span class="font-extrabold text-slate-900 tracking-tight text-xl">Desa<span class="text-brand-500">Smart.</span></span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-500" id="nav-links">
+                <a href="index.html" data-page="index.html" class="nav-link hover:text-slate-900 transition-all relative py-1">Beranda</a>
+                <a href="profil-desa.html" data-page="profil-desa.html" class="nav-link hover:text-slate-900 transition-all relative py-1">Profil</a>
+                <a href="layanan.html" data-page="layanan.html" class="nav-link hover:text-slate-900 transition-all relative py-1">Layanan</a>
+                <a href="umkm.html" data-page="umkm.html" class="nav-link hover:text-slate-900 transition-all relative py-1">UMKM</a>
+                <a href="laporan-publik.html" data-page="laporan-publik.html" class="nav-link hover:text-slate-900 transition-all relative py-1">Lapor</a>
+                <a href="berita.html" data-page="berita.html" class="nav-link hover:text-slate-900 transition-all relative py-1">Berita</a>
+                <a href="kontak.html" data-page="kontak.html" class="nav-link hover:text-slate-900 transition-all relative py-1">Kontak</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="login.html" class="hidden md:block text-sm font-semibold text-slate-600 hover:text-slate-900">Masuk</a>
+                <a href="login.html" class="bg-slate-900 text-white text-sm font-bold rounded-full px-6 py-2.5 hover:bg-brand-500 transition-all shadow-lg shadow-slate-900/20 hover:-translate-y-0.5">Register</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1596404983050-6e469bb0fcbe?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80" alt="Desa" class="absolute inset-0 w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/40 to-slate-900"></div>
+        
+        <div class="relative z-10 text-center px-4 max-w-4xl pt-20">
+            <span class="inline-block py-1 px-3 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30 text-sm font-bold tracking-wider uppercase mb-6 backdrop-blur-md">Kecamatan Sukamakmur</span>
+            <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight">Desa <span class="text-brand-400">Nusantara Jaya</span></h1>
+            <p class="text-xl text-slate-300 mb-10 max-w-2xl mx-auto font-light leading-relaxed">Berakar pada tradisi kearifan budaya lokal, melesat maju dengan teknologi digital yang transparan dan inklusif demi mencapai tujuan kesejahteraan bersama.</p>
+            <div class="flex gap-4 justify-center">
+                <a href="#sejarah" class="bg-brand-500 text-white px-8 py-4 rounded-full font-bold shadow-lg hover:bg-brand-400 transition-all">Jelajahi Sejarah</a>
+                <a href="#statistik" class="bg-white/10 backdrop-blur text-white border border-white/20 px-8 py-4 rounded-full font-bold hover:bg-white/20 transition-all">Lihat Statistik</a>
+            </div>
+        </div>
+        <!-- Decorative Bottom Divider -->
+        <div class="absolute bottom-0 inset-x-0 text-slate-50">
+            <svg viewBox="0 0 1440 120" class="w-full h-auto fill-current"><path d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path></svg>
+        </div>
+    </section>
+
+    <!-- Sambutan Kades -->
+    <section class="py-24 bg-slate-50 relative overflow-hidden" id="sejarah">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center gap-16">
+            <div class="w-full md:w-1/2 relative">
+                <div class="absolute -inset-4 bg-brand-500/20 blur-2xl rounded-full"></div>
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Kepala Desa" class="relative z-10 w-full rounded-[2rem] shadow-2xl border-4 border-white blob-anim grayscale hover:grayscale-0 transition-all duration-700">
+                <div class="absolute -bottom-8 -right-8 bg-white p-6 rounded-3xl shadow-xl z-20 border border-slate-100">
+                    <p class="font-extrabold text-2xl text-slate-900">Bpk. Sudirman</p>
+                    <p class="text-brand-600 font-bold">Kepala Desa</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <div class="inline-flex items-center gap-2 mb-4 text-brand-600 font-bold tracking-widest uppercase text-sm">
+                    <hr class="w-8 border-brand-500 border-2"> Sambutan
+                </div>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight">Bersama Membangun Dari Desa Untuk Negeri</h2>
+                <p class="text-slate-600 leading-relaxed mb-6 text-lg">"Selamat datang di portal resmi Desa Nusantara Jaya. Kami berkomitmen untuk menjadikan teknologi tidak hanya sebagai pelengkap, melainkan alat utama pemerataan ekonomi dan keterbukaan informasi. Aplikasi DesaSmart memberikan ruang penuh bagi setiap warga untuk melaporkan, berdagang, dan berkontribusi."</p>
+                <div class="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm">
+                    <p class="italic text-slate-500 mb-4">"Teknologi di desa bukan mimpi, ini adalah realita kita hari ini."</p>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Signature_of_John_Hancock.svg" class="h-10 opacity-60" alt="TTD">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visi & Misi Blok -->
+    <section class="py-24 bg-slate-900 text-white relative">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]"></div>
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-extrabold mb-4">Visi & Misi</h2>
+                <div class="w-24 h-1 bg-brand-500 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Visi -->
+                <div class="bg-slate-800/50 backdrop-blur-md p-10 rounded-[2.5rem] border border-slate-700/50 transform hover:-translate-y-2 transition-all">
+                    <div class="w-16 h-16 bg-brand-500 flex items-center justify-center rounded-2xl mb-8 -mt-16 text-white shadow-lg mx-auto md:mx-0">
+                        <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-4 text-center md:text-left">Visi Kami</h3>
+                    <p class="text-slate-300 text-lg leading-relaxed text-center md:text-left">"Menjadi Desa Digital yang Mandiri, Sejahtera, Transparan, dan Memegang Teguh Nilai Luhur Budaya Gotong Royong pada Tahun 2030."</p>
+                </div>
+                <!-- Misi -->
+                <div class="bg-slate-800/50 backdrop-blur-md p-10 rounded-[2.5rem] border border-slate-700/50 transform hover:-translate-y-2 transition-all">
+                    <div class="w-16 h-16 bg-blue-500 flex items-center justify-center rounded-2xl mb-8 -mt-16 text-white shadow-lg mx-auto md:mx-0">
+                        <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-4 text-center md:text-left">Misi Utuma</h3>
+                    <ul class="text-slate-300 space-y-4">
+                        <li class="flex items-start gap-3"><span class="text-brand-400 mt-1">✔</span> Memastikan 100% inklusi teknologi di pelayanan administrasi warga.</li>
+                        <li class="flex items-start gap-3"><span class="text-brand-400 mt-1">✔</span> Mendorong ratusan sentra UMKM ke pasar e-commerce DesaSmart.</li>
+                        <li class="flex items-start gap-3"><span class="text-brand-400 mt-1">✔</span> Keterbukaan informasi APBDesa untuk setiap Rukun Tetangga (RT).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistik & Demografi -->
+    <section class="py-24 bg-white" id="statistik">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-extrabold text-slate-900 mb-4">Demografi Cerdas</h2>
+                <p class="text-slate-500">Statistik real-time bersumber dari integrasi e-KTP.</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="p-8 rounded-3xl bg-emerald-50 text-center border border-emerald-100">
+                    <div class="w-16 h-16 mx-auto bg-emerald-200 text-emerald-700 rounded-full flex items-center justify-center mb-4"><i class="fas fa-users text-2xl"></i></div>
+                    <h4 class="text-4xl font-extrabold text-emerald-900 mb-2">4.520</h4>
+                    <p class="text-emerald-700 font-medium">Total Penduduk</p>
+                </div>
+                <div class="p-8 rounded-3xl bg-blue-50 text-center border border-blue-100">
+                    <div class="w-16 h-16 mx-auto bg-blue-200 text-blue-700 rounded-full flex items-center justify-center mb-4"><i class="fas fa-male text-3xl"></i></div>
+                    <h4 class="text-4xl font-extrabold text-blue-900 mb-2">2.150</h4>
+                    <p class="text-blue-700 font-medium">Laki-Laki</p>
+                </div>
+                <div class="p-8 rounded-3xl bg-rose-50 text-center border border-rose-100">
+                    <div class="w-16 h-16 mx-auto bg-rose-200 text-rose-700 rounded-full flex items-center justify-center mb-4"><i class="fas fa-female text-3xl"></i></div>
+                    <h4 class="text-4xl font-extrabold text-rose-900 mb-2">2.370</h4>
+                    <p class="text-rose-700 font-medium">Perempuan</p>
+                </div>
+                <div class="p-8 rounded-3xl bg-amber-50 text-center border border-amber-100">
+                    <div class="w-16 h-16 mx-auto bg-amber-200 text-amber-700 rounded-full flex items-center justify-center mb-4"><i class="fas fa-map-marked-alt text-2xl"></i></div>
+                    <h4 class="text-4xl font-extrabold text-amber-900 mb-2">12</h4>
+                    <p class="text-amber-700 font-medium">Satuan RW</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Struktur Organisasi -->
+    <section class="py-24 bg-slate-50 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-4xl font-extrabold text-slate-900 text-center mb-16">Perangkat Desa</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+                <!-- Person -->
+                <div class="bg-white rounded-[2rem] p-6 text-center border border-slate-100 shadow-sm hover:-translate-y-2 transition-transform">
+                    <img src="https://ui-avatars.com/api/?name=Sudirman&background=10b981&color=fff&size=200" alt="Kades" class="w-32 h-32 rounded-full mx-auto border-4 border-white shadow-lg -mt-16 mb-4">
+                    <h4 class="text-xl font-bold text-slate-900">Bpk. Sudirman</h4>
+                    <p class="text-brand-600 font-medium mb-3">Kepala Desa</p>
+                    <p class="text-sm text-slate-500">Periode 2022 - 2028</p>
+                </div>
+                <!-- Person -->
+                <div class="bg-white rounded-[2rem] p-6 text-center border border-slate-100 shadow-sm hover:-translate-y-2 transition-transform">
+                    <img src="https://ui-avatars.com/api/?name=Handoko+T&background=0f172a&color=fff&size=200" alt="Sekdes" class="w-32 h-32 rounded-full mx-auto border-4 border-white shadow-lg -mt-16 mb-4">
+                    <h4 class="text-xl font-bold text-slate-900">Handoko T.</h4>
+                    <p class="text-brand-600 font-medium mb-3">Sekretaris Desa</p>
+                    <p class="text-sm text-slate-500">Masa Bakti: 2015 - Skg</p>
+                </div>
+                <!-- Person -->
+                <div class="bg-white rounded-[2rem] p-6 text-center border border-slate-100 shadow-sm hover:-translate-y-2 transition-transform">
+                    <img src="https://ui-avatars.com/api/?name=Hj+Ratna&background=f43f5e&color=fff&size=200" alt="Kaur Keuangan" class="w-32 h-32 rounded-full mx-auto border-4 border-white shadow-lg -mt-16 mb-4">
+                    <h4 class="text-xl font-bold text-slate-900">Hj. Ratna</h4>
+                    <p class="text-brand-600 font-medium mb-3">Kaur Keuangan</p>
+                    <p class="text-sm text-slate-500">APBDesa Transparency</p>
+                </div>
+                <!-- Person -->
+                <div class="bg-white rounded-[2rem] p-6 text-center border border-slate-100 shadow-sm hover:-translate-y-2 transition-transform">
+                    <img src="https://ui-avatars.com/api/?name=Agus+S&background=3b82f6&color=fff&size=200" alt="Kasi Pemerintahan" class="w-32 h-32 rounded-full mx-auto border-4 border-white shadow-lg -mt-16 mb-4">
+                    <h4 class="text-xl font-bold text-slate-900">Agus Salim</h4>
+                    <p class="text-brand-600 font-medium mb-3">Kasi Pemerintahan</p>
+                    <p class="text-sm text-slate-500">Layanan Kependudukan</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white pt-20 pb-10 border-t-4 border-brand-500">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-extrabold mb-6">Desa<span class="text-brand-400">Smart.</span></h2>
+            <p class="text-slate-500 mb-8 max-w-lg mx-auto">Sistem Pelayanan Terpadu Menuju Masa Depan Inklusif Nusantara.</p>
+            <p class="text-slate-600 text-sm">&copy; 2026 Desa Nusantara Jaya. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const page = window.location.pathname.split("/").pop() || 'index.html';
+            document.querySelectorAll('.nav-link').forEach(l => {
+                if(l.getAttribute('data-page') === page) l.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

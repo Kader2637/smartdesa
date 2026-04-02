@@ -1,0 +1,212 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Pendapatan - Smart Desa</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        [x-cloak] { display: none !important; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        @keyframes slide-up {
+            0% { transform: translateY(100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .toast-animate { animation: slide-up 0.3s ease-out forwards; }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800" x-data="financeManager()">
+
+    <div x-cloak x-show="toast.show" class="fixed bottom-6 right-6 z-[100] toast-animate">
+        <div class="bg-slate-800 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4">
+            <div :class="toast.type === 'success' ? 'bg-emerald-500' : 'bg-red-500'" class="w-8 h-8 rounded-full flex items-center justify-center">
+                <i class="fas" :class="toast.type === 'success' ? 'fa-check' : 'fa-info'"></i>
+            </div>
+            <p class="font-bold text-sm" x-text="toast.msg"></p>
+        </div>
+    </div>
+
+    <div class="flex h-screen overflow-hidden">
+        <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden" @click="sidebarOpen = false"></div>
+
+        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+            class="fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-slate-200 transition-transform duration-300 lg:static lg:translate-x-0 lg:flex lg:flex-col shadow-sm">
+            <div class="flex items-center justify-center h-20 border-b border-slate-100">
+                <div class="flex items-center gap-2 font-bold text-2xl text-emerald-600 tracking-tight">
+                    <i class="fas fa-store"></i> UMKM<span class="text-slate-800">Desa</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+                <p class="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-2">Pusat Seller</p>
+                <a href="index.html" class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-chart-pie w-5 text-center"></i> <span>Dashboard Toko</span>
+                </a>
+                
+                <p class="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-6">Manajemen Toko</p>
+                <a href="kelola-produk.html" class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-box-open w-5 text-center"></i> <span>Kelola Produk</span>
+                </a>
+                <a href="pesanan-masuk.html" class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-shopping-cart w-5 text-center"></i> <span>Pesanan Masuk</span>
+                </a>
+                <a href="status-pengiriman.html" class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-truck-fast w-5 text-center"></i> <span>Status Pengiriman</span>
+                </a>
+                
+                <p class="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-6">Keuangan & Profil</p>
+                <a href="riwayat-pendapatan.html" class="flex items-center gap-3 px-4 py-2.5 bg-emerald-50 text-emerald-600 font-semibold rounded-lg transition-colors">
+                    <i class="fas fa-wallet w-5 text-center"></i> <span>Riwayat Pendapatan</span>
+                </a>
+                <a href="profil-toko.html" class="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i class="fas fa-store-alt w-5 text-center"></i> <span>Profil & Pengaturan</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-200 shadow-sm relative z-10">
+                <div class="flex items-center gap-4">
+                    <button @click="sidebarOpen = true" class="text-slate-500 focus:outline-none lg:hidden hover:text-emerald-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div class="hidden md:flex flex-col">
+                        <h1 class="font-bold text-slate-800 text-lg leading-tight">Riwayat Pendapatan</h1>
+                        <p class="text-xs text-slate-500">Mutasi Rekening Toko</p>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 p-6">
+                <!-- Saldo Card -->
+                <div class="bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl shadow-lg p-8 text-white mb-8 relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-6">
+                    <!-- Deco bg -->
+                    <div class="absolute right-0 top-0 opacity-10 pointer-events-none transform translate-x-10 -translate-y-10">
+                        <i class="fas fa-coins text-9xl"></i>
+                    </div>
+                    
+                    <div class="relative z-10 text-center md:text-left">
+                        <p class="text-emerald-100 font-medium mb-1 tracking-wider uppercase text-xs">Total Saldo Bisa Ditarik</p>
+                        <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight">Rp <span x-text="balance.toLocaleString('id-ID')"></span></h2>
+                    </div>
+                    <button @click="modalTarik = true" class="relative z-10 bg-white text-emerald-600 font-bold px-8 py-3.5 rounded-xl text-lg hover:shadow-xl transition flex items-center gap-2 hover:bg-emerald-50">
+                        <i class="fas fa-hand-holding-usd"></i> Tarik Dana
+                    </button>
+                </div>
+
+                <!-- Mutasi Table -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden min-h-[400px]">
+                    <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h3 class="font-bold text-slate-800 text-lg">Catatan Mutasi Terbaru</h3>
+                    </div>
+
+                    <div class="divide-y divide-slate-100">
+                        
+                        <template x-for="rec in records" :key="rec.id">
+                            <div x-transition class="p-5 flex justify-between items-center hover:bg-slate-50 transition">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-12 h-12 rounded-full flex items-center justify-center text-xl flex-shrink-0"
+                                        :class="rec.type === 'in' ? 'bg-emerald-50 text-emerald-500' : 'bg-red-50 text-red-500'">
+                                        <i class="fas" :class="rec.type === 'in' ? 'fa-arrow-down' : 'fa-arrow-up'"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-slate-800 text-lg" x-text="rec.title"></p>
+                                        <p class="text-sm text-slate-500" x-text="rec.desc"></p>
+                                        <p class="text-xs text-slate-400 mt-1" x-text="rec.time"></p>
+                                    </div>
+                                </div>
+                                <div class="text-right flex-shrink-0">
+                                    <p class="text-xl font-extrabold" :class="rec.type === 'in' ? 'text-emerald-600' : 'text-red-600'">
+                                        <span x-text="rec.type === 'in' ? '+' : '-'"></span> Rp <span x-text="rec.amount.toLocaleString('id-ID')"></span>
+                                    </p>
+                                    <span class="text-xs font-bold px-2 rounded-lg py-0.5 whitespace-nowrap"
+                                        :class="rec.status === 'sukses' ? 'text-emerald-600 bg-emerald-100' : 'text-blue-600 bg-blue-100'" x-text="rec.label"></span>
+                                </div>
+                            </div>
+                        </template>
+
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Tarik Saldo -->
+    <div x-cloak x-show="modalTarik" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4 text-left">
+        <div x-show="modalTarik" @click.away="modalTarik = false" x-transition.scale class="bg-white rounded-3xl w-full max-w-sm p-8 shadow-2xl relative">
+            <h3 class="font-extrabold text-2xl text-slate-800 mb-2">Tarik Saldo</h3>
+            <p class="text-sm text-slate-500 mb-6">Pindahkan dana hasil penjualan ke rekening Bank pribadi Anda secara instan.</p>
+            
+            <div class="bg-emerald-50 rounded-xl p-4 mb-6 border border-emerald-100 text-center">
+                <p class="text-xs text-emerald-600 font-bold uppercase tracking-wider mb-1">Total Yang Bisa Ditarik</p>
+                <p class="text-2xl font-extrabold text-emerald-700">Rp <span x-text="balance.toLocaleString('id-ID')"></span></p>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-bold text-slate-700 mb-2">Jumlah Penarikan (Rp)</label>
+                <input type="number" x-model.number="withdrawAmount" placeholder="Minimal Rp 50.000" class="w-full border border-slate-200 rounded-lg px-4 py-3 text-lg font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition">
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-sm font-bold text-slate-700 mb-2">Rekening Tujuan</label>
+                <select class="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm font-medium text-slate-600 bg-slate-50 cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 hover:bg-slate-100">
+                    <option>BRI - 0989xxxx1120 (a.n Budi)</option>
+                    <option class="text-emerald-600 font-bold">+ Tambah Rekening Lain</option>
+                </select>
+            </div>
+            
+            <div class="flex gap-3 mt-8">
+                <button @click="modalTarik = false" class="flex-1 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition">Batal</button>
+                <button @click="processWithdraw()" class="flex-1 py-3 bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/30 hover:bg-emerald-600 transition">Tarik Sekarang</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function financeManager() {
+            return {
+                sidebarOpen: false, modalTarik: false, withdrawAmount: '',
+                toast: { show: false, msg: '', type: 'success' },
+                balance: 1450000,
+                records: [
+                    { id: 1, type: 'in', title: 'Pemasukan Pesanan Selesai', desc: '#ORD-98921 - Dari BUMDes Pay', time: 'Hari ini, 14:02', amount: 130000, status: 'sukses', label: 'Berhasil' },
+                    { id: 2, type: 'in', title: 'Pemasukan Pesanan Selesai', desc: '#ORD-98910 - Dari DANA', time: 'Kemarin, 10:15', amount: 85000, status: 'sukses', label: 'Berhasil' },
+                    { id: 3, type: 'out', title: 'Penarikan Saldo', desc: 'Bank BRI a.n Budi Mulya ****1120', time: '28 Mar 2026, 09:00', amount: 2000000, status: 'sukses', label: 'Sukses Cair' }
+                ],
+                showToast(msg, type='success') {
+                    this.toast.msg = msg; this.toast.type = type; this.toast.show = true;
+                    setTimeout(() => { this.toast.show = false; }, 3000);
+                },
+                processWithdraw() {
+                    let w = parseInt(this.withdrawAmount);
+                    if (isNaN(w) || w < 50000) return this.showToast('Penarikan minimal Rp 50.000!', 'error');
+                    if (w > this.balance) return this.showToast('Saldo Anda tidak mencukupi!', 'error');
+
+                    this.balance -= w;
+                    this.records.unshift({
+                        id: Date.now(), type: 'out', title: 'Penarikan Saldo Instan', 
+                        desc: 'Bank BRI a.n Budi Mulya ****1120', time: 'Baru saja', amount: w, status: 'proses', label: 'Proses Transfer'
+                    });
+                    this.modalTarik = false;
+                    this.withdrawAmount = '';
+                    this.showToast('Dana ditarik sebesar Rp ' + w.toLocaleString('id-ID') + '! Sedang di proses Bank.');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+
