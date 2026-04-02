@@ -46,8 +46,8 @@ export default function Cursor() {
 
     return (
         <>
-            <div ref={cursorRef} className="custom-cursor hidden md:block"></div>
-            <div ref={cursorDotRef} className="custom-cursor-dot hidden md:block"></div>
+            <div ref={cursorRef} className="custom-cursor"></div>
+            <div ref={cursorDotRef} className="custom-cursor-dot"></div>
         </>
     );
 }
