@@ -6,7 +6,7 @@ import Link from 'next/link';
 export default function LayananPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeFilter, setActiveFilter] = useState('Semua');
-    
+
     // Multi-step modal state
     const [modalData, setModalData] = useState(null);
     const [currentStep, setCurrentStep] = useState(0); // 0: detail, 1: tnc, 2: form, 3: upload, 4: success
@@ -68,13 +68,11 @@ export default function LayananPage() {
             setUploadProgress(0);
             setIsUploading(false);
             setFormData({ nik: '', nama: '', keperluan: '' });
-        }, 300); // clear after animation
+        }, 300); 
     };
 
     return (
         <div className="bg-slate-50 min-h-screen pt-40 pb-32">
-            
-            {/* HERO SECTION */}
             <section className="relative px-4 pb-16">
                 <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-emerald-500/10 blur-[100px] rounded-full -z-10 animate-blob pointer-events-none"></div>
                 <div className="absolute top-20 left-1/4 w-[300px] h-[300px] bg-teal-500/10 blur-[100px] rounded-full -z-10 animate-blob animation-delay-2000 pointer-events-none"></div>
@@ -85,7 +83,7 @@ export default function LayananPage() {
                     </div>
 
                     <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1] mb-6">
-                        Pusat Layanan <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Digital Warga.</span>
+                        Pusat Layanan <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Digital Warga.</span>
                     </h1>
 
                     <p className="text-lg md:text-xl text-slate-500 mb-12 max-w-2xl mx-auto font-medium">Ajukan dokumen kependudukan, perizinan, dan keperluan lainnya langsung dari rumah Anda.</p>
@@ -94,12 +92,12 @@ export default function LayananPage() {
                         <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none transition-colors group-focus-within:text-emerald-500">
                             <i className="fas fa-search text-xl text-slate-400 group-focus-within:text-emerald-500"></i>
                         </div>
-                        <input 
-                            type="text" 
-                            value={searchQuery} 
-                            onChange={(e) => setSearchQuery(e.target.value)} 
-                            className="block w-full pl-16 pr-6 py-6 bg-white/80 backdrop-blur-xl border-2 border-slate-200 rounded-3xl text-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-xl shadow-slate-200/50" 
-                            placeholder="Cari layanan administrasi... (mis: SKTM, Domisili)" 
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="block w-full pl-16 pr-6 py-6 bg-white/80 backdrop-blur-xl border-2 border-slate-200 rounded-3xl text-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-xl shadow-slate-200/50"
+                            placeholder="Cari layanan administrasi... (mis: SKTM, Domisili)"
                         />
                         {searchQuery && (
                             <button onClick={() => setSearchQuery('')} className="absolute inset-y-0 right-0 pr-6 flex items-center text-slate-400 hover:text-slate-600 transition-colors">
@@ -118,17 +116,16 @@ export default function LayananPage() {
                     </h2>
                     <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 md:pb-0">
                         {['Semua', 'Kependudukan', 'Perizinan', 'Umum', 'Kesejahteraan'].map(cat => (
-                             <button 
-                                key={cat} 
-                                onClick={() => setActiveFilter(cat)} 
-                                className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-sm whitespace-nowrap ${
-                                    activeFilter === cat 
-                                        ? 'bg-slate-900 text-white hover:bg-slate-800' 
+                            <button
+                                key={cat}
+                                onClick={() => setActiveFilter(cat)}
+                                className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-sm whitespace-nowrap ${activeFilter === cat
+                                        ? 'bg-slate-900 text-white hover:bg-slate-800'
                                         : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-                                }`}
-                             >
+                                    }`}
+                            >
                                 {cat}
-                             </button>
+                            </button>
                         ))}
                     </div>
                 </div>
@@ -161,7 +158,7 @@ export default function LayananPage() {
                         </div>
                         <h3 className="text-2xl font-extrabold text-slate-900 mb-2">Layanan Tidak Ditemukan</h3>
                         <p className="text-slate-500 max-w-md mx-auto mb-8">Maaf, kami tidak dapat menemukan layanan <span className="font-bold text-slate-700">"{searchQuery}"</span> dalam kategori <span className="font-bold text-slate-700">"{activeFilter}"</span>. Silakan coba kata kunci lain.</p>
-                        <button onClick={() => {setSearchQuery(''); setActiveFilter('Semua')}} className="px-6 py-3 bg-emerald-50 text-emerald-700 font-bold rounded-xl hover:bg-emerald-100 transition-colors flex items-center gap-2">
+                        <button onClick={() => { setSearchQuery(''); setActiveFilter('Semua') }} className="px-6 py-3 bg-emerald-50 text-emerald-700 font-bold rounded-xl hover:bg-emerald-100 transition-colors flex items-center gap-2">
                             <i className="fas fa-undo"></i> Reset Semua Filter
                         </button>
                     </div>
@@ -178,17 +175,16 @@ export default function LayananPage() {
                                 <i className="fas fa-times"></i>
                             </button>
                         )}
-                        
+
                         {/* Step Indicators Top Bar */}
                         {currentStep > 0 && currentStep < 4 && (
                             <div className="flex items-center justify-between mb-8 pb-4 relative z-10 px-2 lg:px-0 mt-2">
                                 <div className="flex items-center gap-2 w-full">
                                     {[1, 2, 3].map((step) => (
                                         <div key={step} className="flex-1 flex flex-col items-center relative">
-                                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 relative z-10 ${
-                                                currentStep === step ? 'bg-emerald-600 text-white ring-4 ring-emerald-100' :
-                                                currentStep > step ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-400'
-                                            }`}>
+                                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 relative z-10 ${currentStep === step ? 'bg-emerald-600 text-white ring-4 ring-emerald-100' :
+                                                    currentStep > step ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-400'
+                                                }`}>
                                                 {currentStep > step ? <i className="fas fa-check"></i> : step}
                                             </div>
                                             {/* Line connector */}
@@ -217,7 +213,7 @@ export default function LayananPage() {
                                         </div>
                                     </div>
                                     <h3 className="text-3xl font-extrabold text-slate-900 mb-8 leading-tight">{modalData.nama}</h3>
-                                    
+
                                     <div className="bg-slate-50 rounded-3xl p-6 border border-slate-100 mb-8">
                                         <h4 className="font-bold text-slate-900 mb-4 flex items-center gap-2"><i className="fas fa-list-ul text-emerald-500"></i> Persyaratan Berkas:</h4>
                                         <ul className="space-y-3 text-sm text-slate-600 font-medium ml-1">
@@ -264,15 +260,15 @@ export default function LayananPage() {
                                     <form className="space-y-4">
                                         <div>
                                             <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Nomor Induk Kependudukan (NIK)</label>
-                                            <input type="text" value={formData.nik} onChange={e => setFormData({...formData, nik: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 font-mono transition-all" placeholder="16 Digit Angka NIK" />
+                                            <input type="text" value={formData.nik} onChange={e => setFormData({ ...formData, nik: e.target.value })} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 font-mono transition-all" placeholder="16 Digit Angka NIK" />
                                         </div>
                                         <div>
                                             <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Nama Lengkap Sesuai KTP</label>
-                                            <input type="text" value={formData.nama} onChange={e => setFormData({...formData, nama: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 font-medium transition-all" placeholder="Misal: Budi Santoso" />
+                                            <input type="text" value={formData.nama} onChange={e => setFormData({ ...formData, nama: e.target.value })} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 font-medium transition-all" placeholder="Misal: Budi Santoso" />
                                         </div>
                                         <div>
                                             <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Tujuan / Keterangan Keperluan</label>
-                                            <textarea value={formData.keperluan} onChange={e => setFormData({...formData, keperluan: e.target.value})} rows="3" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 font-medium transition-all" placeholder="Penjelasan singkat keperluan surat ini diajukan..."></textarea>
+                                            <textarea value={formData.keperluan} onChange={e => setFormData({ ...formData, keperluan: e.target.value })} rows="3" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 font-medium transition-all" placeholder="Penjelasan singkat keperluan surat ini diajukan..."></textarea>
                                         </div>
                                     </form>
                                     <div className="mt-4 p-3 bg-blue-50 rounded-xl flex items-start gap-3 border border-blue-100">
@@ -287,7 +283,7 @@ export default function LayananPage() {
                                 <div className="animate-in fade-in zoom-in-95 h-64 flex flex-col items-center justify-center text-center">
                                     <h3 className="text-2xl font-extrabold text-slate-900 mb-2">Memproses Dokumen</h3>
                                     <p className="text-sm text-slate-500 mb-10">Sistem mengunggah dan mengenkripsi data secara aman...</p>
-                                    
+
                                     <div className="relative w-24 h-24 mb-6">
                                         <svg className="w-full h-full -rotate-90 transform" viewBox="0 0 100 100">
                                             <circle cx="50" cy="50" r="45" fill="none" stroke="#f1f5f9" strokeWidth="6" />
@@ -309,7 +305,7 @@ export default function LayananPage() {
                                     </div>
                                     <h3 className="text-3xl font-extrabold text-slate-900 mb-3">Pengajuan Berhasil!</h3>
                                     <p className="text-slate-500 mb-8 max-w-sm">Berkas permohonan <strong>{modalData.nama}</strong> Anda telah terkirim dengan sukses ke Meja Kepala Desa.</p>
-                                    
+
                                     <div className="w-full bg-slate-50 rounded-2xl p-6 border border-slate-200 mb-8 border-dashed">
                                         <p className="text-xs font-bold text-slate-500 uppercase mb-1">Nomor Resi Pelacakan</p>
                                         <p className="text-2xl font-mono font-extrabold text-slate-900 tracking-wider">#SRT-{Math.floor(1000 + Math.random() * 9000)}</p>
@@ -327,12 +323,12 @@ export default function LayananPage() {
                                     Mulai Pengajuan <i className="fas fa-arrow-right ml-2 opacity-70"></i>
                                 </button>
                             )}
-                            
+
                             {currentStep === 1 && (
                                 <>
                                     <button onClick={() => setCurrentStep(0)} className="w-1/3 bg-slate-100 text-slate-600 font-bold py-4 rounded-2xl hover:bg-slate-200 transition-colors">Kembali</button>
                                     <button onClick={() => {
-                                        if(document.getElementById('tnc-check').checked) setCurrentStep(2);
+                                        if (document.getElementById('tnc-check').checked) setCurrentStep(2);
                                         else alert('Anda harus menyetujui syarat & ketentuan terlebih dahulu.');
                                     }} className="w-2/3 bg-slate-900 text-white font-bold py-4 rounded-2xl hover:bg-emerald-600 hover:shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 transition-all">Lanjutkan Pengisian Form</button>
                                 </>
@@ -342,7 +338,7 @@ export default function LayananPage() {
                                 <>
                                     <button onClick={() => setCurrentStep(1)} className="w-1/3 bg-slate-100 text-slate-600 font-bold py-4 rounded-2xl hover:bg-slate-200 transition-colors">Kembali</button>
                                     <button onClick={() => {
-                                        if(formData.nik && formData.nama && formData.keperluan) {
+                                        if (formData.nik && formData.nama && formData.keperluan) {
                                             handleUploadClick();
                                         } else alert('Harap isi semua biodata pengajuan.');
                                     }} className="w-2/3 bg-slate-900 text-white font-bold py-4 rounded-2xl hover:bg-emerald-600 hover:shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 transition-all">Upload & Kirim Berkas</button>
@@ -358,7 +354,7 @@ export default function LayananPage() {
                     </div>
                 </div>
             )}
-            
+
         </div>
     );
 }
