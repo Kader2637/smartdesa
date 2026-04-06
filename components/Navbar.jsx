@@ -55,6 +55,7 @@ export default function Navbar() {
                         <Link href="/umkm" className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${isActive('/umkm')} ${pathname === '/umkm' ? 'bg-white shadow-sm ring-1 ring-slate-100' : 'hover:bg-white/60'}`}>UMKM</Link>
                         <Link href="/berita" className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${isActive('/berita')} ${pathname === '/berita' ? 'bg-white shadow-sm ring-1 ring-slate-100' : 'hover:bg-white/60'}`}>Berita</Link>
                         <Link href="/lapor" className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${isActive('/lapor')} ${pathname === '/lapor' ? 'bg-white shadow-sm ring-1 ring-slate-100' : 'hover:bg-white/60'}`}>Lapor</Link>
+                        <Link href="/#lacak-surat" className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${isActive('/#lacak-surat')} ${pathname === '/#lacak-surat' ? 'bg-white shadow-sm ring-1 ring-slate-100' : 'hover:bg-white/60'}`}>Lacak Surat</Link>
                     </div>
 
                     <div className="hidden md:flex items-center gap-2">
@@ -84,6 +85,7 @@ export default function Navbar() {
                         <Link onClick={() => setMobileMenuOpen(false)} href="/layanan" className={`px-4 py-3 rounded-2xl text-sm font-bold transition-colors ${isActive('/layanan')} ${pathname === '/layanan' ? 'bg-emerald-50 text-emerald-700' : 'bg-transparent'}`}>Layanan Desa</Link>
                         <Link onClick={() => setMobileMenuOpen(false)} href="/umkm" className={`px-4 py-3 rounded-2xl text-sm font-bold transition-colors ${isActive('/umkm')} ${pathname === '/umkm' ? 'bg-emerald-50 text-emerald-700' : 'bg-transparent'}`}>Pasar UMKM</Link>
                         <Link onClick={() => setMobileMenuOpen(false)} href="/berita" className={`px-4 py-3 rounded-2xl text-sm font-bold transition-colors ${isActive('/berita')} ${pathname === '/berita' ? 'bg-emerald-50 text-emerald-700' : 'bg-transparent'}`}>Portal Berita</Link>
+                        <Link onClick={() => setMobileMenuOpen(false)} href="/#lacak-surat" className={`px-4 py-3 rounded-2xl text-sm font-bold transition-colors ${isActive('/#lacak-surat')} ${pathname === '/#lacak-surat' ? 'bg-emerald-50 text-emerald-700' : 'bg-transparent'}`}>Lacak Surat Saya</Link>
                     </div>
                     <div className="p-4 bg-slate-50 border-t border-slate-100 flex gap-3">
                         <Link onClick={() => setMobileMenuOpen(false)} href="/login" className="flex-1 py-3 text-center rounded-xl bg-white border border-slate-200 text-slate-700 text-sm font-bold hover:bg-slate-50">Masuk</Link>

@@ -41,6 +41,55 @@ const Typewriter = ({ words, delay = 100 }) => {
 
 export default function Home() {
   const [modalData, setModalData] = useState(null);
+  const [trackingNumber, setTrackingNumber] = useState('');
+  const [trackingResult, setTrackingResult] = useState(null);
+  const [isLacakLoading, setIsLacakLoading] = useState(false);
+
+  const handleLacakSurat = () => {
+    if (!trackingNumber.trim()) return;
+    setIsLacakLoading(true);
+    setTrackingResult(null);
+    
+    // Simulate API call
+    setTimeout(() => {
+      setIsLacakLoading(false);
+      const normalizedID = trackingNumber.trim().toUpperCase();
+      if (normalizedID === '#SRT-1234' || normalizedID === 'SRT-1234') {
+        setTrackingResult({
+          id: '#SRT-1234',
+          status: 'Selesai',
+          icon: 'fa-check-circle',
+          color: 'text-emerald-600',
+          bg: 'bg-emerald-50',
+          borderColor: 'border-emerald-100',
+          desc: 'Surat Keterangan Domisili Anda telah ditandatangani secara elektronik (TTE) dan siap diunduh di dashboard warga.',
+          step: 4
+        });
+      } else if (normalizedID.includes('SRT')) {
+        setTrackingResult({
+          id: normalizedID.startsWith('#') ? normalizedID : `#${normalizedID}`,
+          status: 'Dalam Proses',
+          icon: 'fa-spinner fa-spin',
+          color: 'text-blue-600',
+          bg: 'bg-blue-50',
+          borderColor: 'border-blue-100',
+          desc: 'Dokumen Anda sedang dalam tahap verifikasi oleh sekretaris desa. Estimasi selesai dalam 1 hari kerja.',
+          step: 2
+        });
+      } else {
+        setTrackingResult({
+          id: normalizedID,
+          status: 'Tidak Ditemukan',
+          icon: 'fa-search-minus',
+          color: 'text-slate-400',
+          bg: 'bg-slate-50',
+          borderColor: 'border-slate-200',
+          desc: 'Maaf, nomor resi yang Anda masukkan tidak terdaftar di sistem kami. Pastikan format penulisan sudah benar.',
+          step: 0
+        });
+      }
+    }, 1500);
+  };
 
   const stats = [
       { id: 1, value: "15.420+", label: "Warga Terdaftar", icon: "fa-users" },
@@ -336,6 +385,135 @@ export default function Home() {
                     <p className="text-slate-500 text-lg leading-relaxed">Statistik komprehensif pendataan warga, demografi, hingga transparansi dana desa.</p>
                 </div>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      <section id="lacak-surat" className="py-24 lg:py-32 bg-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-50/50 rounded-full blur-[120px] -z-10 translate-x-1/2 -translate-y-1/2"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="bg-slate-900 rounded-[3rem] p-8 md:p-16 lg:p-20 relative overflow-hidden shadow-2xl">
+              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] mix-blend-overlay"></div>
+              <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-emerald-500/10 via-transparent to-transparent"></div>
+              
+              <div className="relative z-10 flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                  <div className="w-full lg:w-1/2 text-center lg:text-left">
+                      <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-widest mb-6"
+                      >
+                          <i className="fas fa-search"></i> Tracking System
+                      </motion.div>
+                      <h2 className="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-6">
+                          Lacak Status <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">Permohonan Surat.</span>
+                      </h2>
+                      <p className="text-slate-400 text-lg md:text-xl mb-10 max-w-xl mx-auto lg:mx-0">
+                          Masukkan nomor resi atau ID tiket pengajuan yang Anda dapatkan saat mengajukan surat secara online.
+                      </p>
+
+                      <div className="relative max-w-md mx-auto lg:mx-0 group">
+                          <input 
+                            type="text" 
+                            placeholder="E.g: #SRT-1234"
+                            value={trackingNumber}
+                            onChange={(e) => setTrackingNumber(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleLacakSurat()}
+                            className="w-full pl-6 pr-32 py-5 bg-slate-800/50 backdrop-blur-xl border border-slate-700 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all text-lg font-medium"
+                          />
+                          <button 
+                            onClick={handleLacakSurat}
+                            disabled={isLacakLoading || !trackingNumber.trim()}
+                            className="absolute right-2 top-2 bottom-2 px-6 bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-700 disabled:cursor-not-allowed text-slate-900 font-bold rounded-xl transition-all shadow-lg flex items-center gap-2"
+                          >
+                              {isLacakLoading ? <i className="fas fa-spinner fa-spin"></i> : <i className="fas fa-search"></i>}
+                              <span className="hidden sm:inline">Cek Status</span>
+                          </button>
+                      </div>
+                      
+                      <div className="mt-8 flex items-center justify-center lg:justify-start gap-4 text-slate-500 text-sm font-medium">
+                          <div className="flex -space-x-2">
+                              {[1,2,3].map(i => <div key={i} className="w-6 h-6 rounded-full border-2 border-slate-900 bg-slate-800 flex items-center justify-center text-[10px]"><i className="fas fa-check text-emerald-500"></i></div>)}
+                          </div>
+                          <span>1.2k+ Pencarian hari ini</span>
+                      </div>
+                  </div>
+
+                  <div className="w-full lg:w-1/2 flex items-center justify-center">
+                    <div className="relative w-full max-w-[400px]">
+                        {trackingResult && (
+                             <div className={`absolute inset-0 ${trackingResult.bg} blur-3xl opacity-20 rounded-full animate-pulse transition-all duration-1000`}></div>
+                        )}
+
+                        <motion.div 
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          className={`relative min-h-[300px] w-full bg-slate-800/40 backdrop-blur-2xl border border-slate-700 rounded-[2.5rem] p-8 md:p-10 flex flex-col items-center justify-center text-center transition-all duration-500 ${trackingResult ? 'border-emerald-500/30' : ''}`}
+                        >
+                          {!trackingResult && !isLacakLoading && (
+                            <div className="animate-in fade-in zoom-in duration-700">
+                                <div className="w-20 h-20 bg-slate-700/50 rounded-3xl flex items-center justify-center text-slate-500 text-3xl mb-6 mx-auto">
+                                    <i className="fas fa-ticket-alt -rotate-45"></i>
+                                </div>
+                                <h4 className="text-slate-400 font-bold text-lg mb-2">Hasil Pencarian</h4>
+                                <p className="text-slate-500 text-sm max-w-[200px] mx-auto">Belum ada data untuk ditampilkan. Masukkan nomor tiket Anda.</p>
+                            </div>
+                          )}
+
+                          {isLacakLoading && (
+                            <div className="flex flex-col items-center animate-in fade-in duration-300">
+                                <div className="w-20 h-20 border-4 border-slate-700 border-t-emerald-500 rounded-full animate-spin mb-6"></div>
+                                <p className="text-emerald-400 font-bold animate-pulse tracking-widest text-xs uppercase">Menghubungkan ke Server...</p>
+                            </div>
+                          )}
+
+                          {trackingResult && !isLacakLoading && (
+                            <motion.div 
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="w-full text-left"
+                            >
+                                <div className="flex items-center justify-between mb-8">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-12 h-12 ${trackingResult.bg} ${trackingResult.color} rounded-2xl flex items-center justify-center text-xl shadow-inner border ${trackingResult.borderColor}`}>
+                                            <i className={`fas ${trackingResult.icon}`}></i>
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Nomor Tiket</p>
+                                            <p className="text-white font-extrabold text-lg leading-none">{trackingResult.id}</p>
+                                        </div>
+                                    </div>
+                                    <div className={`px-4 py-1.5 rounded-full ${trackingResult.bg} ${trackingResult.color} text-xs font-bold border ${trackingResult.borderColor} shadow-sm`}>
+                                        {trackingResult.status}
+                                    </div>
+                                </div>
+
+                                <div className="space-y-6 mb-8">
+                                    <div className="relative pl-6 border-l-2 border-slate-700">
+                                        <div className="absolute -left-[5px] top-0 w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
+                                        <p className="text-slate-400 text-xs font-bold mb-1">Status Saat Ini</p>
+                                        <p className="text-slate-200 text-sm leading-relaxed">{trackingResult.desc}</p>
+                                    </div>
+                                </div>
+
+                                {trackingResult.status !== 'Tidak Ditemukan' && (
+                                    <div className="grid grid-cols-4 gap-2 mb-8">
+                                        {[1,2,3,4].map(step => (
+                                            <div key={step} className={`h-1.5 rounded-full ${trackingResult.step >= step ? 'bg-emerald-500' : 'bg-slate-700'}`}></div>
+                                        ))}
+                                    </div>
+                                )}
+
+                                <button onClick={() => setTrackingResult(null)} className="w-full py-4 bg-slate-700/50 hover:bg-slate-700 text-slate-300 text-sm font-bold rounded-2xl transition-colors border border-slate-600/50">
+                                    Cek Nomor Lain
+                                </button>
+                            </motion.div>
+                          )}
+                        </motion.div>
+                    </div>
+                  </div>
+              </div>
           </div>
         </div>
       </section>
