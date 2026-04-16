@@ -177,10 +177,10 @@ export default function ProfileDesaPage() {
                     <div className="grid md:grid-cols-2 gap-16 items-center">
                         <div>
                             <span className="text-emerald-400 text-sm font-bold uppercase tracking-widest">Pemimpin Desa</span>
-                            <h2 className="text-4xl font-extrabold mt-2 mb-6">H. Suharto, S.Sos</h2>
+                            <h2 className="text-4xl font-extrabold mt-2 mb-6">H. Abdul Kader</h2>
                             <p className="text-slate-400 font-bold uppercase tracking-wider text-xs mb-5">Kepala Desa Maju Bersama · Periode 2023–2029</p>
                             <p className="text-slate-300 leading-relaxed mb-6">
-                                Dipilih secara demokratis oleh seluruh warga pada Pilkades 2023, Bapak H. Suharto berkomitmen membawa Desa Maju Bersama menuju era transformasi digital dan pertumbuhan ekonomi yang inklusif bagi semua lapisan masyarakat.
+                                Dipilih secara demokratis oleh seluruh warga pada Pilkades 2023, Bapak H. Abdul Kader berkomitmen membawa Desa Maju Bersama menuju era transformasi digital dan pertumbuhan ekonomi yang inklusif bagi semua lapisan masyarakat.
                             </p>
                             <div className="flex flex-wrap gap-3">
                                 <div className="bg-slate-800 rounded-xl px-4 py-2 text-sm font-bold flex items-center gap-2">
