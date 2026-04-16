@@ -194,7 +194,7 @@ export default function ProfileDesaPage() {
                         <div className="relative">
                             <div className="absolute -top-4 -right-4 w-72 h-80 bg-emerald-500/20 rounded-3xl"></div>
                             <img
-                                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80"
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsev8493DrcTiTsFcLExeWSucUB2NTKAd6ZQ&s"
                                 alt="Kepala Desa H. Suharto"
                                 className="relative z-10 w-full max-w-xs md:max-w-sm mx-auto rounded-3xl object-cover shadow-2xl aspect-[3/4]"
                             />
