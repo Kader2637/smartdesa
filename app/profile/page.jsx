@@ -8,40 +8,40 @@ export const metadata = {
 const PERANGKAT = [
     {
         jabatan: 'Kepala Desa',
-        nama: 'H. Suharto, S.Sos',
+        nama: ' Kader',
         periode: 'Periode 2023–2029',
-        foto: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80',
+        foto: 'https://images.unsplascom/photo-1560250097-0b93528c311a?w=400&q=80',
         highlight: true,
     },
     {
         jabatan: 'Sekretaris Desa',
         nama: 'Dra. Ninik Rahayu',
         periode: 'Sejak 2018',
-        foto: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80',
+        foto: 'https://images.unsplascom/photo-1573496359142-b8d87734a5a2?w=400&q=80',
     },
     {
         jabatan: 'Kaur Keuangan',
         nama: 'Bambang Wijaya, S.E.',
         periode: 'Sejak 2020',
-        foto: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',
+        foto: 'https://images.unsplascom/photo-1472099645785-5658abf4ff4e?w=400&q=80',
     },
     {
         jabatan: 'Kaur Umum',
         nama: 'Sri Mulyani, A.Md.',
         periode: 'Sejak 2021',
-        foto: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80',
+        foto: 'https://images.unsplascom/photo-1580489944761-15a19d654956?w=400&q=80',
     },
     {
         jabatan: 'Kasi Pemerintahan',
-        nama: 'Ahmad Fauzi, S.H.',
+        nama: 'Ahmad Fauzi, S.',
         periode: 'Sejak 2019',
-        foto: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
+        foto: 'https://images.unsplascom/photo-1500648767791-00dcc994a43e?w=400&q=80',
     },
     {
         jabatan: 'Kasi Pembangunan',
         nama: 'Endang Lestari',
         periode: 'Sejak 2022',
-        foto: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80',
+        foto: 'https://images.unsplascom/photo-1438761681033-6461ffad8d80?w=400&q=80',
     },
 ];
 
@@ -59,12 +59,12 @@ const PRESTASI = [
 ];
 
 const GALERI = [
-    { src: 'https://images.unsplash.com/photo-1573153978668-a9c97fa0b1f5?w=600&q=80', alt: 'Pemandangan Desa', caption: 'Hamparan sawah desa di pagi hari' },
-    { src: 'https://images.unsplash.com/photo-1542044896530-3c9bca0c8e44?w=600&q=80', alt: 'Kegiatan Warga', caption: 'Gotong royong kerja bakti RT' },
-    { src: 'https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=600&q=80', alt: 'UMKM Desa', caption: 'Pameran produk UMKM unggulan' },
-    { src: 'https://images.unsplash.com/photo-1584553421349-17f25e9b5c03?w=600&q=80', alt: 'Posyandu', caption: 'Posyandu Balita aktif tiap bulan' },
-    { src: 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&q=80', alt: 'Pertanian', caption: 'Lahan pertanian organik warga' },
-    { src: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80', alt: 'Infrastruktur', caption: 'Jalan desa hasil pembangunan 2024' },
+    { src: 'https://images.unsplascom/photo-1573153978668-a9c97fa0b1f5?w=600&q=80', alt: 'Pemandangan Desa', caption: 'Hamparan sawah desa di pagi hari' },
+    { src: 'https://images.unsplascom/photo-1542044896530-3c9bca0c8e44?w=600&q=80', alt: 'Kegiatan Warga', caption: 'Gotong royong kerja bakti RT' },
+    { src: 'https://images.unsplascom/photo-1533900298318-6b8da08a523e?w=600&q=80', alt: 'UMKM Desa', caption: 'Pameran produk UMKM unggulan' },
+    { src: 'https://images.unsplascom/photo-1584553421349-17f25e9b5c03?w=600&q=80', alt: 'Posyandu', caption: 'Posyandu Balita aktif tiap bulan' },
+    { src: 'https://images.unsplascom/photo-1592982537447-7440770cbfc9?w=600&q=80', alt: 'Pertanian', caption: 'Lahan pertanian organik warga' },
+    { src: 'https://images.unsplascom/photo-1566073771259-6a8506099945?w=600&q=80', alt: 'Infrastruktur', caption: 'Jalan desa hasil pembangunan 2024' },
 ];
 
 export default function ProfileDesaPage() {
@@ -177,10 +177,10 @@ export default function ProfileDesaPage() {
                     <div className="grid md:grid-cols-2 gap-16 items-center">
                         <div>
                             <span className="text-emerald-400 text-sm font-bold uppercase tracking-widest">Pemimpin Desa</span>
-                            <h2 className="text-4xl font-extrabold mt-2 mb-6">H. Abdul Kader</h2>
+                            <h2 className="text-4xl font-extrabold mt-2 mb-6"> Abdul Kader</h2>
                             <p className="text-slate-400 font-bold uppercase tracking-wider text-xs mb-5">Kepala Desa Maju Bersama · Periode 2023–2029</p>
                             <p className="text-slate-300 leading-relaxed mb-6">
-                                Dipilih secara demokratis oleh seluruh warga pada Pilkades 2023, Bapak H. Abdul Kader berkomitmen membawa Desa Maju Bersama menuju era transformasi digital dan pertumbuhan ekonomi yang inklusif bagi semua lapisan masyarakat.
+                                Dipilih secara demokratis oleh seluruh warga pada Pilkades 2023, Bapak  Abdul Kader berkomitmen membawa Desa Maju Bersama menuju era transformasi digital dan pertumbuhan ekonomi yang inklusif bagi semua lapisan masyarakat.
                             </p>
                             <div className="flex flex-wrap gap-3">
                                 <div className="bg-slate-800 rounded-xl px-4 py-2 text-sm font-bold flex items-center gap-2">
@@ -195,7 +195,7 @@ export default function ProfileDesaPage() {
                             <div className="absolute -top-4 -right-4 w-72 h-80 bg-emerald-500/20 rounded-3xl"></div>
                             <img
                                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsev8493DrcTiTsFcLExeWSucUB2NTKAd6ZQ&s"
-                                alt="Kepala Desa H. Suharto"
+                                alt="Kepala Desa  Kader"
                                 className="relative z-10 w-full max-w-xs md:max-w-sm mx-auto rounded-3xl object-cover shadow-2xl aspect-[3/4]"
                             />
                             <div className="absolute -bottom-4 -left-4 bg-emerald-500 text-white font-bold text-sm px-5 py-3 rounded-2xl shadow-xl z-20">
