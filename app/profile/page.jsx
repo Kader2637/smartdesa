@@ -184,7 +184,7 @@ export default function ProfileDesaPage() {
                             </p>
                             <div className="flex flex-wrap gap-3">
                                 <div className="bg-slate-800 rounded-xl px-4 py-2 text-sm font-bold flex items-center gap-2">
-                                    <i className="fas fa-graduation-cap text-emerald-400"></i> S1 Ilmu Sosial UNIBRAW
+                                    <i className="fas fa-graduation-cap text-emerald-400"></i> Testing ya guys
                                 </div>
                                 <div className="bg-slate-800 rounded-xl px-4 py-2 text-sm font-bold flex items-center gap-2">
                                     <i className="fas fa-briefcase text-blue-400"></i> 15+ Tahun Pengalaman
