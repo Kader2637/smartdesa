@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useSmartDesa } from '@/components/GlobalProvider';
 
 export default function LoginPage() {
     const router = useRouter();
@@ -11,6 +12,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const { login } = useSmartDesa();
 
     const handleSimulation = (e) => {
         e.preventDefault();
@@ -22,11 +24,17 @@ export default function LoginPage() {
 
             // Simple demo router based on keywords
             if (iden.includes('admin')) {
+                login('admin');
                 router.push('/admin');
             } else if (iden.includes('seller') || iden.includes('umkm')) {
+                login('seller');
                 router.push('/seller');
+            } else if (iden.includes('rt') || iden.includes('ketua rt')) {
+                login('rt');
+                router.push('/rt');
             } else {
                 // Default goes to Warga
+                login('warga');
                 router.push('/warga');
             }
         }, 1000);
@@ -40,6 +48,9 @@ export default function LoginPage() {
         } else if (role === 'seller') {
             setIdentifier('seller@umkm.id');
             setPassword('seller123');
+        } else if (role === 'rt') {
+            setIdentifier('rt01@smartdesa.id');
+            setPassword('rt123');
         } else if (role === 'warga') {
             setIdentifier('3507111222333444'); // Mock NIK
             setPassword('warga123');
@@ -133,6 +144,7 @@ export default function LoginPage() {
                         <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
                             <button type="button" onClick={() => autofill('warga')} className="bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 font-bold text-xs px-3 py-2 rounded-lg transition-colors shadow-sm"><i className="far fa-user mr-1"></i> Mode Warga</button>
                             <button type="button" onClick={() => autofill('seller')} className="bg-slate-100 hover:bg-emerald-50 text-slate-600 hover:text-emerald-600 font-bold text-xs px-3 py-2 rounded-lg transition-colors shadow-sm"><i className="fas fa-store mr-1"></i> Mode Penjual</button>
+                            <button type="button" onClick={() => autofill('rt')} className="bg-slate-100 hover:bg-amber-50 text-slate-600 hover:text-amber-600 font-bold text-xs px-3 py-2 rounded-lg transition-colors shadow-sm"><i className="fas fa-users mr-1"></i> Mode RT</button>
                             <button type="button" onClick={() => autofill('admin')} className="bg-slate-100 hover:bg-purple-50 text-slate-600 hover:text-purple-600 font-bold text-xs px-3 py-2 rounded-lg transition-colors shadow-sm"><i className="fas fa-shield-alt mr-1"></i> Mode Admin</button>
                         </div>
                     </div>

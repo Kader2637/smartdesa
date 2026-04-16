@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useSmartDesa } from '@/components/GlobalProvider';
 
 export default function AdminDashboardPage() {
+    const { surats, wargaData, products } = useSmartDesa();
     const [feedList, setFeedList] = useState([
         { 
             id: 1, name: 'Agus Supriyadi', role: 'RT 04 / RW 02', time: '2 Jam yang lalu', status: 'Menunggu Tanggapan', 
@@ -41,8 +43,8 @@ export default function AdminDashboardPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
                 <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex justify-between items-center group hover:border-emerald-200 transition">
                     <div>
-                        <p className="text-sm font-medium text-slate-500 mb-1">Total Warga Aktif</p>
-                        <h3 className="text-3xl font-extrabold text-slate-800">1,245</h3>
+                        <p className="text-sm font-medium text-slate-500 mb-1">Total Warga Terdaftar</p>
+                        <h3 className="text-3xl font-extrabold text-slate-800">{wargaData?.length ?? 0}</h3>
                     </div>
                     <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                         <i className="fas fa-users"></i>
@@ -50,8 +52,8 @@ export default function AdminDashboardPage() {
                 </div>
                 <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex justify-between items-center group hover:border-emerald-200 transition">
                     <div>
-                        <p className="text-sm font-medium text-slate-500 mb-1">UMKM Terverifikasi</p>
-                        <h3 className="text-3xl font-extrabold text-slate-800">84</h3>
+                        <p className="text-sm font-medium text-slate-500 mb-1">Produk UMKM</p>
+                        <h3 className="text-3xl font-extrabold text-slate-800">{products?.length ?? 0}</h3>
                     </div>
                     <div className="w-14 h-14 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                         <i className="fas fa-store"></i>
@@ -59,19 +61,19 @@ export default function AdminDashboardPage() {
                 </div>
                 <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex justify-between items-center group hover:border-emerald-200 transition">
                     <div>
-                        <p className="text-sm font-medium text-slate-500 mb-1">Total Transaksi (Global)</p>
-                        <h3 className="text-3xl font-extrabold text-slate-800">Rp 45.2Jt</h3>
+                        <p className="text-sm font-medium text-slate-500 mb-1">Surat Selesai (TTE)</p>
+                        <h3 className="text-3xl font-extrabold text-slate-800">{surats?.filter(s => s.status === 'selesai').length ?? 0}</h3>
                     </div>
                     <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                        <i className="fas fa-chart-line"></i>
+                        <i className="fas fa-check-double"></i>
                     </div>
                 </div>
                 <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex justify-between items-center group hover:border-emerald-200 transition relative overflow-hidden">
                     <div className="absolute right-0 top-0 w-16 h-16 bg-red-50 rounded-bl-full -mr-2 -mt-2"></div>
                     <div className="relative z-10 w-full flex justify-between items-center">
                         <div>
-                            <p className="text-sm font-medium text-slate-500 mb-1">Perlu Validasi</p>
-                            <h3 className="text-3xl font-extrabold text-red-600">12</h3>
+                            <p className="text-sm font-medium text-slate-500 mb-1">Perlu TTE Admin</p>
+                            <h3 className="text-3xl font-extrabold text-red-600">{surats?.filter(s => s.status === 'menunggu_kades').length ?? 0}</h3>
                         </div>
                         <div className="w-14 h-14 bg-red-100 text-red-600 rounded-xl flex items-center justify-center text-2xl animate-pulse">
                             <i className="fas fa-bell"></i>

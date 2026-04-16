@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Swal from 'sweetalert2';
 
 export default function ModerasiProdukPage() {
     const [activeTab, setActiveTab] = useState('pending');
@@ -46,24 +47,46 @@ export default function ModerasiProdukPage() {
     };
 
     const approveProduct = (product) => {
-        setProducts(products.map(p => p.id === product.id ? { ...p, status: 'approved' } : p));
-        setShowToast(true);
-        setTimeout(() => setShowToast(false), 3000);
+        Swal.fire({
+            title: 'Setujui Produk?',
+            html: `Produk <b>${product.name}</b> akan ditayangkan di Marketplace.`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Setujui!',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#10B981'
+        }).then(result => {
+            if (result.isConfirmed) {
+                setProducts(products.map(p => p.id === product.id ? { ...p, status: 'approved' } : p));
+                Swal.fire({ title: 'Disetujui!', text: 'Produk kini tayang di Marketplace.', icon: 'success', timer: 1500, showConfirmButton: false });
+            }
+        });
     };
 
     const openRejectModal = (product) => {
         setSelectedProduct(product);
-        setRejectReason('');
-        setShowRejectModal(true);
+        Swal.fire({
+            title: 'Tolak Produk?',
+            html: `Berikan alasan penolakan untuk <b>${product.name}</b>:`,
+            input: 'textarea',
+            inputPlaceholder: 'Misal: Foto produk terlalu buram, silakan upload ulang...',
+            showCancelButton: true,
+            confirmButtonText: 'Tolak Produk',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#EF4444',
+            inputValidator: (value) => {
+                if (!value) return 'Alasan penolakan tidak boleh kosong!';
+            }
+        }).then(result => {
+            if (result.isConfirmed) {
+                setProducts(products.map(p => p.id === product.id ? { ...p, status: 'rejected', reason: result.value } : p));
+                Swal.fire({ title: 'Ditolak', text: 'Produk telah ditolak dan penjual akan diberitahu.', icon: 'error', timer: 1500, showConfirmButton: false });
+            }
+        });
     };
 
     const confirmReject = () => {
-        if (rejectReason.trim() === '') {
-            alert('Alasan penolakan tidak boleh kosong!');
-            return;
-        }
-        setProducts(products.map(p => p.id === selectedProduct.id ? { ...p, status: 'rejected', reason: rejectReason } : p));
-        setShowRejectModal(false);
+        // kept for compatibility but now handled by Swal inline
     };
 
     return (

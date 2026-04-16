@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Swal from 'sweetalert2';
 
 export default function LaporanKomunitasWarga() {
     const [submitting, setSubmitting] = useState(false);
@@ -9,9 +10,15 @@ export default function LaporanKomunitasWarga() {
         e.preventDefault();
         setSubmitting(true);
         setTimeout(() => {
-            alert('Laporan berhasil dikirim!');
             setSubmitting(false);
             e.target.reset();
+            Swal.fire({
+                title: 'Laporan Terkirim!',
+                text: 'Laporan Anda telah kami terima dan akan segera diproses oleh tim.',
+                icon: 'success',
+                confirmButtonColor: '#10B981',
+                confirmButtonText: 'Tutup'
+            });
         }, 1000);
     };
 

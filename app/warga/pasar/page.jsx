@@ -2,17 +2,20 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useSmartDesa } from '@/components/GlobalProvider';
+import Swal from 'sweetalert2';
 
 export default function PasarDesaWarga() {
-    const umkmList = [
-        { id: 1, nama: "Kopi Arabika Gayo Asli", penjual: "Pak Budi", kategori: "Pertanian", harga: "Rp 65.000", rating: 4.9, img: "https://images.unsplash.com/photo-1559525839-b184a4d698c7?w=500&q=80" },
-        { id: 2, nama: "Kerajinan Anyaman Bambu", penjual: "Ibu Siti", kategori: "Kerajinan", harga: "Rp 120.000", rating: 4.8, img: "https://images.unsplash.com/photo-1590736969955-71cc94801759?w=500&q=80" },
-        { id: 3, nama: "Madu Hutan Liar Murni", penjual: "Kelompok Tani", kategori: "Pertanian", harga: "Rp 85.000", rating: 5.0, img: "https://images.unsplash.com/photo-1587049352847-4d4b1ed748d3?w=500&q=80" },
-        { id: 4, nama: "Keripik Singkong Pedas", penjual: "Mpok Nori", kategori: "Kuliner", harga: "Rp 15.000", rating: 4.7, img: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=500&q=80" },
-        { id: 5, nama: "Sambal Roa Tradisional", penjual: "Ibu Rahma", kategori: "Kuliner", harga: "Rp 35.000", rating: 4.8, img: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=500&q=80" }
-    ];
-
+    const { products, addToCart } = useSmartDesa();
+    const router = useRouter();
     const [modalData, setModalData] = useState(null);
+    const [cartQty, setCartQty] = useState(1);
+
+    const openModal = (item) => {
+        setModalData(item);
+        setCartQty(1);
+    };
 
     return (
         <div className="space-y-8 fade-in">
@@ -28,8 +31,8 @@ export default function PasarDesaWarga() {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {umkmList.map(item => (
-                    <div key={item.id} onClick={() => setModalData(item)} className="bg-white rounded-2xl p-3 shadow-sm border border-slate-100 hover:shadow-md transition cursor-pointer group">
+                {products.map(item => (
+                    <div key={item.id} onClick={() => openModal(item)} className="bg-white rounded-2xl p-3 shadow-sm border border-slate-100 hover:shadow-md transition cursor-pointer group">
                         <div className="relative aspect-square overflow-hidden rounded-xl mb-3 bg-slate-100">
                             <img src={item.img} alt={item.nama} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                             <span className="absolute top-2 left-2 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-[10px] font-bold text-slate-700 uppercase">{item.kategori}</span>
@@ -37,8 +40,11 @@ export default function PasarDesaWarga() {
                         <h3 className="font-bold text-slate-900 text-sm mb-1 leading-tight line-clamp-2">{item.nama}</h3>
                         <p className="text-xs text-slate-400 mb-2">{item.penjual}</p>
                         <div className="flex justify-between items-center mt-2 pt-2 border-t border-slate-50">
-                            <span className="font-extrabold text-brand-600 text-sm">{item.harga}</span>
+                            <span className="font-extrabold text-brand-600 text-sm">Rp {item.harga.toLocaleString('id-ID')}</span>
                             <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600 font-bold">⭐ {item.rating}</span>
+                        </div>
+                        <div className="mt-2 text-[10px] font-bold text-slate-400">
+                            Stok: {item.stock} unit
                         </div>
                     </div>
                 ))}
@@ -60,12 +66,54 @@ export default function PasarDesaWarga() {
                             <p className="text-slate-500 mb-4 text-xs md:text-sm">Produk olahan asli dari {modalData.penjual}. Kualitas terjamin dan dibuat dengan bahan pilihan terbaik.</p>
                             
                             <div className="mt-auto">
-                                <p className="text-[10px] text-slate-400 font-bold mb-1">HARGA</p>
-                                <p className="text-2xl font-extrabold text-slate-900 mb-6">{modalData.harga}</p>
+                                <div className="flex justify-between items-end mb-6">
+                                    <div>
+                                        <p className="text-[10px] text-slate-400 font-bold mb-1">TOTAL HARGA</p>
+                                        <p className="text-2xl font-extrabold text-slate-900">Rp {(modalData.harga * cartQty).toLocaleString('id-ID')}</p>
+                                    </div>
+                                    <div className="flex items-center gap-3 bg-slate-100 rounded-xl p-1">
+                                        <button 
+                                            onClick={() => setCartQty(q => Math.max(1, q - 1))}
+                                            className="w-8 h-8 rounded-lg bg-white text-slate-600 font-bold shadow-sm hover:bg-slate-50"
+                                        >-</button>
+                                        <span className="text-sm font-bold w-4 text-center">{cartQty}</span>
+                                        <button 
+                                            onClick={() => setCartQty(q => Math.min(modalData.stock, q + 1))}
+                                            className="w-8 h-8 rounded-lg bg-white text-slate-600 font-bold shadow-sm hover:bg-slate-50"
+                                        >+</button>
+                                    </div>
+                                </div>
                                 
                                 <div className="flex gap-3">
-                                    <button className="flex-1 bg-slate-900 text-white font-bold py-3 rounded-xl hover:bg-slate-800 transition text-sm">
-                                        <i className="fas fa-cart-plus mr-2"></i> + Keranjang
+                                    <button 
+                                        onClick={() => {
+                                            if (modalData.stock === 0) return Swal.fire('Stok Habis', 'Maaf, produk ini sedang kosong.', 'error');
+                                            addToCart(modalData, cartQty);
+                                            Swal.fire({
+                                                title: 'Berhasil!',
+                                                text: `${cartQty}x ${modalData.nama} ditambahkan ke keranjang.`,
+                                                icon: 'success',
+                                                toast: true,
+                                                position: 'top-end',
+                                                showConfirmButton: false,
+                                                timer: 2000
+                                            });
+                                            setModalData(null);
+                                        }}
+                                        className="flex-1 bg-white border border-slate-200 text-slate-700 font-bold py-3 rounded-xl hover:bg-slate-50 transition text-sm shadow-sm"
+                                    >
+                                        + Keranjang
+                                    </button>
+                                    <button 
+                                        onClick={() => {
+                                            if (modalData.stock === 0) return Swal.fire('Stok Habis', 'Maaf, produk ini sedang kosong.', 'error');
+                                            addToCart(modalData, cartQty);
+                                            setModalData(null);
+                                            router.push('/warga/keranjang');
+                                        }}
+                                        className="flex-1 bg-slate-900 text-white font-bold py-3 rounded-xl hover:bg-emerald-600 transition text-sm shadow-lg shadow-slate-900/20 hover:shadow-emerald-500/30"
+                                    >
+                                        Beli Langsung
                                     </button>
                                 </div>
                             </div>

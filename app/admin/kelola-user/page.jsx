@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Swal from 'sweetalert2';
 
 export default function KelolaUserPage() {
     const [activeTab, setActiveTab] = useState('all');
@@ -35,16 +36,39 @@ export default function KelolaUserPage() {
         }));
     };
 
-    const verifyUser = (id) => {
-        if (confirm('Verifikasi UMKM ini? Akun akan menjadi aktif dan bisa berjualan di Marketplace.')) {
-            setUsers(users.map(u => u.id === id ? { ...u, status: 'active' } : u));
-        }
+    const verifyUser = (id, name) => {
+        Swal.fire({
+            title: 'Verifikasi Akun UMKM?',
+            html: `Akun <b>${name}</b> akan diaktifkan dan bisa berjualan di Marketplace.`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Aktifkan!',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#10B981'
+        }).then(result => {
+            if (result.isConfirmed) {
+                setUsers(users.map(u => u.id === id ? { ...u, status: 'active' } : u));
+                Swal.fire({ title: 'Diaktifkan!', text: 'Akun UMKM berhasil diverifikasi.', icon: 'success', timer: 1500, showConfirmButton: false });
+            }
+        });
     };
 
-    const deleteUser = (id) => {
-        if (confirm('Apakah Anda yakin ingin menghapus pengguna ini secara permanen?')) {
-            setUsers(users.filter(u => u.id !== id));
-        }
+    const deleteUser = (id, name) => {
+        Swal.fire({
+            title: 'Hapus Pengguna?',
+            html: `Akun <b>${name}</b> akan dihapus secara permanen dari sistem.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#EF4444',
+            cancelButtonColor: '#94A3B8',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then(result => {
+            if (result.isConfirmed) {
+                setUsers(users.filter(u => u.id !== id));
+                Swal.fire({ title: 'Terhapus!', text: 'Pengguna telah dihapus dari sistem.', icon: 'success', timer: 1500, showConfirmButton: false });
+            }
+        });
     };
 
     const openEditModal = (user) => {
@@ -179,7 +203,7 @@ export default function KelolaUserPage() {
                                     <td className="p-4 w-40">
                                         <div className="flex items-center justify-center gap-3">
                                             {user.status === 'pending' ? (
-                                                <button onClick={() => verifyUser(user.id)} className="bg-emerald-100 text-emerald-700 px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-emerald-200 transition">
+                                                <button onClick={() => verifyUser(user.id, user.name)} className="bg-emerald-100 text-emerald-700 px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-emerald-200 transition">
                                                     Verifikasi
                                                 </button>
                                             ) : (
@@ -193,7 +217,7 @@ export default function KelolaUserPage() {
                                             )}
                                             
                                             <button onClick={() => openEditModal(user)} className="text-slate-400 hover:text-blue-600 p-2 transition rounded-xl hover:bg-blue-50" title="Edit Data"><i className="fas fa-edit"></i></button>
-                                            <button onClick={() => deleteUser(user.id)} className="text-slate-400 hover:text-red-600 p-2 transition rounded-xl hover:bg-red-50" title="Hapus Akun"><i className="fas fa-trash-alt"></i></button>
+                                            <button onClick={() => deleteUser(user.id, user.name)} className="text-slate-400 hover:text-red-600 p-2 transition rounded-xl hover:bg-red-50" title="Hapus Akun"><i className="fas fa-trash-alt"></i></button>
                                         </div>
                                     </td>
                                 </tr>

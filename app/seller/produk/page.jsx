@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 
 export default function ProdukSellerPage() {
     // State
@@ -76,10 +77,22 @@ export default function ProdukSellerPage() {
         showToast(`Stok ${activeProduct.name} telah diupdate menjadi ${tempVal}`);
     };
 
-    const deleteProduct = (id) => {
-        if (!confirm('Anda yakin ingin menghapus produk ini?')) return;
-        setProducts(products.filter(p => p.id !== id));
-        showToast('Produk berhasil dihapus secara permanen.');
+    const deleteProduct = (id, name) => {
+        Swal.fire({
+            title: 'Hapus Produk?',
+            html: `Produk <b>${name}</b> akan dihapus secara permanen.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#EF4444',
+            cancelButtonColor: '#94A3B8',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then(result => {
+            if (result.isConfirmed) {
+                setProducts(products.filter(p => p.id !== id));
+                showToast('Produk berhasil dihapus secara permanen.');
+            }
+        });
     };
 
     return (
@@ -167,7 +180,7 @@ export default function ProdukSellerPage() {
                                             <button onClick={() => handleOpenEditStock(product)} className="w-8 h-8 rounded bg-orange-50 text-orange-600 hover:bg-orange-100 flex items-center justify-center transition" title="Update Stok">
                                                 <i className="fas fa-boxes"></i>
                                             </button>
-                                            <button onClick={() => deleteProduct(product.id)} className="w-8 h-8 rounded bg-red-50 text-red-600 hover:bg-red-100 flex items-center justify-center transition" title="Hapus Produk">
+                                            <button onClick={() => deleteProduct(product.id, product.name)} className="w-8 h-8 rounded bg-red-50 text-red-600 hover:bg-red-100 flex items-center justify-center transition" title="Hapus Produk">
                                                 <i className="fas fa-trash"></i>
                                             </button>
                                         </div>

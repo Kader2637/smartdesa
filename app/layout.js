@@ -3,6 +3,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Cursor from '@/components/Cursor';
+import { GlobalProvider } from '@/components/GlobalProvider';
 
 const plusJakarta = Plus_Jakarta_Sans({ 
   subsets: ['latin'],
@@ -61,12 +62,14 @@ export default function RootLayout({ children }) {
         <link rel="apple-touch-icon" href="/favicon.png?v=2" />
       </head>
       <body className="font-sans text-slate-800 antialiased selection:bg-brand-500 selection:text-white relative">
-        <Cursor />
-        <Navbar />
-        <main className="min-h-screen">
-          {children}
-        </main>
-        <Footer />
+        <GlobalProvider>
+          <Cursor />
+          <Navbar />
+          <main className="min-h-screen">
+            {children}
+          </main>
+          <Footer />
+        </GlobalProvider>
         <link 
           rel="stylesheet" 
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" 

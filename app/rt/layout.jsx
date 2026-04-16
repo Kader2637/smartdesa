@@ -3,19 +3,21 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSmartDesa } from '@/components/GlobalProvider';
 
-export default function AdminLayout({ children }) {
+export default function RTLayout({ children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [profileOpen, setProfileOpen] = useState(false);
     const pathname = usePathname();
+    const { currentUser, logout } = useSmartDesa();
 
     const menuItems = [
-        { path: '/admin', icon: 'fas fa-shield-alt', label: 'Dashboard Admin' },
-        { path: '/admin/data-warga', icon: 'fas fa-users-cog', label: 'Data Masyarakat Desa' },
-        { path: '/admin/validasi-surat', icon: 'fas fa-pen-fancy', label: 'Validasi & TTE Surat' },
-        { path: '/admin/arsip-surat', icon: 'fas fa-archive', label: 'Arsip Riwayat Surat' },
-        { path: '/admin/moderasi-produk', icon: 'fas fa-check-circle', label: 'Moderasi Produk' },
-        { path: '/admin/kelola-user', icon: 'fas fa-users', label: 'Kelola Pengguna' },
+        { path: '/rt', icon: 'fas fa-pen-fancy', label: 'Verifikasi & Pengantar RT' },
+        { path: '/rt/arsip-surat', icon: 'fas fa-file-signature', label: 'Arsip Surat Ditandatangani' },
+        { path: '/rt/data-warga', icon: 'fas fa-users', label: 'Data Warga' },
+        { path: '/rt/pengaduan', icon: 'fas fa-exclamation-triangle', label: 'Pengaduan Warga' },
+        { path: '/rt/iuran', icon: 'fas fa-wallet', label: 'Uang Kas / Iuran' },
+        { path: '/rt/pengumuman', icon: 'fas fa-bullhorn', label: 'Pengumuman RT' },
     ];
 
     const isCurrentPath = (path) => pathname === path;
@@ -41,7 +43,7 @@ export default function AdminLayout({ children }) {
                 </div>
 
                 <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-                    <p className="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-2">Pusat Kendali</p>
+                    <p className="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-6">Pelayanan RT</p>
                     
                     {menuItems.map((item) => (
                         <Link 
@@ -49,32 +51,14 @@ export default function AdminLayout({ children }) {
                             href={item.path}
                             className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors ${
                                 isCurrentPath(item.path) 
-                                    ? 'bg-emerald-50 text-emerald-600 font-semibold' 
-                                    : 'text-slate-500 hover:text-emerald-600 hover:bg-slate-50'
+                                    ? 'bg-amber-50 text-amber-600 font-semibold' 
+                                    : 'text-slate-500 hover:text-amber-600 hover:bg-slate-50'
                             }`}
                         >
                             <i className={`${item.icon} w-5 text-center`}></i> 
                             <span>{item.label}</span>
                         </Link>
                     ))}
-
-                    <p className="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-6">Akses Cepat</p>
-                    <Link 
-                        href="/warga/pasar"
-                        className="flex items-center gap-3 px-4 py-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors"
-                    >
-                        <i className="fas fa-store w-5 text-center"></i> <span>Belanja (Marketplace)</span>
-                    </Link>
-                    <Link 
-                        href="/admin/statistik"
-                        className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors ${
-                            isCurrentPath('/admin/statistik')
-                                ? 'bg-emerald-50 text-emerald-600 font-semibold'
-                                : 'text-slate-500 hover:text-emerald-600 hover:bg-slate-50'
-                        }`}
-                    >
-                        <i className="fas fa-chart-line w-5 text-center"></i> <span>Statistik Global</span>
-                    </Link>
                 </nav>
             </aside>
 
@@ -85,18 +69,10 @@ export default function AdminLayout({ children }) {
                     <div className="flex items-center gap-4">
                         <button 
                             onClick={() => setSidebarOpen(true)}
-                            className="text-slate-500 focus:outline-none lg:hidden hover:text-emerald-600"
+                            className="text-slate-500 focus:outline-none lg:hidden hover:text-amber-600"
                         >
                             <i className="fas fa-bars text-xl"></i>
                         </button>
-                        <div className="hidden md:flex relative">
-                            <i className="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
-                            <input 
-                                type="text" 
-                                placeholder="Cari data warga, UMKM, resi..."
-                                className="pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 w-72 text-sm outline-none transition-all focus:w-80"
-                            />
-                        </div>
                     </div>
 
                     <div className="flex items-center gap-5">
@@ -106,26 +82,22 @@ export default function AdminLayout({ children }) {
                                 className="flex items-center gap-3 focus:outline-none hover:bg-slate-50 p-1.5 rounded-xl transition"
                             >
                                 <img 
-                                    src="https://ui-avatars.com/api/?name=Admin+Desa&background=10B981&color=fff"
+                                    src={`https://ui-avatars.com/api/?name=${encodeURI(currentUser?.name || 'RT')}&background=F59E0B&color=fff`}
                                     alt="Avatar" 
                                     className="h-9 w-9 rounded-full object-cover shadow-sm"
                                 />
                                 <div className="hidden md:block text-left">
-                                    <p className="text-sm font-semibold text-slate-700 leading-tight">Kepala Admin</p>
-                                    <p className="text-xs text-slate-500">Supervisi Sistem</p>
+                                    <p className="text-sm font-semibold text-slate-700 leading-tight">{currentUser?.name || 'Ketua RT'}</p>
+                                    <p className="text-xs text-slate-500">Panel Rukun Tetangga</p>
                                 </div>
                                 <i className="fas fa-chevron-down text-xs text-slate-400 ml-1"></i>
                             </button>
                             
                             {profileOpen && (
                                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 border border-slate-100 z-50 animate-in fade-in zoom-in-95 duration-200">
-                                    <Link href="/admin/pengaturan" className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-emerald-600 transition">
-                                        <i className="fas fa-cog mr-2 text-slate-400"></i> Pengaturan
-                                    </Link>
-                                    <div className="border-t border-slate-100 my-1"></div>
-                                    <Link href="/" className="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-medium transition">
-                                        <i className="fas fa-sign-out-alt mr-2 text-red-400"></i> Logout
-                                    </Link>
+                                    <button onClick={() => { logout(); window.location.href = '/login'; }} className="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-medium transition cursor-pointer">
+                                        <i className="fas fa-sign-out-alt mr-2 text-red-400"></i> Keluar
+                                    </button>
                                 </div>
                             )}
                         </div>

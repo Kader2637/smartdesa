@@ -21,7 +21,7 @@ export default function Navbar() {
     // A helper to determine if the link is active
     const isActive = (path) => pathname === path ? 'text-emerald-600 font-bold' : 'text-slate-600 hover:text-emerald-600';
 
-    if (pathname.startsWith('/warga') || pathname.startsWith('/admin') || pathname.startsWith('/seller')) {
+    if (pathname.startsWith('/warga') || pathname.startsWith('/admin') || pathname.startsWith('/seller') || pathname.startsWith('/rt')) {
         return null;
     }
 
