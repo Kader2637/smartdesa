@@ -84,7 +84,7 @@ export default function ProfileDesaPage() {
                 <div className="absolute top-32 left-1/2 -translate-x-1/2 z-10">
                     <div className="bg-white/20 backdrop-blur-xl border border-white/30 text-white text-xs font-bold px-5 py-2 rounded-full shadow-xl flex items-center gap-2">
                         <i className="fas fa-map-marker-alt text-emerald-400"></i>
-                        Kecamatan Singosari · Kabupaten Malang · Jawa Timur
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, explicabo?
                     </div>
                 </div>
 
