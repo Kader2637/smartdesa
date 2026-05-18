@@ -121,6 +121,75 @@ export default function Home() {
     }, 1500);
   };
 
+  const menuCards = [
+    {
+      title: "Layanan Surat Online",
+      desc: "Ajukan administrasi surat-menyurat online secara cepat, efisien, dan ditandatangani elektronik oleh Kepala Desa.",
+      icon: "fa-file-signature",
+      gradient: "from-emerald-500 to-teal-600",
+      color: "from-emerald-500/10 to-teal-500/10",
+      link: "/layanan",
+      btnText: "Ajukan Surat Warga",
+      borderClass: "border-slate-200 hover:border-emerald-500",
+      bgHover: "hover:bg-gradient-to-r hover:from-emerald-500 hover:to-teal-600"
+    },
+    {
+      title: "Pasar Digital UMKM",
+      desc: "Dukung pertumbuhan ekonomi mandiri. Beli produk segar, kerajinan tangan otentik, dan kuliner khas langsung dari pedagang lokal desa.",
+      icon: "fa-store",
+      gradient: "from-amber-500 to-orange-600",
+      color: "from-amber-500/10 to-orange-500/10",
+      link: "/umkm",
+      btnText: "Jelajahi Pasar UMKM",
+      borderClass: "border-slate-200 hover:border-amber-500",
+      bgHover: "hover:bg-gradient-to-r hover:from-amber-500 hover:to-orange-600"
+    },
+    {
+      title: "Suara Warga & Lapor",
+      desc: "Laporkan fasilitas publik yang rusak, aduan sosial, atau berikan aspirasi pembangunan desa langsung dengan melampirkan foto.",
+      icon: "fa-bullhorn",
+      gradient: "from-rose-500 to-red-600",
+      color: "from-rose-500/10 to-red-500/10",
+      link: "/lapor",
+      btnText: "Buat Laporan / Aduan",
+      borderClass: "border-slate-200 hover:border-rose-500",
+      bgHover: "hover:bg-gradient-to-r hover:from-rose-500 hover:to-red-600"
+    },
+    {
+      title: "Portal Berita & Info",
+      desc: "Akses berita terupdate, pengumuman penting, rilis pers, serta dokumentasi kegiatan resmi yang diselenggarakan di Desa Tunjungtirto.",
+      icon: "fa-newspaper",
+      gradient: "from-blue-500 to-indigo-600",
+      color: "from-blue-500/10 to-indigo-500/10",
+      link: "/berita",
+      btnText: "Buka Portal Berita",
+      borderClass: "border-slate-200 hover:border-blue-500",
+      bgHover: "hover:bg-gradient-to-r hover:from-blue-500 hover:to-indigo-600"
+    },
+    {
+      title: "Profil & Struktur Desa",
+      desc: "Ketahui sejarah berdirinya desa, peta administratif, visi & misi pembangunan, beserta informasi struktur jajaran aparatur desa.",
+      icon: "fa-map-marked-alt",
+      gradient: "from-sky-500 to-blue-600",
+      color: "from-sky-500/10 to-blue-500/10",
+      link: "/profile",
+      btnText: "Pelajari Profil Desa",
+      borderClass: "border-slate-200 hover:border-sky-500",
+      bgHover: "hover:bg-gradient-to-r hover:from-sky-500 hover:to-blue-600"
+    },
+    {
+      title: "Lacak Pengajuan Surat",
+      desc: "Pantau sejauh mana proses persetujuan dan verifikasi surat permohonan Anda secara langsung menggunakan nomor tiket resi.",
+      icon: "fa-search",
+      gradient: "from-slate-700 to-slate-900",
+      color: "from-slate-700/10 to-slate-900/10",
+      link: "/#lacak-surat",
+      btnText: "Lacak Status Surat",
+      borderClass: "border-slate-200 hover:border-slate-700",
+      bgHover: "hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-900"
+    }
+  ];
+
   const stats = [
     { id: 1, value: "15.420+", label: "Warga Terdaftar", icon: "fa-users" },
     { id: 2, value: isInitialized && surats.length > 0 ? surats.length.toString() : "1.284", label: "Surat Diajukan", icon: "fa-file-signature" },
@@ -312,6 +381,73 @@ export default function Home() {
                   <h3 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">{item.value}</h3>
                 </div>
                 <p className="text-slate-400 font-medium uppercase tracking-widest text-[10px] sm:text-xs">{item.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION: Quick Access Menu Cards */}
+      <section className="py-24 bg-gradient-to-b from-white to-slate-50 relative overflow-hidden">
+        {/* Decorative background shapes */}
+        <div className="absolute top-1/2 left-1/4 w-[500px] h-[500px] bg-emerald-100/20 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+        <div className="absolute bottom-10 right-10 w-[400px] h-[400px] bg-sky-100/20 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-3xl mx-auto mb-16"
+          >
+            <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-widest mb-4 shadow-sm shadow-emerald-100/50">
+              <i className="fas fa-th-large"></i> Akses Menu Utama
+            </span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+              Akses Cepat <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Layanan SmartDesa</span>
+            </h2>
+            <p className="text-slate-500 text-lg sm:text-xl mt-4 leading-relaxed font-medium">
+              Temukan seluruh kemudahan pelayanan publik, administrasi desa, dan pemberdayaan ekonomi lokal di satu platform terpadu.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {menuCards.map((menu, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                className="group relative bg-white border border-slate-200/80 rounded-[2.5rem] p-8 shadow-[0_10px_40px_rgba(0,0,0,0.015)] hover:shadow-[0_20px_50px_rgba(16,185,129,0.08)] hover:border-emerald-500/20 transition-all duration-500 flex flex-col justify-between overflow-hidden cursor-pointer"
+              >
+                {/* Background glow hover effect */}
+                <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl ${menu.color} opacity-0 group-hover:opacity-100 rounded-full blur-2xl transition-all duration-700 pointer-events-none`}></div>
+                
+                <div>
+                  {/* Icon Badge */}
+                  <div className={`w-14 h-14 bg-gradient-to-br ${menu.gradient} text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-md shadow-slate-200/50 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
+                    <i className={`fas ${menu.icon}`}></i>
+                  </div>
+
+                  {/* Title & Description */}
+                  <h3 className="text-2xl font-extrabold text-slate-900 mb-3 group-hover:text-emerald-600 transition-colors">
+                    {menu.title}
+                  </h3>
+                  <p className="text-slate-500 leading-relaxed text-base mb-8 font-medium">
+                    {menu.desc}
+                  </p>
+                </div>
+
+                {/* Button Action */}
+                <Link 
+                  href={menu.link}
+                  className={`mt-auto w-full py-4 px-6 rounded-2xl border ${menu.borderClass} ${menu.bgHover} text-slate-700 hover:text-white font-bold flex items-center justify-center gap-2 group/btn shadow-sm hover:shadow-md transition-all duration-300`}
+                >
+                  <span>{menu.btnText}</span>
+                  <i className="fas fa-arrow-right text-xs group-hover/btn:translate-x-1 transition-transform"></i>
+                </Link>
               </motion.div>
             ))}
           </div>
