@@ -258,7 +258,52 @@ export const GlobalProvider = ({ children }) => {
   };
 
   if (!isInitialized) {
-    return <div className="min-h-screen bg-slate-50 flex items-center justify-center">Memuat Sistem...</div>; // Prevent hydration mismatch
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center relative overflow-hidden">
+        {/* Sleek glowing blur shapes */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-100/30 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-sky-100/20 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div className="flex flex-col items-center relative z-10 animate-in fade-in zoom-in duration-500">
+          {/* Logo container with pulsing neon rings */}
+          <div className="relative mb-6 flex items-center justify-center">
+            {/* Spinning dashed outer boundary */}
+            <div className="absolute w-28 h-28 border-2 border-dashed border-emerald-500/20 rounded-full animate-spin" style={{ animationDuration: '10s' }}></div>
+            {/* Pulsing ring */}
+            <div className="absolute w-24 h-24 border border-emerald-500/40 rounded-full animate-ping opacity-25"></div>
+            
+            {/* Logo Card */}
+            <div className="relative bg-white p-5 rounded-[2.25rem] shadow-[0_20px_50px_rgba(16,185,129,0.08)] border border-slate-100/80 flex items-center justify-center w-20 h-20 transition-transform duration-300">
+              <img 
+                src="/favicon.png" 
+                alt="SmartDesa Logo" 
+                className="w-12 h-12 object-contain animate-bounce"
+                style={{ animationDuration: '2.5s' }}
+              />
+            </div>
+          </div>
+
+          {/* Text Indicators */}
+          <h3 className="text-slate-900 font-extrabold text-xl tracking-tight mb-2">SmartDesa Nusantara</h3>
+          <p className="text-slate-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest flex items-center gap-2 mb-6 font-sans">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            Sistem Digital Terintegrasi
+          </p>
+
+          {/* Clean Rounded Loading Capsule */}
+          <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-emerald-50/60 border border-emerald-100/80 shadow-[0_4px_15px_rgba(16,185,129,0.04)]">
+            <svg className="animate-spin h-3.5 w-3.5 text-emerald-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span className="text-[10px] sm:text-xs font-bold text-emerald-700 tracking-wider uppercase font-mono">Memuat Sistem...</span>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
