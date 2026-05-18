@@ -113,7 +113,11 @@ export const GlobalProvider = ({ children }) => {
     } catch (e) {
       console.error(e);
     }
-    setIsInitialized(true);
+    
+    // Berikan waktu tunda loading agar animasi logo favicon tampil premium
+    setTimeout(() => {
+      setIsInitialized(true);
+    }, 1800);
   }, []);
 
   // Sync to local storage when state changes
