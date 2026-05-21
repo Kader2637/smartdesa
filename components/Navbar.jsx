@@ -1,12 +1,12 @@
 "use client";
 
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
 export default function Navbar() {
-    const pathname = usePathname() || '/';
+    const pathname = usePathname() ?? '/';
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 

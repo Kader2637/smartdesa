@@ -2,13 +2,15 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
-export default function StoreProfilePage({ params }) {
+import React from 'react';
+export default function StoreProfilePage() {
     // Di real app, params.id/slug akan dipakai fetch DB.
     const baseData = [
         { id: 1, nama: "Kopi Arabika Gayo Asli", penjual: "Waroeng Budi", slug: "waroeng-budi", kategori: "Pertanian", harga: "Rp 65.000", rating: 4.9, terjual: 342, img: "https://images.unsplash.com/photo-1559525839-b184a4d698c7?w=500&q=80", lat: -7.940, lng: 112.600, alamat: "Kawasan Pasar Tunjungtirto Utara", desc: "Produk andalan kami." },
         { id: 2, nama: "Kopi Hitam Robusta", penjual: "Waroeng Budi", slug: "waroeng-budi", kategori: "Pertanian", harga: "Rp 40.000", rating: 4.5, terjual: 89, img: "https://images.unsplash.com/photo-1611162458324-aae1eb4129a4?w=500&q=80", lat: -7.940, lng: 112.600, alamat: "Kawasan Pasar Tunjungtirto Utara" },
-        { id: 3, nama: "Bubuk Coklat Organik", penjual: "Waroeng Budi", slug: "waroeng-budi", kategori: "Kuliner", harga: "Rp 25.000", rating: 4.8, terjual: 211, img: "https://images.unsplash.com/photo-1622384792671-55c9183490fd?w=500&q=80", lat: -7.940, lng: 112.600, alamat: "Kawasan Pasar Tunjungtirto Utara" },
+        { id: 3, nama: "Bubuk Coklat Organik", penjual: "Waroeng Budi", slug: "waroeng-budi", kategori: "Kuliner", harga: "Rp 25.000", rating: 4.8, terjual: 211, img: "https://www.gourmet-versand.com/V6/bilder-website/kategorien_head_bilder_v2/10687-kakao-coklat-bubuk-coklat-minum-bubuk.jpg", lat: -7.940, lng: 112.600, alamat: "Kawasan Pasar Tunjungtirto Utara" },
     ];
     
     const storeDefaults = {
@@ -46,11 +48,12 @@ export default function StoreProfilePage({ params }) {
     const mapRef = useRef(null);
     const mapInstance = useRef(null);
 
+    const { id } = useParams();
+    const slug = id || "waroeng-budi";
     useEffect(() => {
-        const slug = params?.id || "waroeng-budi"; 
         setStoreInfo(storeDefaults[slug] || storeDefaults["waroeng-budi"]);
         setProducts(baseData.filter(p => p.slug === slug).length > 0 ? baseData.filter(p => p.slug === slug) : baseData);
-    }, [params]);
+    }, []);
 
     // Handle map loading
     useEffect(() => {
