@@ -8,7 +8,7 @@ export const useSmartDesa = () => useContext(SmartDesaContext);
 
 const DUMMY_PRODUCTS = [
   { id: 1, nama: "Kopi Arabika Gayo", penjual: "Pak Budi", kategori: "Kopi Lokal", harga: 65000, rating: 4.9, img: "https://images.unsplash.com/photo-1559525839-b184a4d698c7?w=600&q=80", stock: 15 },
-  { id: 2, nama: "Kerajinan Bambu", penjual: "Ibu Siti", kategori: "Kriya", harga: 120000, rating: 4.8, img: "https://media.suara.com/pictures/970x544/2024/12/01/81323-produk-kerajinan-bambu-prinx-mas-jumat-29102024.jpg", stock: 5 },
+  { id: 2, nama: "Kerajinan Bambu", penjual: "Ibu Siti", kategori: "Kriya", harga: 120000, rating: 4.8, img: "/kerajinan-bambu.png", stock: 5 },
   { id: 3, nama: "Madu Hutan Liar", penjual: "Peternakan Desa", kategori: "Kesehatan", harga: 85000, rating: 5.0, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdPOLr56s6vvHgt3ub3Ho5FLAWFnijgjqA1Q&s", stock: 12 },
   { id: 4, nama: "Tenun Ikat Khas", penjual: "Kelompok Tenun", kategori: "Pakaian", harga: 250000, rating: 4.9, img: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600&q=80", stock: 8 }
 ];
@@ -57,7 +57,7 @@ export const GlobalProvider = ({ children }) => {
   const [wargaData, setWargaData] = useState([]);
 
   // ⚡ Bump this version to force-reset all localStorage on next load
-  const DATA_VERSION = 'v4';
+  const DATA_VERSION = 'v5';
 
   // Load from local storage
   useEffect(() => {
